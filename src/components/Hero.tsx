@@ -100,6 +100,7 @@ const Hero = () => {
                 position: 'absolute',
                 bottom: '-20px',
                 right: '-50px',
+                zIndex: 1,
               }} />
           </Box>
           <Box
@@ -136,45 +137,6 @@ const Hero = () => {
               >
                 Transform your collection with our high-resolution 3D diecast toys and detailed model frames.
               </Typography>
-            </Box>
-            <Box sx={{ 
-              width: '100%', 
-              mb: 2,
-              overflow: 'hidden'
-            }}>
-              <Box sx={{ 
-                display: 'flex', 
-                gap: 2,
-                animation: 'scroll 25s linear infinite',
-                '@keyframes scroll': {
-                  '0%': { transform: 'translateX(100%)' },
-                  '100%': { transform: 'translateX(-100%)' }
-                }
-              }}>
-                {['BMW', 'Mercedes-Benz', 'Honda', 'Ducati', 'Harley-Davidson',
-                  'Toyota', 'Ferrari', 'Yamaha', 'Kawasaki', 'Porsche'].map((brand) => (
-                  <Box
-                    key={brand}
-                    sx={{
-                      backgroundColor: '#f0f0f0',
-                      px: 2.5,
-                      py: 1,
-                      borderRadius: '20px',
-                      whiteSpace: 'nowrap',
-                      boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
-                      border: '1px solid #ddd'
-                    }}
-                  >
-                    <Typography sx={{ 
-                      fontSize: '15px', 
-                      fontWeight: 600,
-                      color: '#222',
-                    }}>
-                      {brand}
-                    </Typography>
-                  </Box>
-                ))}
-              </Box>
             </Box>
             <Button
               size='small'
