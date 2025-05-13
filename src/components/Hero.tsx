@@ -140,6 +140,11 @@ const Hero = () => {
             </Box>
             <Button
               size='small'
+              onClick={() => {
+                document.getElementById('selection')?.scrollIntoView({
+                  behavior: 'smooth'
+                });
+              }}
               sx={{
                 backgroundColor: 'black',
                 color: 'white',
