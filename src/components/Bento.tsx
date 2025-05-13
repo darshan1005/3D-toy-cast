@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
 import f1 from '../assets/f-1.svg';
 import superCar from '../assets/supercar.png';
 
@@ -17,27 +17,49 @@ const styles = {
     color: 'transparent',
     display: 'inline-block'
   }
-}
+};
 
 const Bento = () => {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
   return (
     <Box
       sx={{
         backgroundColor: 'red',
         p: 2,
-        pb: 1,
-      }}>
-      <Box sx={{
-        backgroundColor: 'white',
-        padding: 2,
-        borderRadius: 3,
-        display: 'flex',
-        flexDirection: 'row',
-        gap: 2
-      }}>
-        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <Box display={'flex'} flexDirection='row' gap={2}>
-            <Box display={'flex'} flexDirection='column' gap={2} flex={2}>
+        pb: isSmallScreen ? 0.5 : 1,
+      }}
+    >
+      <Box
+        sx={{
+          backgroundColor: 'white',
+          padding: 2,
+          borderRadius: 3,
+          display: 'flex',
+          flexDirection: isSmallScreen ? 'column' : 'row',
+          gap: isSmallScreen ? 1 : 2,
+        }}
+      >
+        <Box
+          sx={{
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: isSmallScreen ? 1 : 2,
+          }}
+        >
+          <Box
+            display="flex"
+            flexDirection={isSmallScreen ? 'column' : 'row'}
+            gap={isSmallScreen ? 1 : 2}
+          >
+            <Box
+              display="flex"
+              flexDirection="column"
+              gap={isSmallScreen ? 1 : 2}
+              flex={2}
+            >
               <Box
                 sx={{
                   flex: 1,
@@ -46,33 +68,36 @@ const Bento = () => {
                   alignItems: 'start',
                   justifyContent: 'center',
                   flexDirection: 'column',
-                  minHeight: '175px',
+                  minHeight: isSmallScreen ? '120px' : '175px',
                   backgroundColor: 'black',
-                  px: 4,
+                  px: isSmallScreen ? 2 : 4,
                 }}
               >
-                <Typography variant="h3" sx={{ color: 'white', fontWeight: 600 }}>
+                <Typography
+                  variant={isSmallScreen ? 'h5' : 'h3'}
+                  sx={{ color: 'white', fontWeight: 600 }}
+                >
                   3D Printed Frames
                 </Typography>
                 <Typography
                   sx={{
                     color: 'rgba(255, 255, 255, 0.8)',
-                    fontSize: '1.5rem',
-                    fontWeight: 400
+                    fontSize: isSmallScreen ? '1rem' : '1.5rem',
+                    fontWeight: 400,
                   }}
                 >
                   Custom printed frames with multiple design variants
                   <Box
                     component="span"
                     sx={{
-                      display: 'block',
+                      display: isSmallScreen ? 'none' : 'block',
                       mt: 1,
-                      fontSize: '1rem',
+                      fontSize: isSmallScreen ? '0.8rem' : '1rem',
                       opacity: 0.7,
                       transition: 'opacity 0.2s ease',
                       '&:hover': {
-                        opacity: 1
-                      }
+                        opacity: 1,
+                      },
                     }}
                   >
                     High-quality materials • Multiple sizes available • Custom color options • UV-resistant coating
@@ -87,33 +112,36 @@ const Bento = () => {
                   alignItems: 'start',
                   justifyContent: 'center',
                   flexDirection: 'column',
-                  minHeight: '175px',
+                  minHeight: isSmallScreen ? '120px' : '175px',
                   backgroundColor: 'red',
-                  px: 4,
+                  px: isSmallScreen ? 2 : 4,
                 }}
               >
-                <Typography variant="h3" sx={{ color: 'white', fontWeight: 600 }}>
+                <Typography
+                  variant={isSmallScreen ? 'h5' : 'h3'}
+                  sx={{ color: 'white', fontWeight: 600 }}
+                >
                   Die-Cast Collection
                 </Typography>
                 <Typography
                   sx={{
                     color: 'rgba(255, 255, 255, 0.8)',
-                    fontSize: '1.5rem',
-                    fontWeight: 400
+                    fontSize: isSmallScreen ? '1rem' : '1.5rem',
+                    fontWeight: 400,
                   }}
                 >
                   Detailed diecast metal toys with precision engineering
                   <Box
                     component="span"
                     sx={{
-                      display: 'block',
+                      display: isSmallScreen ? 'none' : 'block',
                       mt: 1,
-                      fontSize: '1rem',
+                      fontSize: isSmallScreen ? '0.8rem' : '1rem',
                       opacity: 0.7,
                       transition: 'opacity 0.2s ease',
                       '&:hover': {
-                        opacity: 1
-                      }
+                        opacity: 1,
+                      },
                     }}
                   >
                     1:18 & 1:24 scale • Opening parts • Premium detailing • Limited editions
@@ -129,31 +157,37 @@ const Bento = () => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 flexDirection: 'column',
-                minHeight: '208px',
+                minHeight: isSmallScreen ? '150px' : '208px',
                 backgroundColor: 'black',
               }}
             >
-              <Typography variant="h2"
+              <Typography
+                variant={isSmallScreen ? 'h3' : 'h2'}
                 sx={{
                   fontWeight: 700,
                   ...styles.textGradient,
-                }}>
+                }}
+              >
                 700+
               </Typography>
               <Typography
-                variant="h4"
+                variant={isSmallScreen ? 'body1' : 'h4'}
                 sx={{
                   ...styles.textGradient,
                   fontWeight: 600,
                   width: '70%',
-                  textAlign: 'center'
+                  textAlign: 'center',
                 }}
               >
                 Order's Completed
               </Typography>
             </Box>
           </Box>
-          <Box display={'flex'} flexDirection='row' gap={2}>
+          <Box
+            display="flex"
+            flexDirection={isSmallScreen ? 'column' : 'row'}
+            gap={isSmallScreen ? 1 : 2}
+          >
             <Box
               sx={{
                 position: 'relative',
@@ -163,7 +197,7 @@ const Bento = () => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 flexDirection: 'column',
-                minHeight: '175px',
+                minHeight: isSmallScreen ? '120px' : '175px',
                 backgroundColor: 'black',
                 '&::before': {
                   content: '""',
@@ -177,15 +211,18 @@ const Bento = () => {
                   backgroundPosition: 'center',
                   backgroundRepeat: 'no-repeat',
                   opacity: 0.5,
-                }
+                },
               }}
             >
-              <Typography variant="h5" sx={{
-                color: 'white',
-                fontWeight: 600,
-                position: 'relative',
-                zIndex: 1
-              }}>
+              <Typography
+                variant={isSmallScreen ? 'body1' : 'h5'}
+                sx={{
+                  color: 'white',
+                  fontWeight: 600,
+                  position: 'relative',
+                  zIndex: 1,
+                }}
+              >
                 Fast & Secure Delivery
               </Typography>
             </Box>
@@ -197,33 +234,36 @@ const Bento = () => {
                 alignItems: 'start',
                 justifyContent: 'center',
                 flexDirection: 'column',
-                minHeight: '175px',
+                minHeight: isSmallScreen ? '120px' : '175px',
                 backgroundColor: 'red',
-                px: 4,
+                px: isSmallScreen ? 2 : 4,
               }}
             >
-              <Typography variant="h3" sx={{ color: 'white', fontWeight: 600 }}>
+              <Typography
+                variant={isSmallScreen ? 'h5' : 'h3'}
+                sx={{ color: 'white', fontWeight: 600 }}
+              >
                 Custom Displays
               </Typography>
               <Typography
                 sx={{
                   color: 'rgba(255, 255, 255, 0.8)',
-                  fontSize: '1.5rem',
-                  fontWeight: 400
+                  fontSize: isSmallScreen ? '1rem' : '1.5rem',
+                  fontWeight: 400,
                 }}
               >
                 Personalized display environments designed for your models
                 <Box
                   component="span"
                   sx={{
-                    display: 'block',
+                    display: isSmallScreen ? 'none' : 'block',
                     mt: 1,
-                    fontSize: '1rem',
+                    fontSize: isSmallScreen ? '0.8rem' : '1rem',
                     opacity: 0.7,
                     transition: 'opacity 0.2s ease',
                     '&:hover': {
-                      opacity: 1
-                    }
+                      opacity: 1,
+                    },
                   }}
                 >
                   LED lighting • Dust protection • Modular design • Custom backgrounds
@@ -234,7 +274,7 @@ const Bento = () => {
         </Box>
         <Box
           sx={{
-            width: '20%',
+            width: isSmallScreen ? '100%' : '20%',
             borderRadius: '20px',
             display: 'flex',
             alignItems: 'center',
@@ -242,38 +282,44 @@ const Bento = () => {
             flexDirection: 'row',
             backgroundColor: 'black',
             position: 'relative',
-            overflow: 'hidden'
-          }}>
-          <Typography variant="h2"
+            overflow: 'hidden',
+            minHeight: isSmallScreen ? '150px' : 'auto',
+          }}
+        >
+          <Typography
+            variant={isSmallScreen ? 'h5' : 'h2'}
             sx={{
               fontWeight: 600,
-              transform: 'rotate(-90deg)',
+              transform: isSmallScreen ? 'none' : 'rotate(-90deg)',
               transformOrigin: 'center',
               width: 'max-content',
               ...styles.textGradientTwo,
               position: 'absolute',
               zIndex: 1,
               opacity: 0.8,
-              fontSize: '4rem'
-            }}>
+              fontSize: isSmallScreen ? '3rem' : '4rem',
+            }}
+          >
             3D TOY CAST
           </Typography>
           <Box
-            component={'img'}
+            component="img"
             src={f1}
             alt="f-1"
             sx={{
+              display: isSmallScreen ? 'none' : 'block',
               position: 'absolute',
               zIndex: 2,
-              left: '67%',
+              left: isSmallScreen ? '50%' : '67%',
               top: '50%',
               transform: 'translate(-50%, -50%)',
+              width: isSmallScreen ? '50%' : 'auto',
             }}
           />
         </Box>
       </Box>
     </Box>
-  )
-}
+  );
+};
 
 export default Bento;

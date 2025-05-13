@@ -102,7 +102,7 @@ const Footer = () => {
               <Typography variant="h6" fontWeight="bold" sx={{ fontSize: { xs: '1rem', md: '1.25rem' } }}>
                 Follow Us
               </Typography>
-              <Stack direction="row" spacing={1} sx={{ justifyContent: { xs: 'center', md: 'flex-start' } }}>
+              <Stack direction="row" spacing={1} sx={{ justifyContent: 'flex-start' }}>
                 <IconButton color="primary"><FacebookIcon /></IconButton>
                 <IconButton sx={{ color: '#E1306C' }}><InstagramIcon /></IconButton>
                 <IconButton color="error"><YouTubeIcon /></IconButton>
