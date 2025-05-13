@@ -1,9 +1,10 @@
 import Bento from '@components/Bento'
+import Footer from '@components/Footer'
 import Hero from '@components/Hero'
+import ScrollToTop from '@components/ScrollToTop'
 import Selection from '@components/Selection'
 import Testimonies from '@components/Testimonies'
 import { Box } from '@mui/material'
-import React from 'react'
 
 const MainPage = () => {
   return (
@@ -12,6 +13,8 @@ const MainPage = () => {
       <Bento />
       <Selection />
       <Testimonies />
+      <Footer />
+      <ScrollToTop />
     </Box>
   )
 }
