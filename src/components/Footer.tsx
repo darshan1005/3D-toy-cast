@@ -33,23 +33,26 @@ const Footer = () => {
         padding: 4,
         borderRadius: 3,
       }}>
-        <Stack direction={{ xs: 'column', md: 'row' }} spacing={4} >
+        <Stack direction={{ xs: 'column', md: 'row' }} spacing={4}>
           {/* Left Section */}
           <Stack
             spacing={2}
             sx={{
               bgcolor: 'black',
               color: 'white',
-              p: 3,
+              p: { xs: 2, md: 3 },
               borderRadius: 2,
               flex: 1,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              textAlign: { xs: 'center', md: 'left' },
             }}
           >
-            <Typography variant="h3" fontWeight="bold" color="red">3D TOY CAST</Typography>
-            <Typography variant="h5" fontWeight="bold" sx={{ textAlign: 'center' }}>
+            <Typography variant="h3" fontWeight="bold" color="red" sx={{ fontSize: { xs: '1.8rem', md: '2.5rem' } }}>
+              3D TOY CAST
+            </Typography>
+            <Typography variant="h5" fontWeight="bold" sx={{ textAlign: 'center', fontSize: { xs: '1rem', md: '1.5rem' } }}>
               We combine precision engineering with artistic design to deliver collector-grade products.
             </Typography>
             <Typography variant="caption" sx={{ opacity: 0.6 }}>
@@ -59,66 +62,73 @@ const Footer = () => {
               variant="body2"
               sx={{
                 opacity: 0.7,
-                fontSize: '0.9rem',
+                fontSize: { xs: '0.8rem', md: '0.9rem' },
                 textAlign: 'center',
                 transition: 'opacity 0.2s ease',
                 '&:hover': {
-                  opacity: 1
-                }
+                  opacity: 1,
+                },
               }}
             >
               {FooterContent}
             </Typography>
           </Stack>
+
           {/* Right Section */}
-          <Stack spacing={4}>
+          <Stack spacing={4} flex={1}>
             {/* Contact Info */}
             <Stack spacing={2}>
-              <Typography variant="h6" fontWeight="bold">Contact Us</Typography>
+              <Typography variant="h6" fontWeight="bold" sx={{ fontSize: { xs: '1rem', md: '1.25rem' } }}>
+                Contact Us
+              </Typography>
               <Stack spacing={1}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
                   <WhatsAppIcon color="success" />
-                  <Typography>+1 99X XXX XX0</Typography>
+                  <Typography sx={{ fontSize: { xs: '0.9rem', md: '1rem' } }}>+91 99X XXX XX0</Typography>
                 </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
                   <EmailIcon color="primary" />
-                  <Typography>contact@3dtoycast.com</Typography>
+                  <Typography sx={{ fontSize: { xs: '0.9rem', md: '1rem' } }}>contact@3dtoycast.com</Typography>
                 </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
                   <PhoneIcon color="secondary" />
-                  <Typography>+1 9XX XXX XX1</Typography>
+                  <Typography sx={{ fontSize: { xs: '0.9rem', md: '1rem' } }}>+1 9XX XXX XX1</Typography>
                 </Box>
               </Stack>
             </Stack>
-          </Stack>
-          {/* Social Media */}
-          <Stack>
+
+            {/* Social Media */}
             <Stack spacing={1}>
-              <Typography variant="h6" fontWeight="bold">Follow Us</Typography>
-              <Stack direction="row" spacing={1}>
+              <Typography variant="h6" fontWeight="bold" sx={{ fontSize: { xs: '1rem', md: '1.25rem' } }}>
+                Follow Us
+              </Typography>
+              <Stack direction="row" spacing={1} sx={{ justifyContent: { xs: 'center', md: 'flex-start' } }}>
                 <IconButton color="primary"><FacebookIcon /></IconButton>
                 <IconButton sx={{ color: '#E1306C' }}><InstagramIcon /></IconButton>
                 <IconButton color="error"><YouTubeIcon /></IconButton>
                 <IconButton sx={{ color: '#0088cc' }}><TelegramIcon /></IconButton>
               </Stack>
             </Stack>
+
             {/* Newsletter */}
             <Stack spacing={2}>
-              <Typography variant="h6" fontWeight="bold">
+              <Typography variant="h6" fontWeight="bold" sx={{ fontSize: { xs: '1rem', md: '1.25rem' } }}>
                 For Business
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: '0.8rem', md: '1rem' } }}>
                 Please send us the business mail below
               </Typography>
-              <Stack direction="row" spacing={1}>
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1}>
                 <Input
                   placeholder="Enter your email"
                   value={email}
                   onChange={handleEmailChange}
                   error={emailError}
                   sx={{
+                    flex: 1,
                     '&:before': { borderColor: 'rgba(0, 0, 0, 0.23)' },
-                    '& input': { color: emailError ? 'error.main' : 'inherit' }
+                    '& input': { color: emailError ? 'error.main' : 'inherit' },
+                    fontSize: { xs: '0.8rem', md: '1rem' },
                   }}
                 />
                 <Button
@@ -126,14 +136,15 @@ const Footer = () => {
                   disabled={emailError || !email}
                   sx={{
                     bgcolor: 'black',
-                    '&:hover': { bgcolor: 'red' }
+                    '&:hover': { bgcolor: 'red' },
+                    fontSize: { xs: '0.8rem', md: '1rem' },
                   }}
                 >
                   SEND
                 </Button>
               </Stack>
               {emailError && (
-                <Typography variant="caption" color="error">
+                <Typography variant="caption" color="error" sx={{ fontSize: { xs: '0.7rem', md: '0.9rem' } }}>
                   Please enter a valid email address
                 </Typography>
               )}
