@@ -1,4 +1,23 @@
 import { Box, Typography } from "@mui/material";
+import f1 from '../assets/f-1.svg';
+import superCar from '../assets/supercar.png';
+
+const styles = {
+  textGradient: {
+    background: 'linear-gradient(90deg,rgb(255, 255, 255),rgb(27, 27, 27))',
+    backgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    color: 'transparent',
+    display: 'inline-block'
+  },
+  textGradientTwo: {
+    background: 'linear-gradient(rgb(255, 255, 255),rgb(0, 0, 0))',
+    backgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    color: 'transparent',
+    display: 'inline-block'
+  }
+}
 
 const Bento = () => {
   return (
@@ -24,18 +43,40 @@ const Bento = () => {
                   flex: 1,
                   borderRadius: '20px',
                   display: 'flex',
-                  alignItems: 'center',
+                  alignItems: 'start',
                   justifyContent: 'center',
                   flexDirection: 'column',
                   minHeight: '175px',
                   backgroundColor: 'black',
+                  px: 4,
                 }}
               >
-                <Typography variant="h4" sx={{ color: 'white', fontWeight: 600 }}>
+                <Typography variant="h3" sx={{ color: 'white', fontWeight: 600 }}>
                   3D Printed Frames
                 </Typography>
-                <Typography sx={{ color: '#dedede', fontSize: '0.9rem', px: 2, mt: 1 }}>
-                  Premium quality frames with stunning detail and durability
+                <Typography
+                  sx={{
+                    color: 'rgba(255, 255, 255, 0.8)',
+                    fontSize: '1.5rem',
+                    fontWeight: 400
+                  }}
+                >
+                  Custom printed frames with multiple design variants
+                  <Box
+                    component="span"
+                    sx={{
+                      display: 'block',
+                      mt: 1,
+                      fontSize: '1rem',
+                      opacity: 0.7,
+                      transition: 'opacity 0.2s ease',
+                      '&:hover': {
+                        opacity: 1
+                      }
+                    }}
+                  >
+                    High-quality materials • Multiple sizes available • Custom color options • UV-resistant coating
+                  </Box>
                 </Typography>
               </Box>
               <Box
@@ -43,18 +84,40 @@ const Bento = () => {
                   flex: 1,
                   borderRadius: '20px',
                   display: 'flex',
-                  alignItems: 'center',
+                  alignItems: 'start',
                   justifyContent: 'center',
                   flexDirection: 'column',
                   minHeight: '175px',
                   backgroundColor: 'red',
+                  px: 4,
                 }}
               >
-                <Typography variant="h4" sx={{ color: 'white', fontWeight: 600 }}>
+                <Typography variant="h3" sx={{ color: 'white', fontWeight: 600 }}>
                   Die-Cast Collection
                 </Typography>
-                <Typography sx={{ color: '#f8f8f8', fontSize: '0.9rem', px: 2, mt: 1 }}>
-                  Authentic replicas with precise engineering details
+                <Typography
+                  sx={{
+                    color: 'rgba(255, 255, 255, 0.8)',
+                    fontSize: '1.5rem',
+                    fontWeight: 400
+                  }}
+                >
+                  Detailed diecast metal toys with precision engineering
+                  <Box
+                    component="span"
+                    sx={{
+                      display: 'block',
+                      mt: 1,
+                      fontSize: '1rem',
+                      opacity: 0.7,
+                      transition: 'opacity 0.2s ease',
+                      '&:hover': {
+                        opacity: 1
+                      }
+                    }}
+                  >
+                    1:18 & 1:24 scale • Opening parts • Premium detailing • Limited editions
+                  </Box>
                 </Typography>
               </Box>
             </Box>
@@ -70,17 +133,30 @@ const Bento = () => {
                 backgroundColor: 'black',
               }}
             >
-              <Typography variant="h2" sx={{ color: 'white', fontWeight: 700 }}>
+              <Typography variant="h2"
+                sx={{
+                  fontWeight: 700,
+                  ...styles.textGradient,
+                }}>
                 700+
               </Typography>
-              <Typography variant="h4" sx={{ color: 'white', mt: 1 }}>
-                Satisfied Collectors
+              <Typography
+                variant="h4"
+                sx={{
+                  ...styles.textGradient,
+                  fontWeight: 600,
+                  width: '70%',
+                  textAlign: 'center'
+                }}
+              >
+                Order's Completed
               </Typography>
             </Box>
           </Box>
           <Box display={'flex'} flexDirection='row' gap={2}>
             <Box
               sx={{
+                position: 'relative',
                 flex: 1,
                 borderRadius: '20px',
                 display: 'flex',
@@ -89,9 +165,27 @@ const Bento = () => {
                 flexDirection: 'column',
                 minHeight: '175px',
                 backgroundColor: 'black',
+                '&::before': {
+                  content: '""',
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  backgroundImage: `URL(${superCar})`,
+                  backgroundSize: 'contain',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat',
+                  opacity: 0.5,
+                }
               }}
             >
-              <Typography variant="h6" sx={{ color: 'white', fontWeight: 600 }}>
+              <Typography variant="h5" sx={{
+                color: 'white',
+                fontWeight: 600,
+                position: 'relative',
+                zIndex: 1
+              }}>
                 Fast & Secure Delivery
               </Typography>
             </Box>
@@ -100,36 +194,82 @@ const Bento = () => {
                 flex: 2,
                 borderRadius: '20px',
                 display: 'flex',
-                alignItems: 'center',
+                alignItems: 'start',
                 justifyContent: 'center',
                 flexDirection: 'column',
                 minHeight: '175px',
                 backgroundColor: 'red',
+                px: 4,
               }}
             >
-              <Typography variant="h4" sx={{ color: 'white', fontWeight: 600 }}>
+              <Typography variant="h3" sx={{ color: 'white', fontWeight: 600 }}>
                 Custom Displays
               </Typography>
-              <Typography sx={{ color: '#f8f8f8', fontSize: '0.9rem', px: 2, mt: 1 }}>
-                Bespoke display solutions for your prized collection
+              <Typography
+                sx={{
+                  color: 'rgba(255, 255, 255, 0.8)',
+                  fontSize: '1.5rem',
+                  fontWeight: 400
+                }}
+              >
+                Personalized display environments designed for your models
+                <Box
+                  component="span"
+                  sx={{
+                    display: 'block',
+                    mt: 1,
+                    fontSize: '1rem',
+                    opacity: 0.7,
+                    transition: 'opacity 0.2s ease',
+                    '&:hover': {
+                      opacity: 1
+                    }
+                  }}
+                >
+                  LED lighting • Dust protection • Modular design • Custom backgrounds
+                </Box>
               </Typography>
             </Box>
           </Box>
         </Box>
         <Box
           sx={{
-            width: '350px',
+            width: '20%',
             borderRadius: '20px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            flexDirection: 'column',
+            flexDirection: 'row',
             backgroundColor: 'black',
+            position: 'relative',
+            overflow: 'hidden'
           }}>
-          <Typography variant="h6" sx={{ color: 'white', fontWeight: 600 }}>
+          <Typography variant="h2"
+            sx={{
+              fontWeight: 600,
+              transform: 'rotate(-90deg)',
+              transformOrigin: 'center',
+              width: 'max-content',
+              ...styles.textGradientTwo,
+              position: 'absolute',
+              zIndex: 1,
+              opacity: 0.8,
+              fontSize: '4rem'
+            }}>
             3D TOY CAST
           </Typography>
-
+          <Box
+            component={'img'}
+            src={f1}
+            alt="f-1"
+            sx={{
+              position: 'absolute',
+              zIndex: 2,
+              left: '67%',
+              top: '50%',
+              transform: 'translate(-50%, -50%)',
+            }}
+          />
         </Box>
       </Box>
     </Box>
