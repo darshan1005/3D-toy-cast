@@ -7,13 +7,13 @@ import { Box } from '@mui/material'
 
 const MainPage = () => {
   return (
-    <Box>
+    <>
       <Hero />
       <Bento />
       <Selection />
       <Testimonies />
       <Footer />
-    </Box>
+    </>
   )
 }
 
