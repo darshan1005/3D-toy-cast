@@ -1,25 +1,29 @@
 import React from 'react'
-import { Card, CardContent, Typography, Box, Button, CardMedia } from '@mui/material'
+import { Card, CardContent, Typography, Box, Button, CardMedia, useMediaQuery, useTheme } from '@mui/material'
 
 interface ToyCardProps {
   image: any
   name: string
   description: string
   price: number
+  moterType: string
 }
 
-const ToyCard: React.FC<ToyCardProps> = ({ image, name, description, price }) => {
+const ToyCard: React.FC<ToyCardProps> = ({ image, name, description, price, moterType }) => {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
   return (
     <Card
       sx={{
-        width: 230,
+        width: isSmallScreen ? '90%' : 240,
         bgcolor: 'black',
         color: 'white',
         p: 2,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        height: '100%',
+        height: 330,
         borderRadius: 2,
       }}
     >
@@ -38,8 +42,8 @@ const ToyCard: React.FC<ToyCardProps> = ({ image, name, description, price }) =>
 
       {/* Content */}
       <CardContent sx={{ p: 0, flexGrow: 1 }}>
-        <Typography variant="h6" fontWeight="bold" gutterBottom>
-          {name}
+        <Typography variant="body1" fontWeight="bold" gutterBottom>
+          {name} <Typography component={'span'} variant='caption' sx={{ opacity: 0.7 }}>{moterType}</Typography>
         </Typography>
         <Typography variant="body2" color="white">
           {description}
