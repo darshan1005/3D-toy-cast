@@ -34,17 +34,10 @@ const FramePage = () => {
   }
 
   const handleConfirm = () => {
-    if (!selectedFrame) {
-      sessionStorage.removeItem('selectedFrame')
-    }
-    console.log('Selected frame:', selectedFrame)
-    console.log('SessionStorage data:', {
-      selectedToys: sessionStorage.getItem('selectedToys'),
-      selectedFrame: sessionStorage.getItem('selectedFrame'),
-    })
-
     // Navigate to home page after confirming
-    navigate('/')
+    navigate('/', {
+      state: { scrollToSelection: true },
+    })
   }
 
   return (
@@ -54,6 +47,7 @@ const FramePage = () => {
         p: 2,
       }}
     >
+      <ConfirmComponent onConfirm={handleConfirm} selectedFrame={selectedFrame} />
       <Box
         sx={{
           backgroundColor: 'white',
@@ -61,9 +55,6 @@ const FramePage = () => {
           borderRadius: 3,
         }}
       >
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <ConfirmComponent onConfirm={handleConfirm} selectedFrame={selectedFrame} />
-        </Box>
         <Box
           sx={{
             display: 'flex',

@@ -1,13 +1,17 @@
-import { Typography, Box, useTheme } from '@mui/material'
 import { useState } from 'react'
+import { Box, Typography, useTheme } from '@mui/material'
 
 interface TruncatedTextProps {
   text: string
-  textAlign?: 'left' | 'center'
+  textAlign?: 'left' | 'center' | 'right'
   truncatedValue?: number
 }
 
-const TruncatedText = ({ text, textAlign = 'left', truncatedValue = 100 }: TruncatedTextProps) => {
+const TruncatedText: React.FC<TruncatedTextProps> = ({
+  text,
+  textAlign = 'left',
+  truncatedValue = 100,
+}) => {
   const theme = useTheme()
   const [showFullText, setShowFullText] = useState(false)
 
@@ -19,17 +23,16 @@ const TruncatedText = ({ text, textAlign = 'left', truncatedValue = 100 }: Trunc
 
   return (
     <Typography
-      variant="body2"
+      variant="body1"
       sx={{
         textAlign: {
           xs: textAlign === 'left' ? 'left' : 'center',
-          md: textAlign !== 'left' ? 'left' : '',
+          md: textAlign !== 'left' ? 'left' : undefined,
         },
         fontSize: {
           xs: '0.9rem',
           md: '1rem',
         },
-        lineHeight: 1.5,
       }}
     >
       {isTextLong ? (
@@ -42,7 +45,7 @@ const TruncatedText = ({ text, textAlign = 'left', truncatedValue = 100 }: Trunc
               color: theme.palette.primary.main,
               cursor: 'pointer',
               fontWeight: 'bold',
-              fontSize: '0.9rem',
+              fontSize: '1rem',
               marginLeft: '0.5rem',
             }}
           >
@@ -55,5 +58,4 @@ const TruncatedText = ({ text, textAlign = 'left', truncatedValue = 100 }: Trunc
     </Typography>
   )
 }
-
 export default TruncatedText

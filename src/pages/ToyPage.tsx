@@ -13,8 +13,10 @@ import { useState, useEffect } from 'react'
 import ToyCard from '@components/custom/ToyCard'
 import { carToyData, ToyDataProps } from '../data/ToyData'
 import ConfirmComponent from '@components/custom/ConfirmComponent'
+import { useNavigate } from 'react-router-dom'
 
 const ToysPage = () => {
+  const navigate = useNavigate()
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
 
@@ -93,205 +95,199 @@ const ToysPage = () => {
         sessionStorage.setItem('selectedToys', JSON.stringify(newSelected))
       }
 
-      console.log('Selected toys in sessionStorage:', newSelected)
       return newSelected
     })
   }
 
   const handleConfirm = () => {
-    if (selectedToys.length === 0) {
-      sessionStorage.removeItem('selectedToys')
-    }
-    console.log('Selected toys:', selectedToys)
-    console.log('SessionStorage data:', {
-      selectedToys: sessionStorage.getItem('selectedToys'),
-      selectedFrame: sessionStorage.getItem('selectedFrame'),
+    // Navigate to home page after confirming
+    navigate('/', {
+      state: { scrollToSelection: true },
     })
   }
 
   return (
-    <Box
-      sx={{
-        backgroundColor: 'red',
-        p: 2,
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
+    <>
       <Box
         sx={{
-          backgroundColor: 'white',
-          padding: 2,
-          borderRadius: 3,
-          flex: 1,
+          backgroundColor: 'red',
+          p: 2,
+          minHeight: '100vh',
           display: 'flex',
           flexDirection: 'column',
         }}
       >
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <ConfirmComponent onConfirm={handleConfirm} selectedToy={selectedToys[0]} />
-        </Box>
-
-        {/* Filters Section */}
-        <Stack
-          direction={isSmallScreen ? 'column' : 'row'}
-          spacing={2}
-          mb={2}
-          justifyContent="center"
-          alignItems={isSmallScreen ? 'flex-start' : 'center'}
+        <ConfirmComponent onConfirm={handleConfirm} selectedToy={selectedToys[0]} />
+        <Box
+          sx={{
+            backgroundColor: 'white',
+            padding: 2,
+            borderRadius: 3,
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+          }}
         >
-          <Select
-            value={selectedType}
-            onChange={e => handleTypeChange(e.target.value)}
-            displayEmpty
-            sx={{
-              minWidth: 250,
-              height: isSmallScreen ? '40px' : 'auto',
-              width: isSmallScreen ? '100%' : 'auto',
-            }}
+          {/* Filters Section */}
+          <Stack
+            direction={isSmallScreen ? 'column' : 'row'}
+            spacing={2}
+            mb={2}
+            justifyContent="center"
+            alignItems={isSmallScreen ? 'flex-start' : 'center'}
           >
-            <MenuItem value="">Select Type</MenuItem>
-            {getTypeOptions().map((type, index) => (
-              <MenuItem key={index} value={type}>
-                {type}
-              </MenuItem>
-            ))}
-          </Select>
+            <Select
+              value={selectedType}
+              onChange={e => handleTypeChange(e.target.value)}
+              displayEmpty
+              sx={{
+                minWidth: 250,
+                height: isSmallScreen ? '40px' : 'auto',
+                width: isSmallScreen ? '100%' : 'auto',
+              }}
+            >
+              <MenuItem value="">Select Type</MenuItem>
+              {getTypeOptions().map((type, index) => (
+                <MenuItem key={index} value={type}>
+                  {type}
+                </MenuItem>
+              ))}
+            </Select>
 
-          <Autocomplete
-            multiple
-            options={getBrandOptions()}
-            value={selectedBrands}
-            onChange={(event, newValue) => setSelectedBrands(newValue)}
-            renderInput={params => (
-              <TextField {...params} label="Select Brands" placeholder="Brands" />
-            )}
-            renderTags={(value, getTagProps) => (
-              <>
-                {getDisplayedBrands().map((option, index) => (
-                  <span {...getTagProps({ index })}>{option}</span>
-                ))}
-                {selectedBrands.length > 1 && (
-                  <span
-                    style={{
-                      backgroundColor: 'lightgrey',
-                      color: 'black',
-                      borderRadius: '3rem',
-                      padding: 4,
-                    }}
-                  >
-                    +{selectedBrands.length - 1}
-                  </span>
-                )}
-              </>
-            )}
-            sx={{
-              minWidth: 250,
-              width: isSmallScreen ? '100%' : 'auto',
-              height: isSmallScreen ? '55px' : 'auto',
-            }}
-            disabled={!selectedType}
-          />
+            <Autocomplete
+              multiple
+              options={getBrandOptions()}
+              value={selectedBrands}
+              onChange={(event, newValue) => setSelectedBrands(newValue)}
+              renderInput={params => (
+                <TextField {...params} label="Select Brands" placeholder="Brands" />
+              )}
+              renderTags={(value, getTagProps) => (
+                <>
+                  {getDisplayedBrands().map((option, index) => (
+                    <span {...getTagProps({ index })}>{option}</span>
+                  ))}
+                  {selectedBrands.length > 1 && (
+                    <span
+                      style={{
+                        backgroundColor: 'lightgrey',
+                        color: 'black',
+                        borderRadius: '3rem',
+                        padding: 4,
+                      }}
+                    >
+                      +{selectedBrands.length - 1}
+                    </span>
+                  )}
+                </>
+              )}
+              sx={{
+                minWidth: 250,
+                width: isSmallScreen ? '100%' : 'auto',
+                height: isSmallScreen ? '55px' : 'auto',
+              }}
+              disabled={!selectedType}
+            />
 
-          <Button
-            variant="contained"
-            onClick={handleApplyFilters}
-            disabled={!selectedType && selectedBrands.length === 0}
-            sx={{
-              fontWeight: 600,
-              bgcolor: 'black',
-              color: 'white',
-              width: isSmallScreen ? '100%' : 'auto',
-              '&:hover': {
-                bgcolor: 'white',
+            <Button
+              variant="contained"
+              onClick={handleApplyFilters}
+              disabled={!selectedType && selectedBrands.length === 0}
+              sx={{
+                fontWeight: 600,
+                bgcolor: 'black',
+                color: 'white',
+                width: isSmallScreen ? '100%' : 'auto',
+                '&:hover': {
+                  bgcolor: 'white',
+                  color: 'black',
+                },
+              }}
+            >
+              Apply
+            </Button>
+
+            <Button
+              variant="outlined"
+              onClick={handleResetFilters}
+              sx={{
+                fontWeight: 600,
                 color: 'black',
-              },
-            }}
-          >
-            Apply
-          </Button>
+                width: isSmallScreen ? '100%' : 'auto',
+                '&:hover': {
+                  bgcolor: 'white',
+                  color: 'black',
+                },
+              }}
+              disabled={selectedBrands.length === 0}
+            >
+              Clear Filters
+            </Button>
+          </Stack>
 
-          <Button
-            variant="outlined"
-            onClick={handleResetFilters}
-            sx={{
-              fontWeight: 600,
-              color: 'black',
-              width: isSmallScreen ? '100%' : 'auto',
-              '&:hover': {
-                bgcolor: 'white',
-                color: 'black',
-              },
-            }}
-            disabled={selectedBrands.length === 0}
-          >
-            Clear Filters
-          </Button>
-        </Stack>
+          {/* Selected Brands Display */}
+          {selectedBrands.length !== 0 && (
+            <Box
+              sx={{
+                display: 'flex',
+                margin: '0 auto',
+                flexWrap: 'wrap',
+                gap: 1,
+                maxHeight: '100px',
+                overflowY: 'auto',
+                mb: 2,
+                p: 1,
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+                width: isSmallScreen ? '100%' : '100%',
+              }}
+            >
+              {selectedBrands.map((brand, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    backgroundColor: '#f0f0f0',
+                    borderRadius: '16px',
+                    padding: '4px 8px',
+                    fontSize: '14px',
+                    fontWeight: 500,
+                  }}
+                >
+                  {brand}
+                </Box>
+              ))}
+            </Box>
+          )}
 
-        {/* Selected Brands Display */}
-        {selectedBrands.length !== 0 && (
+          {/* Toys Grid */}
           <Box
             sx={{
-              display: 'flex',
-              margin: '0 auto',
-              flexWrap: 'wrap',
-              gap: 1,
-              maxHeight: '100px',
-              overflowY: 'auto',
-              mb: 2,
-              p: 1,
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-              width: isSmallScreen ? '100%' : '100%',
+              display: 'grid',
+              gridTemplateColumns: isSmallScreen ? '1fr' : 'repeat(auto-fit, minmax(200px, 1fr))',
+              gap: '33px',
+              placeItems: isSmallScreen ? 'center' : 'start',
+              maxWidth: isSmallScreen ? '100%' : '98%',
             }}
           >
-            {selectedBrands.map((brand, index) => (
-              <Box
-                key={index}
-                sx={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  backgroundColor: '#f0f0f0',
-                  borderRadius: '16px',
-                  padding: '4px 8px',
-                  fontSize: '14px',
-                  fontWeight: 500,
-                }}
-              >
-                {brand}
+            {filteredData.map(toy => (
+              <Box key={toy.id}>
+                <ToyCard
+                  image={toy.image}
+                  name={toy.name}
+                  description={toy.description}
+                  price={toy.price}
+                  moterType={toy.type}
+                  onSelect={() => handleToySelect(toy)}
+                  isSelected={selectedToys.some(t => t.id === toy.id)}
+                />
               </Box>
             ))}
           </Box>
-        )}
-
-        {/* Toys Grid */}
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: isSmallScreen ? '1fr' : 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '32px',
-            placeItems: isSmallScreen ? 'center' : 'start',
-            maxWidth: isSmallScreen ? '100%' : '100%',
-          }}
-        >
-          {filteredData.map(toy => (
-            <Box key={toy.id}>
-              <ToyCard
-                image={toy.image}
-                name={toy.name}
-                description={toy.description}
-                price={toy.price}
-                moterType={toy.type}
-                onSelect={() => handleToySelect(toy)}
-                isSelected={selectedToys.some(t => t.id === toy.id)}
-              />
-            </Box>
-          ))}
         </Box>
       </Box>
-    </Box>
+    </>
   )
 }
 

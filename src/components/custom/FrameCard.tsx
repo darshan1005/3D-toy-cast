@@ -19,11 +19,15 @@ interface FrameCardProps {
   frameDetails: FrameDetails
   onSelect?: () => void
   isSelected?: boolean
+  isExpanded?: boolean
 }
 
-const FrameCard: React.FC<FrameCardProps> = ({ frameDetails, onSelect, isSelected = false }) => {
-  const [isExpanded, setIsExpanded] = useState(false)
-
+const FrameCard: React.FC<FrameCardProps> = ({
+  frameDetails,
+  onSelect,
+  isSelected = false,
+  isExpanded,
+}) => {
   return (
     <Card
       sx={{
@@ -157,7 +161,7 @@ const FrameCard: React.FC<FrameCardProps> = ({ frameDetails, onSelect, isSelecte
               minWidth: 80,
             }}
           >
-          {isSelected ? 'Selected' : 'Select'}
+            {isSelected ? 'Selected' : 'Select'}
           </Button>
           <Box
             sx={{

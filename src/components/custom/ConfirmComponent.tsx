@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Button } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 interface ConfirmComponentProps {
   onConfirm: () => void
@@ -22,24 +22,9 @@ const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
   selectedToy,
   selectedFrame,
 }) => {
-  const navigate = useNavigate()
-
   const handleConfirm = () => {
-    // Save to session storage
-    if (selectedToy) {
-      sessionStorage.setItem('selectedToy', JSON.stringify(selectedToy))
-    }
-    if (selectedFrame) {
-      sessionStorage.setItem('selectedFrame', JSON.stringify(selectedFrame))
-    }
-
-    // If we're on the toy page and have selected a toy, navigate to home page and change toy button to green
-    if (selectedToy && !selectedFrame) {
-      navigate('/')
-    } else {
-      // If we're on the frame page or have both selections, call the onConfirm callback
-      onConfirm()
-    }
+    // Call onConfirm callback if provided
+    onConfirm()
   }
 
   return (
@@ -50,8 +35,13 @@ const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
         alignItems: 'center',
         gap: 2,
         p: 2,
+        mb: 2,
         bgcolor: 'white',
         borderRadius: 2,
+        position: 'sticky',
+        top: 0,
+        zIndex: 1000,
+        width: '100%',
       }}
     >
       {/* Back Button */}
@@ -85,6 +75,7 @@ const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
           px: 3,
           '&:hover': { bgcolor: '#333' },
         }}
+        disabled={!selectedToy && !selectedFrame}
       >
         Confirm
       </Button>
