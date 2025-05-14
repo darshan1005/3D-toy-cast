@@ -3,12 +3,13 @@ import MainPage from './pages/MainPage'
 import ScrollToTop from '@components/ScrollToTop'
 import ToysPage from './pages/ToyPage'
 import FramePage from './pages/FramePage'
+import ScrollTop from './hooks/scrollTop'
 
 const App = () => {
-  console.log('App component rendered')
   return (
     <Router>
       <ScrollToTop />
+      <ScrollTop /> {/* trigger scroll to top on route change */}
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="toyspage" element={<ToysPage />} />

@@ -210,6 +210,7 @@ const Selection = () => {
           }}
           title="Order Summary"
           centerTitle
+          width={500}
         >
           <OrderForm />
         </CustomPopupHOC>
