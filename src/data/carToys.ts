@@ -1,0 +1,129 @@
+export interface ToyCardProps {
+  id: number
+  image: any
+  name: string
+  description: string
+  price: number
+}
+
+export const carToys: ToyCardProps[] = [
+  {
+    id: 1,
+    image: '/images/cars/ferrari.jpg',
+    name: 'Ferrari F40',
+    description:
+      'The legendary Italian supercar that dominated the 80s with its twin-turbo V8 engine and iconic design.',
+    price: 129.99,
+  },
+  {
+    id: 2,
+    image: '/images/cars/porsche.jpg',
+    name: 'Porsche 911',
+    description:
+      'The timeless German sports car that combines daily usability with track-ready performance.',
+    price: 119.99,
+  },
+  {
+    id: 3,
+    image: '/images/cars/lamborghini.jpg',
+    name: 'Lamborghini Countach',
+    description:
+      'The wedge-shaped Italian supercar that defined the 80s with its aggressive styling and powerful V12.',
+    price: 139.99,
+  },
+  {
+    id: 4,
+    image: '/images/cars/mustang.jpg',
+    name: 'Ford Mustang',
+    description:
+      "America's iconic muscle car that brings raw power and classic styling to the streets.",
+    price: 89.99,
+  },
+  {
+    id: 5,
+    image: '/images/cars/bugatti.jpg',
+    name: 'Bugatti Veyron',
+    description:
+      'The engineering marvel that redefined speed limits with its quad-turbo W16 engine.',
+    price: 149.99,
+  },
+  {
+    id: 6,
+    image: '/images/cars/mclaren.jpg',
+    name: 'McLaren F1',
+    description:
+      'The revolutionary British supercar that held the production car speed record for over a decade.',
+    price: 159.99,
+  },
+  {
+    id: 7,
+    image: '/images/cars/audi.jpg',
+    name: 'Audi R8',
+    description:
+      'The German supercar that combines quattro all-wheel drive with stunning performance.',
+    price: 129.99,
+  },
+  {
+    id: 8,
+    image: '/images/cars/mercedes.jpg',
+    name: 'Mercedes-Benz 300SL',
+    description:
+      'The iconic Gullwing doors and elegant design make this German classic a true automotive legend.',
+    price: 119.99,
+  },
+  {
+    id: 9,
+    image: '/images/cars/jaguar.jpg',
+    name: 'Jaguar E-Type',
+    description:
+      'Enzo Ferrari called it the most beautiful car ever made, a British masterpiece of design.',
+    price: 109.99,
+  },
+  {
+    id: 10,
+    image: '/images/cars/aston.jpg',
+    name: 'Aston Martin DB5',
+    description:
+      'The quintessential British GT car, made famous by James Bond and its elegant styling.',
+    price: 139.99,
+  },
+  {
+    id: 11,
+    image: '/images/cars/chevrolet.jpg',
+    name: 'Chevrolet Corvette',
+    description:
+      "America's sports car that delivers supercar performance at a fraction of the price.",
+    price: 99.99,
+  },
+  {
+    id: 12,
+    image: '/images/cars/koenigsegg.jpg',
+    name: 'Koenigsegg Agera',
+    description:
+      'The Swedish hypercar that pushes the boundaries of automotive engineering and speed.',
+    price: 169.99,
+  },
+  {
+    id: 13,
+    image: '/images/cars/pagani.jpg',
+    name: 'Pagani Huayra',
+    description:
+      'The Italian hypercar that combines art and engineering with its handcrafted carbon-titanium chassis.',
+    price: 179.99,
+  },
+  {
+    id: 14,
+    image: '/images/cars/rolls.jpg',
+    name: 'Rolls-Royce Phantom',
+    description:
+      'The ultimate luxury car that sets the standard for opulence and refinement in automotive design.',
+    price: 189.99,
+  },
+  {
+    id: 15,
+    image: '/images/cars/bentley.jpg',
+    name: 'Bentley Continental GT',
+    description: 'The perfect blend of British luxury and performance in a grand touring package.',
+    price: 149.99,
+  },
+]

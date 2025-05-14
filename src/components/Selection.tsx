@@ -1,9 +1,11 @@
 import { Box, Button, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import orangeCar from '../assets/orangeCar.png';
-
+import { Link } from "react-router-dom";
+const selectionButtonObj = [{label:'Toy', link:'/toyspage'}, {label:'Frame', link:'/framespage'}]
 const Selection = () => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
 
   return (
     <Box
@@ -84,9 +86,10 @@ const Selection = () => {
               width="100%"
               justifyContent="center"
             >
-              {['Toy', 'Frame'].map((label) => (
+              {Object.values(selectionButtonObj).map((label) => (
+                <Link to={label.link} key={label.label} style={{ textDecoration: 'none' }}>
                 <Button
-                  key={label}
+                  key={label.label}
                   variant={isSmallScreen ? "contained" : "outlined"}
                   sx={{
                     flex: 1,
@@ -101,8 +104,9 @@ const Selection = () => {
                     },
                   }}
                 >
-                  {label}
+                  {label.label}
                 </Button>
+                </Link>
               ))}
             </Stack>
 
