@@ -8,7 +8,6 @@ import {
   MenuItem,
   Autocomplete,
   TextField,
-  Tooltip
 } from '@mui/material';
 import { useState } from 'react';
 import ToyCard from '@components/custom/ToyCard';
@@ -25,6 +24,10 @@ const ToysPage = () => {
   const handleTypeChange = (type: string) => {
     setSelectedType(type);
     setSelectedBrands([]);
+  };
+
+  const getTypeOptions = () => {
+    return [...new Set(carToyData.map(toy => toy.type))];
   };
 
   const getBrandOptions = () => {
@@ -104,8 +107,9 @@ const ToysPage = () => {
             }}
           >
             <MenuItem value="">Select Type</MenuItem>
-            <MenuItem value="Car">Car</MenuItem>
-            <MenuItem value="Bike">Bike</MenuItem>
+            {getTypeOptions().map((type, index) => (
+              <MenuItem key={index} value={type}>{type}</MenuItem>
+            ))}
           </Select>
 
           <Autocomplete
