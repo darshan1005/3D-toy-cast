@@ -1,11 +1,49 @@
-import { Box, Button, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
-import orangeCar from '../assets/orangeCar.png';
-import { Link } from "react-router-dom";
-const selectionButtonObj = [{ label: 'Toy', link: '/toyspage' }, { label: 'Frame', link: '/framespage' }]
-const Selection = () => {
-  const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+import { Box, Button, Stack, Typography, useMediaQuery, useTheme } from '@mui/material'
+import orangeCar from '../assets/orangeCar.png'
+import { Link, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 
+const selectionButtonObj = [
+  { label: 'Toy', link: '/toyspage' },
+  { label: 'Frame', link: '/framespage' },
+]
+
+const Selection = () => {
+  const theme = useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
+  const navigate = useNavigate()
+  const [selectedToy, setSelectedToy] = useState<any>(null)
+  const [selectedFrame, setSelectedFrame] = useState<any>(null)
+
+  // Function to check if an item is selected
+  const isItemSelected = (item: string) => {
+    const storageKey = item === 'Toy' ? 'selectedToys' : 'selectedFrame'
+    const storedData = sessionStorage.getItem(storageKey)
+    return storedData !== null && storedData !== '[]' && storedData !== 'null'
+  }
+
+  useEffect(() => {
+    // Load selections from sessionStorage
+    const toy = sessionStorage.getItem('selectedToys')
+    const frame = sessionStorage.getItem('selectedFrame')
+
+    if (toy && toy !== '[]' && toy !== 'null') {
+      setSelectedToy(JSON.parse(toy))
+    } else {
+      setSelectedToy(null)
+    }
+
+    if (frame && frame !== '[]' && frame !== 'null') {
+      setSelectedFrame(JSON.parse(frame))
+    } else {
+      setSelectedFrame(null)
+    }
+  }, [])
+
+  const handleOrder = () => {
+    // Handle order logic here
+    console.log('Order placed with:', { toy: selectedToy, frame: selectedFrame })
+  }
 
   return (
     <Box
@@ -67,62 +105,78 @@ const Selection = () => {
               fontSize: isSmallScreen ? '1rem' : '1.2rem',
               opacity: isSmallScreen ? 1 : 0.7,
               fontWeight: 600,
-              zIndex: 2
+              zIndex: 2,
             }}
           >
-            Build your perfect gift! Start by selecting your favorite toy and a matching frame to make it truly yours. Only when both are chosen, the magic happens -
+            Build your perfect gift! Start by selecting your favorite toy and a matching frame to
+            make it truly yours. Only when both are chosen, the magic happens -
             <Typography component="span" sx={{ color: 'red', fontWeight: 700 }}>
               3D Toy Caste
             </Typography>
           </Typography>
 
-          <Stack
-            width={isSmallScreen ? '100%' : '50%'}
-            spacing={isSmallScreen ? 2 : 3}
-          >
+          <Stack width={isSmallScreen ? '100%' : '50%'} spacing={isSmallScreen ? 2 : 3}>
             <Stack
               direction={isSmallScreen ? 'column' : 'row'}
               spacing={isSmallScreen ? 2 : 3}
               width="100%"
               justifyContent="center"
             >
-              {Object.values(selectionButtonObj).map((label) => (
-                <Link to={label.link} key={label.label} style={{ textDecoration: 'none', width: '100%' }}>
-                  <Button
-                    key={label.label}
-                    variant={isSmallScreen ? "contained" : "outlined"}
-                    sx={{
-                      width: '100%',
-                      fontSize: isSmallScreen ? '1rem' : '1.4rem',
-                      fontWeight: 600,
-                      borderColor: 'common.black',
-                      bgcolor: isSmallScreen ? 'black' : 'none',
-                      color: isSmallScreen ? 'white' : 'common.black',
-                      '&:hover': {
-                        borderColor: 'red',
-                        color: 'red',
-                      },
-                    }}
+              {selectionButtonObj.map(item => {
+                const isSelected = isItemSelected(item.label)
+                return (
+                  <Link
+                    to={item.link}
+                    key={item.label}
+                    style={{ textDecoration: 'none', width: '100%' }}
                   >
-                    {label.label}
-                  </Button>
-                </Link>
-              ))}
+                    <Button
+                      variant={isSmallScreen ? 'contained' : 'outlined'}
+                      sx={{
+                        width: '100%',
+                        fontSize: isSmallScreen ? '1rem' : '1.4rem',
+                        fontWeight: 600,
+                        borderColor: isSelected ? 'green' : 'common.black',
+                        bgcolor: isSmallScreen
+                          ? isSelected
+                            ? 'green'
+                            : 'black'
+                          : isSelected
+                          ? 'green'
+                          : 'none',
+                        color: isSmallScreen ? 'white' : isSelected ? 'white' : 'common.black',
+                        '&:hover': {
+                          borderColor: isSelected ? 'green' : 'red',
+                          color: isSelected ? 'white' : 'red',
+                          bgcolor: isSelected ? 'green' : 'none',
+                        },
+                      }}
+                    >
+                      {item.label}
+                    </Button>
+                  </Link>
+                )
+              })}
             </Stack>
 
             <Button
               variant="contained"
+              onClick={handleOrder}
+              disabled={!isItemSelected('Toy') || !isItemSelected('Frame')}
               sx={{
                 width: isSmallScreen ? '100%' : '30%',
                 alignSelf: 'center',
-                bgcolor: 'red',
+                bgcolor: isItemSelected('Toy') && isItemSelected('Frame') ? 'green' : 'red',
                 color: 'white',
                 fontWeight: 600,
                 fontSize: isSmallScreen ? '1rem' : '1.2rem',
                 '&:hover': {
-                  bgcolor: 'transparent',
-                  border: '1px solid red',
-                  color: 'red',
+                  bgcolor:
+                    isItemSelected('Toy') && isItemSelected('Frame') ? 'darkgreen' : 'darkred',
+                },
+                '&.Mui-disabled': {
+                  bgcolor: 'grey.400',
+                  color: 'white',
                 },
               }}
             >
@@ -132,7 +186,7 @@ const Selection = () => {
         </Stack>
       </Stack>
     </Box>
-  );
-};
+  )
+}
 
-export default Selection;
+export default Selection

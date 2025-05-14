@@ -8,57 +8,106 @@ import {
   MenuItem,
   Autocomplete,
   TextField,
-} from '@mui/material';
-import { useState } from 'react';
-import ToyCard from '@components/custom/ToyCard';
-import { carToyData } from '../data/ToyData';
+} from '@mui/material'
+import { useState, useEffect } from 'react'
+import ToyCard from '@components/custom/ToyCard'
+import { carToyData, ToyDataProps } from '../data/ToyData'
+import ConfirmComponent from '@components/custom/ConfirmComponent'
 
 const ToysPage = () => {
-  const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const theme = useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
 
-  const [selectedType, setSelectedType] = useState('');
-  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-  const [filteredData, setFilteredData] = useState(carToyData);
+  const [selectedType, setSelectedType] = useState('')
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([])
+  const [filteredData, setFilteredData] = useState(carToyData)
+  const [selectedToys, setSelectedToys] = useState<ToyDataProps[]>([])
+
+  // Load selected toys from sessionStorage on component mount
+  useEffect(() => {
+    const savedToys = sessionStorage.getItem('selectedToys')
+    if (savedToys) {
+      setSelectedToys(JSON.parse(savedToys))
+    }
+  }, [])
 
   const handleTypeChange = (type: string) => {
-    setSelectedType(type);
-    setSelectedBrands([]);
-  };
+    setSelectedType(type)
+    setSelectedBrands([])
+  }
 
   const getTypeOptions = () => {
-    return [...new Set(carToyData.map(toy => toy.type))];
-  };
+    return [...new Set(carToyData.map(toy => toy.type))]
+  }
 
   const getBrandOptions = () => {
-    if (!selectedType) return [];
-    return [...new Set(carToyData.filter(toy => toy.type === selectedType).map(toy => toy.name))];
-  };
+    if (!selectedType) return []
+    return [...new Set(carToyData.filter(toy => toy.type === selectedType).map(toy => toy.name))]
+  }
 
   const getDisplayedBrands = () => {
-    if (selectedBrands.length <= 1) return selectedBrands;
-    return selectedBrands.slice(0, 1);
-  };
+    if (selectedBrands.length <= 1) return selectedBrands
+    return selectedBrands.slice(0, 1)
+  }
 
   const handleApplyFilters = () => {
-    let filtered = carToyData;
+    let filtered = carToyData
 
     if (selectedType) {
-      filtered = filtered.filter(toy => toy.type === selectedType);
+      filtered = filtered.filter(toy => toy.type === selectedType)
     }
 
     if (selectedBrands.length > 0) {
-      filtered = filtered.filter(toy => selectedBrands.some(brand => toy.name.includes(brand)));
+      filtered = filtered.filter(toy => selectedBrands.some(brand => toy.name.includes(brand)))
     }
 
-    setFilteredData(filtered);
-  };
+    setFilteredData(filtered)
+  }
 
   const handleResetFilters = () => {
-    setFilteredData(carToyData);
-    setSelectedType('');
-    setSelectedBrands([]);
-  };
+    setFilteredData(carToyData)
+    setSelectedType('')
+    setSelectedBrands([])
+  }
+
+  const handleToySelect = (toy: ToyDataProps) => {
+    setSelectedToys(prevSelected => {
+      let newSelected
+      const isAlreadySelected = prevSelected.some(t => t.id === toy.id)
+
+      if (isAlreadySelected) {
+        // If toy is already selected, remove it
+        newSelected = prevSelected.filter(t => t.id !== toy.id)
+      } else if (prevSelected.length < 2) {
+        // If less than 2 toys are selected, add the new toy
+        newSelected = [...prevSelected, toy]
+      } else {
+        // If 2 toys are already selected, replace the first one
+        newSelected = [prevSelected[1], toy]
+      }
+
+      // Update sessionStorage
+      if (newSelected.length === 0) {
+        sessionStorage.removeItem('selectedToys')
+      } else {
+        sessionStorage.setItem('selectedToys', JSON.stringify(newSelected))
+      }
+
+      console.log('Selected toys in sessionStorage:', newSelected)
+      return newSelected
+    })
+  }
+
+  const handleConfirm = () => {
+    if (selectedToys.length === 0) {
+      sessionStorage.removeItem('selectedToys')
+    }
+    console.log('Selected toys:', selectedToys)
+    console.log('SessionStorage data:', {
+      selectedToys: sessionStorage.getItem('selectedToys'),
+      selectedFrame: sessionStorage.getItem('selectedFrame'),
+    })
+  }
 
   return (
     <Box
@@ -80,35 +129,33 @@ const ToysPage = () => {
           flexDirection: 'column',
         }}
       >
-        {/* Navigation Buttons */}
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-          mb={3}
-        >
-        </Stack>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <ConfirmComponent onConfirm={handleConfirm} selectedToy={selectedToys[0]} />
+        </Box>
 
         {/* Filters Section */}
         <Stack
           direction={isSmallScreen ? 'column' : 'row'}
           spacing={2}
-          mb={3}
+          mb={2}
           justifyContent="center"
-          alignItems={isSmallScreen ? "flex-start" : "center"}
+          alignItems={isSmallScreen ? 'flex-start' : 'center'}
         >
           <Select
             value={selectedType}
-            onChange={(e) => handleTypeChange(e.target.value)}
+            onChange={e => handleTypeChange(e.target.value)}
             displayEmpty
             sx={{
-              minWidth: 350,
+              minWidth: 250,
+              height: isSmallScreen ? '40px' : 'auto',
               width: isSmallScreen ? '100%' : 'auto',
             }}
           >
             <MenuItem value="">Select Type</MenuItem>
             {getTypeOptions().map((type, index) => (
-              <MenuItem key={index} value={type}>{type}</MenuItem>
+              <MenuItem key={index} value={type}>
+                {type}
+              </MenuItem>
             ))}
           </Select>
 
@@ -117,15 +164,13 @@ const ToysPage = () => {
             options={getBrandOptions()}
             value={selectedBrands}
             onChange={(event, newValue) => setSelectedBrands(newValue)}
-            renderInput={(params) => (
+            renderInput={params => (
               <TextField {...params} label="Select Brands" placeholder="Brands" />
             )}
             renderTags={(value, getTagProps) => (
               <>
                 {getDisplayedBrands().map((option, index) => (
-                  <span {...getTagProps({ index })}>
-                    {option}
-                  </span>
+                  <span {...getTagProps({ index })}>{option}</span>
                 ))}
                 {selectedBrands.length > 1 && (
                   <span
@@ -133,7 +178,7 @@ const ToysPage = () => {
                       backgroundColor: 'lightgrey',
                       color: 'black',
                       borderRadius: '3rem',
-                      padding: 4
+                      padding: 4,
                     }}
                   >
                     +{selectedBrands.length - 1}
@@ -142,8 +187,9 @@ const ToysPage = () => {
               </>
             )}
             sx={{
-              minWidth: 350,
-              width: isSmallScreen ? '100%' : 250,
+              minWidth: 250,
+              width: isSmallScreen ? '100%' : 'auto',
+              height: isSmallScreen ? '55px' : 'auto',
             }}
             disabled={!selectedType}
           />
@@ -185,46 +231,49 @@ const ToysPage = () => {
         </Stack>
 
         {/* Selected Brands Display */}
-        {selectedBrands.length !== 0 && <Box
-          sx={{
-            display: 'flex',
-            margin: '0 auto',
-            flexWrap: 'wrap',
-            gap: 1,
-            maxHeight: '100px',
-            overflowY: 'auto',
-            mb: 2,
-            p: 1,
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            width: '65%'
-          }}
-        >
-          {selectedBrands.map((brand, index) => (
-            <Box
-              key={index}
-              sx={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                backgroundColor: '#f0f0f0',
-                borderRadius: '16px',
-                padding: '4px 8px',
-                fontSize: '14px',
-                fontWeight: 500,
-              }}
-            >
-              {brand}
-            </Box>
-          ))}
-        </Box>}
+        {selectedBrands.length !== 0 && (
+          <Box
+            sx={{
+              display: 'flex',
+              margin: '0 auto',
+              flexWrap: 'wrap',
+              gap: 1,
+              maxHeight: '100px',
+              overflowY: 'auto',
+              mb: 2,
+              p: 1,
+              border: '1px solid #ccc',
+              borderRadius: '4px',
+              width: isSmallScreen ? '100%' : '100%',
+            }}
+          >
+            {selectedBrands.map((brand, index) => (
+              <Box
+                key={index}
+                sx={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  backgroundColor: '#f0f0f0',
+                  borderRadius: '16px',
+                  padding: '4px 8px',
+                  fontSize: '14px',
+                  fontWeight: 500,
+                }}
+              >
+                {brand}
+              </Box>
+            ))}
+          </Box>
+        )}
 
         {/* Toys Grid */}
         <Box
           sx={{
             display: 'grid',
             gridTemplateColumns: isSmallScreen ? '1fr' : 'repeat(auto-fit, minmax(200px, 1fr))',
-            gridGap: '16px',
-            placeItems: 'start',
+            gap: '32px',
+            placeItems: isSmallScreen ? 'center' : 'start',
+            maxWidth: isSmallScreen ? '100%' : '100%',
           }}
         >
           {filteredData.map(toy => (
@@ -235,13 +284,15 @@ const ToysPage = () => {
                 description={toy.description}
                 price={toy.price}
                 moterType={toy.type}
+                onSelect={() => handleToySelect(toy)}
+                isSelected={selectedToys.some(t => t.id === toy.id)}
               />
             </Box>
           ))}
         </Box>
       </Box>
-    </Box >
-  );
-};
+    </Box>
+  )
+}
 
-export default ToysPage;
+export default ToysPage

@@ -18,23 +18,27 @@ interface FrameDetails {
 interface FrameCardProps {
   frameDetails: FrameDetails
   onSelect?: () => void
+  isSelected?: boolean
 }
 
-const FrameCard: React.FC<FrameCardProps> = ({ frameDetails, onSelect }) => {
+const FrameCard: React.FC<FrameCardProps> = ({ frameDetails, onSelect, isSelected = false }) => {
   const [isExpanded, setIsExpanded] = useState(false)
 
   return (
     <Card
       sx={{
-        bgcolor: 'black',
-        color: 'white',
+        bgcolor: isSelected ? '#cccba4' : '#FFFECE',
+        color: '#black',
         display: 'flex',
         padding: 2,
         width: '100%',
         height: isExpanded ? 'auto' : '300px',
-        maxWidth: 1200,
+        maxWidth: 1280,
         borderRadius: 2,
         transition: 'height 0.3s ease-in-out',
+        '&:hover': {
+          bgcolor: isSelected ? '#b2b190' : '#99987b',
+        },
       }}
     >
       {/* Left Section */}
@@ -52,7 +56,7 @@ const FrameCard: React.FC<FrameCardProps> = ({ frameDetails, onSelect }) => {
           sx={{
             width: 200,
             height: 270,
-            bgcolor: 'red',
+            bgcolor: 'black',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
@@ -81,7 +85,7 @@ const FrameCard: React.FC<FrameCardProps> = ({ frameDetails, onSelect }) => {
         {/* Frame Details */}
         <Box
           sx={{
-            bgcolor: 'red',
+            bgcolor: '#FFD0C7',
             height: isExpanded ? 'auto' : '80%',
             minHeight: 100,
             padding: 2,
@@ -144,8 +148,8 @@ const FrameCard: React.FC<FrameCardProps> = ({ frameDetails, onSelect }) => {
             onClick={onSelect}
             variant="contained"
             sx={{
-              bgcolor: 'red',
-              color: 'white',
+              bgcolor: 'black',
+              color: '#FFFECE',
               fontWeight: 'bold',
               '&:hover': { bgcolor: 'darkred' },
               fontSize: '1rem',
@@ -153,17 +157,17 @@ const FrameCard: React.FC<FrameCardProps> = ({ frameDetails, onSelect }) => {
               minWidth: 80,
             }}
           >
-            SELECT
+          {isSelected ? 'Selected' : 'Select'}
           </Button>
           <Box
             sx={{
-              bgcolor: 'red',
+              bgcolor: 'black',
               fontWeight: 'bold',
               fontSize: '1.5rem',
               py: 0.5,
               px: 1,
               textAlign: 'center',
-              color: 'white',
+              color: '#FFFECE',
               minWidth: 80,
               borderRadius: 1,
             }}

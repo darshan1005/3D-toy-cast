@@ -1,7 +1,7 @@
 import superCar from "../assets/superCar.png";
 import bikeImage from "../assets/Bike.svg";
 
-export interface ToyCardProps {
+export interface ToyDataProps {
   id: number;
   image: any;
   name: string;
@@ -10,7 +10,7 @@ export interface ToyCardProps {
   type: string;
 }
 
-export const carToyData: ToyCardProps[] = [
+export const carToyData: ToyDataProps[] = [
   {
     id: 1,
     image: superCar,
