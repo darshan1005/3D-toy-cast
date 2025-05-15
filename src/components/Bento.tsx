@@ -25,11 +25,7 @@ const Bento = () => {
 
   return (
     <Box
-      sx={{
-        backgroundColor: 'red',
-        p: 2,
-        pb: isSmallScreen ? 0.5 : 1,
-      }}
+      sx={{ backgroundColor: 'red', p: 2 }}
     >
       <Box
         sx={{

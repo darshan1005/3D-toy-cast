@@ -67,7 +67,7 @@ const Testimonies = () => {
   ];
 
   return (
-    <Box sx={{ backgroundColor: 'red', p: 2, pb: 1 }}>
+    <Box sx={{ backgroundColor: 'red', p: 2 }}>
       <Box sx={{ backgroundColor: 'white', padding: 2, borderRadius: 3 }}>
         <Stack spacing={3} sx={{ p: 4 }}>
           <Typography variant="h4" fontWeight="bold" textAlign="center" mb={3}>

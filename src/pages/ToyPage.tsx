@@ -9,7 +9,7 @@ import {
   Autocomplete,
   TextField,
 } from '@mui/material'
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import ToyCard from '@components/custom/ToyCard'
 import { carToyData, ToyDataProps } from '../data/ToyData'
 import ConfirmComponent from '@components/custom/ConfirmComponent'
@@ -115,7 +115,7 @@ const ToysPage = () => {
           flexDirection: 'column',
         }}
       >
-        <ConfirmComponent onConfirm={handleConfirm} selectedToy={selectedToys[0]} />
+        <ConfirmComponent onConfirm={handleConfirm} selectedToy={selectedToys[0]} label={'Next'} />
         <Box
           sx={{
             backgroundColor: 'white',
@@ -271,7 +271,7 @@ const ToysPage = () => {
             }}
           >
             {filteredData.map(toy => (
-              <Box key={toy.id}>
+              <React.Fragment key={toy.id}>
                 <ToyCard
                   image={toy.image}
                   name={toy.name}
@@ -281,7 +281,7 @@ const ToysPage = () => {
                   onSelect={() => handleToySelect(toy)}
                   isSelected={selectedToys.some(t => t.id === toy.id)}
                 />
-              </Box>
+              </React.Fragment>
             ))}
           </Box>
         </Box>

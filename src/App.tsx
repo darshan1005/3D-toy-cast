@@ -3,7 +3,7 @@ import MainPage from './pages/MainPage'
 import ScrollToTop from '@components/ScrollToTop'
 import ToysPage from './pages/ToyPage'
 import FramePage from './pages/FramePage'
-import ScrollTop from './hooks/scrollTop'
+import ScrollTop from './helpers/scrollTop'
 
 const App = () => {
   return (

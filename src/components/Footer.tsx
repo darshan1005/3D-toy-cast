@@ -27,7 +27,7 @@ const Footer = () => {
   };
 
   return (
-    <Box sx={{ backgroundColor: 'red', p: 2, pb: 2 }} id='footer'>
+    <Box sx={{ p: 2 }} id='footer'>
       <Box sx={{
         backgroundColor: 'white',
         padding: 4,

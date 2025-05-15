@@ -33,8 +33,8 @@ const ScrollToTop = () => {
       onClick={scrollToTop}
       sx={{
         position: "fixed",
-        right: { xs: "10px", sm: "20px" },
-        bottom: { xs: "10px", sm: "20px" },
+        right: "10px",
+        bottom: "10px",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",

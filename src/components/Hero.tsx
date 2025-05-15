@@ -5,7 +5,6 @@ import CarImage from '../assets/Car.svg';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useState } from 'react';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
-import { Link } from 'react-router-dom';
 
 const likeCount = 0;
 
@@ -30,19 +29,13 @@ const Hero = () => {
   };
 
   return (
-    <Box
-      sx={{
-        backgroundColor: 'red',
-        p: 2,
-        pb: isSmallScreen ? 0.5 : 1,
-      }}
-    >
+    <>
       <Box
         sx={{
           backgroundColor: 'white',
           padding: 2,
           borderRadius: 3,
-          height: isSmallScreen ? 'auto' : '640px',
+          height: isSmallScreen ? 'auto' : '100vh',
         }}
       >
         <Box
@@ -76,9 +69,9 @@ const Hero = () => {
               variant="h4"
               sx={{
                 fontWeight: 600,
-                backgroundColor: 'red',
+                backgroundColor: 'rgb(255, 0, 0)',
                 width: 'max-content',
-                color: 'white',
+                color: '#fff',
                 padding: isSmallScreen ? 0.5 : 1,
                 fontSize: isSmallScreen ? '16px' : '20px',
               }}
@@ -152,15 +145,16 @@ const Hero = () => {
             flexDirection="column"
             justifyContent="space-between"
             alignItems="flex-start"
+            gap={2}
             sx={{
               width: isSmallScreen ? '100%' : '60%',
               px: isSmallScreen ? 1 : 2,
-              height: isSmallScreen ? 'auto' : '450px',
+              height: isSmallScreen ? 'auto' : '500px',
               overflow: 'hidden',
               mb: isSmallScreen ? 2 : 0,
             }}
           >
-            <Box>
+            <Box display="flex" flexDirection={'column'} gap={1}>
               <Typography
                 variant={isSmallScreen ? 'h4' : 'h1'}
                 sx={{
@@ -222,16 +216,16 @@ const Hero = () => {
               alt="car image"
               sx={{
                 position: 'absolute',
-                bottom: isSmallScreen ? '10px' : '0px',
+                bottom: isSmallScreen ? '5px' : '0px',
                 top: isSmallScreen ? 'auto' : '40%',
-                left: isSmallScreen ? '10px' : '-100px',
+                left: isSmallScreen ? '35px' : '-100px',
                 width: isSmallScreen ? '80%' : 'auto',
               }}
             />
           </Box>
         </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 

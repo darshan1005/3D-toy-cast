@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { JSX } from 'react'
 import { Box, Button } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 interface ConfirmComponentProps {
   onConfirm: () => void;
   navigateTo?: string;
+  label?: string | JSX.Element;
   selectedToy?: {
     id: number
     name: string
@@ -21,12 +22,21 @@ interface ConfirmComponentProps {
 const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
   onConfirm,
   navigateTo = '/',
+  label = 'Confrim',
   selectedToy,
   selectedFrame,
 }) => {
+  const navigate = useNavigate();
+
   const handleConfirm = () => {
     // Call onConfirm callback if provided
     onConfirm()
+  }
+
+  const handleBackNav = () => {
+    navigate(navigateTo, {
+      state: { scrollToSelection: true },
+    })
   }
 
   return (
@@ -48,24 +58,23 @@ const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
       }}
     >
       {/* Back Button */}
-      <Link to={navigateTo} style={{ textDecoration: 'none' }}>
-        <Button
-          variant="outlined"
-          sx={{
-            minWidth: 40,
-            width: 40,
-            height: 40,
-            borderRadius: '50%',
-            bgcolor: 'grey.400',
-            color: 'white',
-            '&:hover': {
-              bgcolor: 'grey.600',
-            },
-          }}
-        >
-          <ArrowBackIcon />
-        </Button>
-      </Link>
+      <Button
+        variant="outlined"
+        sx={{
+          minWidth: 40,
+          width: 40,
+          height: 40,
+          borderRadius: '50%',
+          bgcolor: 'grey.400',
+          color: 'white',
+          '&:hover': {
+            bgcolor: 'grey.600',
+          },
+        }}
+        onClick={handleBackNav}
+      >
+        <ArrowBackIcon />
+      </Button>
 
       {/* Confirm Button */}
       <Button
@@ -80,7 +89,7 @@ const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
         }}
         disabled={!selectedToy && !selectedFrame}
       >
-        Confirm
+        {label}
       </Button>
     </Box>
   )

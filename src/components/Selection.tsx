@@ -62,19 +62,11 @@ const Selection = () => {
 
   return (
     <>
-      <Box
-        sx={{
-          bgcolor: 'red',
-          p: 2,
-          pb: isSmallScreen ? 0.5 : 1,
-        }}
-        id="selection"
-      >
+      <Box id="selection">
         <Stack
           sx={{
             bgcolor: 'white',
             p: 4,
-            borderRadius: 3,
             height: isSmallScreen ? 'auto' : '540px',
             position: 'relative',
             overflow: 'hidden',
@@ -90,14 +82,12 @@ const Selection = () => {
               top: isSmallScreen ? '10%' : '30%',
               transform: isSmallScreen
                 ? 'translate(-50%, -50%) rotate(-45deg)'
-                : 'translateY(-50%) rotate(-55deg)',
+                : 'translateY(-50%) rotate(-50deg)',
               filter: 'blur(3px)',
-              transition: 'all 0.3s ease',
               width: isSmallScreen ? '80%' : 'auto',
-              '&:hover': { filter: 'blur(0)' },
+              opacity: 0.7
             }}
           />
-
           <Stack
             alignItems={isSmallScreen ? 'center' : 'flex-end'}
             justifyContent="center"
@@ -119,7 +109,7 @@ const Selection = () => {
                 width: isSmallScreen ? '100%' : '50%',
                 textAlign: isSmallScreen ? 'center' : 'right',
                 fontSize: isSmallScreen ? '1rem' : '1.2rem',
-                opacity: isSmallScreen ? 1 : 0.7,
+                color: 'rgb(0,0,0)',
                 fontWeight: 600,
                 zIndex: 2,
               }}
@@ -152,19 +142,19 @@ const Selection = () => {
                           width: '100%',
                           fontSize: isSmallScreen ? '1rem' : '1.4rem',
                           fontWeight: 600,
-                          borderColor: isSelected ? 'green' : 'common.black',
+                          borderColor: isSelected ? 'teal' : 'grey.500',
                           bgcolor: isSmallScreen
                             ? isSelected
-                              ? 'green'
-                              : 'black'
+                              ? 'teal'
+                              : 'grey.800'
                             : isSelected
-                              ? 'green'
-                              : 'none',
-                          color: isSmallScreen ? 'white' : isSelected ? 'white' : 'common.black',
+                              ? 'teal'
+                              : 'transparent',
+                          color: isSmallScreen ? 'white' : isSelected ? 'white' : 'grey.800',
                           '&:hover': {
-                            borderColor: isSelected ? 'green' : 'red',
-                            color: isSelected ? 'white' : 'red',
-                            bgcolor: isSelected ? 'green' : 'none',
+                            borderColor: isSelected ? 'teal' : 'orange',
+                            color: isSelected ? 'white' : 'orange',
+                            bgcolor: isSelected ? 'teal' : 'transparent',
                           },
                         }}
                       >
@@ -182,13 +172,13 @@ const Selection = () => {
                 sx={{
                   width: isSmallScreen ? '100%' : '30%',
                   alignSelf: 'center',
-                  bgcolor: isItemSelected('Toy') && isItemSelected('Frame') ? 'green' : 'red',
+                  bgcolor: isItemSelected('Toy') && isItemSelected('Frame') ? 'teal' : 'orange',
                   color: 'white',
                   fontWeight: 600,
                   fontSize: isSmallScreen ? '1rem' : '1.2rem',
                   '&:hover': {
                     bgcolor:
-                      isItemSelected('Toy') && isItemSelected('Frame') ? 'darkgreen' : 'darkred',
+                      isItemSelected('Toy') && isItemSelected('Frame') ? 'darkslategray' : 'darkorange',
                   },
                   '&.Mui-disabled': {
                     bgcolor: 'grey.400',
@@ -201,7 +191,7 @@ const Selection = () => {
             </Stack>
           </Stack>
         </Stack>
-      </Box>
+      </Box >
       {openModal && (
         <CustomPopupHOC
           open={openModal}
@@ -213,7 +203,8 @@ const Selection = () => {
         >
           <OrderForm />
         </CustomPopupHOC>
-      )}
+      )
+      }
     </>
   )
 }

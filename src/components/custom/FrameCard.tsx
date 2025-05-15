@@ -62,6 +62,9 @@ const FrameCard: React.FC<FrameCardProps> = ({
       >
         {/* Frame Preview */}
         <Box
+          component={'img'}
+          src={frameDetails.image}
+          alt={frameDetails.type}
           sx={{
             width: { xs: 180, sm: 200 },
             height: { xs: 120, sm: 270 },
@@ -78,9 +81,7 @@ const FrameCard: React.FC<FrameCardProps> = ({
             },
           }}
           onClick={() => setPreviewOpen(true)}
-        >
-          <img src={frameDetails.image} alt={frameDetails.type} />
-        </Box>
+        />
         <Dialog open={previewOpen} onClose={() => setPreviewOpen(false)} maxWidth="md">
           <Box sx={{ p: 2, bgcolor: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <img
@@ -127,7 +128,7 @@ const FrameCard: React.FC<FrameCardProps> = ({
             <Typography variant="body2" sx={{ minWidth: 100 }}>
               Material:
             </Typography>
-            <Typography variant="body2" noWrap>
+            <Typography variant="body2" fontWeight={'bold'} noWrap>
               {frameDetails.material}
             </Typography>
           </Box>
@@ -136,7 +137,7 @@ const FrameCard: React.FC<FrameCardProps> = ({
             <Typography variant="body2" sx={{ minWidth: 100 }}>
               Dimensions:
             </Typography>
-            <Typography variant="body2" noWrap>
+            <Typography variant="body2" fontWeight={'bold'} noWrap>
               {frameDetails.dimensions.width} x {frameDetails.dimensions.height} x{' '}
               {frameDetails.dimensions.depth} cm
             </Typography>
@@ -146,12 +147,10 @@ const FrameCard: React.FC<FrameCardProps> = ({
             <Typography variant="body2" sx={{ minWidth: 100 }}>
               Weight:
             </Typography>
-            <Typography variant="body2" noWrap>
+            <Typography variant="body2" fontWeight={'bold'} noWrap>
               {frameDetails.weight} kg
             </Typography>
           </Box>
-
-          <Divider sx={{ bgcolor: 'white', opacity: 0.2, my: 1 }} />
 
           <Box sx={{ mt: 1 }}>
             <TruncatedText text={frameDetails.description} truncatedValue={100} textAlign="left" />
@@ -199,7 +198,7 @@ const FrameCard: React.FC<FrameCardProps> = ({
               width: { xs: '100%', sm: 'auto' },
             }}
           >
-            ₹ {frameDetails.price} /-
+            ₹ {frameDetails.price}.00
           </Box>
         </Box>
       </Box>
