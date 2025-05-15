@@ -3,6 +3,7 @@ import { Box, Button } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import { useNavigate } from 'react-router-dom'
+import Cart from './Cart'
 
 interface ConfirmComponentProps {
   onConfirm: () => void;
@@ -113,41 +114,9 @@ const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
 
       {/* Cart Component (Simple Drawer/Modal) */}
       {cartOpen && (
-        // <Cart />
-
-        <Box
-          sx={{
-            position: 'fixed',
-            top: 80,
-            right: 40,
-            width: 300,
-            bgcolor: 'white',
-            boxShadow: 3,
-            borderRadius: 2,
-            p: 2,
-            zIndex: 2000,
-          }}
-        >
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-            <strong>Cart</strong>
-            <Button size="small" onClick={() => setCartOpen(false)}>Close</Button>
-          </Box>
-          {selectedToy ? (
-            <Box sx={{ mb: 1 }}>
-              <div><strong>Toy:</strong> {selectedToy.name}</div>
-              <div><strong>Price:</strong> ${selectedToy.price}</div>
-            </Box>
-          ) : (
-            <Box sx={{ mb: 1, color: 'grey.600' }}>No toy selected</Box>
-          )}
-          {selectedFrame && (
-            <Box>
-              <div><strong>Frame:</strong> {selectedFrame.type}</div>
-              <div><strong>Price:</strong> ${selectedFrame.price}</div>
-            </Box>
-          )}
-        </Box>
+        <Cart open={cartOpen} onClose={() => setCartOpen(false)} />
       )}
+
     </Box>
   )
 }

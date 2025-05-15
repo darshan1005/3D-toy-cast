@@ -1,103 +1,148 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Typography, IconButton, Paper } from '@mui/material'
+import {
+  Box,
+  Typography,
+  IconButton,
+  Paper,
+  Drawer,
+  Button,
+  Divider,
+} from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ToyCard from './ToyCard'
+import { FrameDetailsProps } from 'src/data/FrameData'
+import { ToyDataProps } from 'src/data/ToyData'
 
-interface Toy {
-  id: number
-  image: any
-  name: string
-  description: string
-  price: number
-  moterType: string
+interface CartProps {
+  open: boolean
+  onClose: () => void
 }
 
-const Cart: React.FC = () => {
-  const [selectedToys, setSelectedToys] = useState<Toy[]>([])
+const Cart: React.FC<CartProps> = ({ open, onClose }) => {
+  const [selectedToys, setSelectedToys] = useState<ToyDataProps[]>([])
+  const [selectedFrame, setSelectedFrame] = useState<FrameDetailsProps | null>(null)
 
   useEffect(() => {
-    // Load selected toys from session storage on component mount
     const toyData = sessionStorage.getItem('selectedToys')
-    if (toyData) {
-      setSelectedToys(JSON.parse(toyData))
-    }
-  }, [])
+    const frameData = sessionStorage.getItem('selectedFrame')
+
+    if (toyData) setSelectedToys(JSON.parse(toyData))
+    if (frameData) setSelectedFrame(JSON.parse(frameData))
+  }, [open]) // refresh data every time the drawer is opened
 
   const handleRemoveToy = (toyId: number) => {
-    // Remove toy from state
     const updatedToys = selectedToys.filter(toy => toy.id !== toyId)
     setSelectedToys(updatedToys)
-
-    // Update session storage
-    if (updatedToys.length === 0) {
-      sessionStorage.removeItem('selectedToys')
-    } else {
-      sessionStorage.setItem('selectedToys', JSON.stringify(updatedToys))
-    }
+    updatedToys.length === 0
+      ? sessionStorage.removeItem('selectedToys')
+      : sessionStorage.setItem('selectedToys', JSON.stringify(updatedToys))
   }
 
-  if (selectedToys.length === 0) {
-    return (
-      <Box sx={{ p: 2, textAlign: 'center' }}>
-        <Typography variant="h6" color="text.secondary">
-          Your cart is empty
-        </Typography>
-      </Box>
-    )
+  const handleRemoveFrame = () => {
+    setSelectedFrame(null)
+    sessionStorage.removeItem('selectedFrame')
   }
 
   return (
-    <Box sx={{ p: 2 }}>
-      <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
-        Selected Toys
-      </Typography>
-      <Box
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: {
-            xs: '1fr',
-            sm: 'repeat(2, 1fr)',
-            md: 'repeat(3, 1fr)',
-          },
-          gap: 2,
-        }}
-      >
-        {selectedToys.map(toy => (
-          <Paper
-            key={toy.id}
-            elevation={3}
-            sx={{
-              position: 'relative',
-              p: 1,
-              '&:hover': {
-                boxShadow: 6,
-              },
-            }}
-          >
+    <Drawer anchor="right" open={open} onClose={onClose}>
+      <Box sx={{ width: 400, p: 2 }}>
+        <Typography variant="h6" fontWeight="bold" mb={2}>
+          Your Cart
+        </Typography>
+
+        {/* TOYS LIST */}
+        {selectedToys.length > 0 ? (
+          selectedToys.map(toy => (
+            <Paper
+              key={toy.id}
+              elevation={3}
+              sx={{
+                position: 'relative',
+                p: 1,
+                mb: 2,
+                '&:hover': { boxShadow: 6 },
+              }}
+            >
+              <IconButton
+                onClick={() => handleRemoveToy(toy.id)}
+                sx={{
+                  position: 'absolute',
+                  top: 8,
+                  right: 8,
+                  bgcolor: 'rgba(255,255,255,0.8)',
+                  '&:hover': { bgcolor: 'rgba(255,255,255,0.9)' },
+                }}
+              >
+                <DeleteIcon color="error" />
+              </IconButton>
+              <ToyCard isSelected={true} onSelect={() => { } } image={undefined} name={''} description={''} price={0} moterType={''} />
+            </Paper>
+          ))
+        ) : (
+          <Typography color="text.secondary" mb={2}>
+            No toys selected.
+          </Typography>
+        )}
+
+        <Divider sx={{ my: 2 }} />
+
+        {/* FRAME CARD */}
+        {selectedFrame ? (
+          <Paper elevation={3} sx={{ position: 'relative', p: 2, mb: 2 }}>
             <IconButton
-              onClick={() => handleRemoveToy(toy.id)}
+              onClick={handleRemoveFrame}
               sx={{
                 position: 'absolute',
                 top: 8,
                 right: 8,
-                bgcolor: 'rgba(255, 255, 255, 0.8)',
-                '&:hover': {
-                  bgcolor: 'rgba(255, 255, 255, 0.9)',
-                },
-                zIndex: 1,
+                bgcolor: 'rgba(255,255,255,0.8)',
+                '&:hover': { bgcolor: 'rgba(255,255,255,0.9)' },
               }}
             >
               <DeleteIcon color="error" />
             </IconButton>
-            <ToyCard
-              {...toy}
-              isSelected={true}
-              onSelect={() => {}} // Empty function since we don't want to allow selection in cart
-            />
+            <Box>
+              <img
+                src={selectedFrame.image}
+                alt={selectedFrame.type}
+                style={{ width: '100%', borderRadius: 8 }}
+              />
+              <Typography variant="subtitle1" fontWeight="bold" mt={1}>
+                {selectedFrame.type}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {selectedFrame.description}
+              </Typography>
+              <Typography variant="body2" mt={1}>
+                <strong>Material:</strong> {selectedFrame.material}
+              </Typography>
+              <Typography variant="body2">
+                <strong>Size:</strong> {selectedFrame.dimensions.width} x{' '}
+                {selectedFrame.dimensions.height} x {selectedFrame.dimensions.depth} cm
+              </Typography>
+              <Typography variant="body2">
+                <strong>Weight:</strong> {selectedFrame.weight} kg
+              </Typography>
+              <Typography variant="body2">
+                <strong>Price:</strong> ₹{selectedFrame.price}
+              </Typography>
+            </Box>
           </Paper>
-        ))}
+        ) : (
+          <Typography color="text.secondary">No frame selected.</Typography>
+        )}
+
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          sx={{ mt: 3 }}
+          onClick={onClose}
+        >
+          Close Cart
+        </Button>
       </Box>
-    </Box>
+    </Drawer>
   )
 }
 

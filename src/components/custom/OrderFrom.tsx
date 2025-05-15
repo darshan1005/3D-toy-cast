@@ -136,8 +136,11 @@ const OrderForm = () => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
 
+    // Debounce the validation to prevent too frequent updates
     const error = validate(name, value)
-    setErrors(prev => ({ ...prev, [name]: error }))
+    if (error !== errors[name as keyof typeof errors]) {
+      setErrors(prev => ({ ...prev, [name]: error }))
+    }
   }
 
   const handlePlaceOrder = () => {
@@ -153,205 +156,193 @@ const OrderForm = () => {
     setFinalCost(0)
   }
 
-  const OrderPlacedMessage = () => (
-    <Box
-      sx={{
-        pt: 2,
-        maxWidth: '600px',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <Typography variant="body1" textAlign="center" fontWeight="bold">
-        Please keep an eye on your email for order updates.
-      </Typography>
-      <Typography variant="body2" textAlign="center" fontWeight="bold" sx={{ opacity: 0.7 }}>
-        Your order will be confirmed once the advance payment is received. Payment details will be
-        shared in our follow-up email with your order summary.
-      </Typography>
-      <Typography variant="h6" textAlign="center" fontWeight="bold" mt={1}>
-        Thanks for choosing
-      </Typography>
-    </Box>
-  )
-
-  const OrderCancelledMessage = () => (
-    <Box sx={{ p: 2, maxWidth: '600px', mx: 'auto' }}>
-      <Typography variant="h6" textAlign="center" mb={2}>
-        We cannot process your order at this time. Please close the popup and try again.
-      </Typography>
-    </Box>
-  )
-
-  const OrderSummaryForm = () => (
-    <Box sx={{ p: 2, maxWidth: '600px', mx: 'auto' }}>
-      <Typography sx={{ fontWeight: 'bold', pt: 3 }}>Order Summary</Typography>
-      <Box mt={2}>
-        <Box display="flex" flexDirection={{ xs: 'column', sm: 'row' }} gap={1} mb={1}>
-          <TextField
-            fullWidth
-            name="name"
-            label="Name"
-            size="small"
-            required
-            value={formData.name}
-            onChange={handleChange}
-            error={Boolean(errors.name)}
-            helperText={errors.name}
-          />
-          <TextField
-            fullWidth
-            name="phone"
-            label="Phone Number"
-            size="small"
-            required
-            value={formData.phone}
-            onChange={handleChange}
-            error={Boolean(errors.phone)}
-            helperText={errors.phone}
-          />
-        </Box>
-        <Box display="flex" flexDirection={{ xs: 'column', sm: 'row' }} gap={1} mb={1}>
-          <TextField
-            fullWidth
-            name="email"
-            label="Email"
-            size="small"
-            required
-            value={formData.email}
-            onChange={handleChange}
-            error={Boolean(errors.email)}
-            helperText={errors.email}
-          />
-          <TextField
-            fullWidth
-            name="state"
-            label="State"
-            size="small"
-            required
-            value={formData.state}
-            onChange={handleChange}
-            error={Boolean(errors.state)}
-            helperText={errors.state}
-          />
-        </Box>
-        <Box display="flex" flexDirection={{ xs: 'column', sm: 'row' }} gap={1} mb={1}>
-          <TextField
-            fullWidth
-            name="city"
-            label="City"
-            size="small"
-            required
-            value={formData.city}
-            onChange={handleChange}
-            error={Boolean(errors.city)}
-            helperText={errors.city}
-          />
-          <TextField
-            fullWidth
-            name="pincode"
-            label="Pin Code"
-            size="small"
-            required
-            value={formData.pincode}
-            onChange={handleChange}
-            error={Boolean(errors.pincode)}
-            helperText={errors.pincode}
-          />
-        </Box>
-        <Box mb={1}>
-          <TextField
-            fullWidth
-            name="address"
-            label="Address"
-            size="small"
-            multiline
-            rows={2}
-            required
-            value={formData.address}
-            onChange={handleChange}
-            error={Boolean(errors.address)}
-            helperText={errors.address}
-          />
-        </Box>
-      </Box>
-
-      <Box
-        display="flex"
-        flexDirection={{ xs: 'column', sm: 'row' }}
-        justifyContent="space-between"
-        my={2}
-        gap={1}
-      >
-        <Button variant="contained" fullWidth sx={{ bgcolor: 'red' }}>
-          {selectedToys.map(toy => toy.name).join(' & ') || 'No Toy Selected'}
-        </Button>
-        <Button variant="contained" fullWidth sx={{ bgcolor: 'red' }}>
-          {selectedFrame || 'No Frame Selected'}
-        </Button>
-      </Box>
-
-      <Box sx={{ bgcolor: 'black', color: 'white', textAlign: 'center', py: 1, mb: 2 }}>
-        <Typography variant="h6">Final Cost: ₹{finalCost.toFixed(2)}</Typography>
-      </Box>
-
-      <Box
-        display="flex"
-        flexDirection={{ xs: 'column', sm: 'row' }}
-        justifyContent="space-between"
-        gap={1}
-      >
-        <Button
-          variant="contained"
-          fullWidth
-          sx={{ bgcolor: 'red', color: 'white' }}
-          onClick={handlePlaceOrder}
-        >
-          Place Order
-        </Button>
-        <Button variant="outlined" fullWidth color="error" onClick={handleCancelOrder}>
-          Cancel
-        </Button>
-      </Box>
-
-      <Typography
-        variant="caption"
-        display="block"
-        mt={2}
-        textAlign="center"
-        fontWeight={'bold'}
-        sx={{ opacity: 0.7 }}
-      >
-        Please track your mail for order updates
-      </Typography>
-
-      <CustomPopup
-        open={openModal}
-        onClose={handleCloseModal}
-        title={'Are you sure to cancel the order?'}
-        centerTitle
-        width={450}
-      >
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-          <Button onClick={handleClearOrder} sx={{ mr: 2 }}>
-            Cancel
-          </Button>
-          <Button onClick={handleCloseModal}>Order</Button>
-        </Box>
-      </CustomPopup>
-    </Box>
-  )
-
   return (
     <>
       {orderPlaced ? (
-        <OrderPlacedMessage />
+        <Box
+          sx={{
+            pt: 2,
+            maxWidth: '600px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Typography variant="body1" textAlign="center" fontWeight="bold">
+            Please keep an eye on your email for order updates.
+          </Typography>
+          <Typography variant="body2" textAlign="center" fontWeight="bold" sx={{ opacity: 0.7 }}>
+            Your order will be confirmed once the advance payment is received. Payment details will
+            be shared in our follow-up email with your order summary.
+          </Typography>
+          <Typography variant="h6" textAlign="center" fontWeight="bold" mt={1}>
+            Thanks for choosing
+          </Typography>
+        </Box>
       ) : isOrderCancelled ? (
-        <OrderCancelledMessage />
+        <Box sx={{ p: 2, maxWidth: '600px', mx: 'auto' }}>
+          <Typography variant="h6" textAlign="center" mb={2}>
+            We cannot process your order at this time. Please close the popup and try again.
+          </Typography>
+        </Box>
       ) : (
-        <OrderSummaryForm />
+        <Box sx={{ p: 2, maxWidth: '600px', mx: 'auto' }}>
+          <Typography sx={{ fontWeight: 'bold', pt: 3 }}>Order Summary</Typography>
+          <Box mt={2}>
+            <Box display="flex" flexDirection={{ xs: 'column', sm: 'row' }} gap={1} mb={1}>
+              <TextField
+                fullWidth
+                name="name"
+                label="Name"
+                size="small"
+                required
+                value={formData.name}
+                onChange={handleChange}
+                error={Boolean(errors.name)}
+                helperText={errors.name}
+              />
+              <TextField
+                fullWidth
+                name="phone"
+                label="Phone Number"
+                size="small"
+                required
+                value={formData.phone}
+                onChange={handleChange}
+                error={Boolean(errors.phone)}
+                helperText={errors.phone}
+              />
+            </Box>
+            <Box display="flex" flexDirection={{ xs: 'column', sm: 'row' }} gap={1} mb={1}>
+              <TextField
+                fullWidth
+                name="email"
+                label="Email"
+                size="small"
+                required
+                value={formData.email}
+                onChange={handleChange}
+                error={Boolean(errors.email)}
+                helperText={errors.email}
+              />
+              <TextField
+                fullWidth
+                name="state"
+                label="State"
+                size="small"
+                required
+                value={formData.state}
+                onChange={handleChange}
+                error={Boolean(errors.state)}
+                helperText={errors.state}
+              />
+            </Box>
+            <Box display="flex" flexDirection={{ xs: 'column', sm: 'row' }} gap={1} mb={1}>
+              <TextField
+                fullWidth
+                name="city"
+                label="City"
+                size="small"
+                required
+                value={formData.city}
+                onChange={handleChange}
+                error={Boolean(errors.city)}
+                helperText={errors.city}
+              />
+              <TextField
+                fullWidth
+                name="pincode"
+                label="Pin Code"
+                size="small"
+                required
+                value={formData.pincode}
+                onChange={handleChange}
+                error={Boolean(errors.pincode)}
+                helperText={errors.pincode}
+              />
+            </Box>
+            <Box mb={1}>
+              <TextField
+                fullWidth
+                name="address"
+                label="Address"
+                size="small"
+                multiline
+                rows={2}
+                required
+                value={formData.address}
+                onChange={handleChange}
+                error={Boolean(errors.address)}
+                helperText={errors.address}
+              />
+            </Box>
+          </Box>
+
+          <Box
+            display="flex"
+            flexDirection={{ xs: 'column', sm: 'row' }}
+            justifyContent="space-between"
+            my={2}
+            gap={1}
+          >
+            <Button variant="contained" fullWidth sx={{ bgcolor: 'red' }}>
+              {selectedToys.map(toy => toy.name).join(' & ') || 'No Toy Selected'}
+            </Button>
+            <Button variant="contained" fullWidth sx={{ bgcolor: 'red' }}>
+              {selectedFrame || 'No Frame Selected'}
+            </Button>
+          </Box>
+
+          <Box sx={{ bgcolor: 'black', color: 'white', textAlign: 'center', py: 1, mb: 2 }}>
+            <Typography variant="h6">Final Cost: ₹{finalCost.toFixed(2)}</Typography>
+          </Box>
+
+          <Box
+            display="flex"
+            flexDirection={{ xs: 'column', sm: 'row' }}
+            justifyContent="space-between"
+            gap={1}
+          >
+            <Button
+              variant="contained"
+              fullWidth
+              sx={{ bgcolor: 'red', color: 'white' }}
+              onClick={handlePlaceOrder}
+            >
+              Place Order
+            </Button>
+            <Button variant="outlined" fullWidth color="error" onClick={handleCancelOrder}>
+              Cancel
+            </Button>
+          </Box>
+
+          <Typography
+            variant="caption"
+            display="block"
+            mt={2}
+            textAlign="center"
+            fontWeight={'bold'}
+            sx={{ opacity: 0.7 }}
+          >
+            Please track your mail for order updates
+          </Typography>
+
+          <CustomPopup
+            open={openModal}
+            onClose={handleCloseModal}
+            title={'Are you sure to cancel the order?'}
+            centerTitle
+            width={450}
+          >
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+              <Button onClick={handleClearOrder} sx={{ mr: 2 }}>
+                Cancel
+              </Button>
+              <Button onClick={handleCloseModal}>Order</Button>
+            </Box>
+          </CustomPopup>
+        </Box>
       )}
     </>
   )

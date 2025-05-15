@@ -16,6 +16,7 @@ const ToyCard: React.FC<ToyCardProps> = ({
   name,
   description,
   price,
+  moterType,
   onSelect,
   isSelected = false,
 }) => {
@@ -57,7 +58,7 @@ const ToyCard: React.FC<ToyCardProps> = ({
       {/* Content */}
       <CardContent sx={{ p: 0, flexGrow: 1 }}>
         <Typography variant="body1" fontWeight="bold" gutterBottom>
-          {name} <Typography component={'span'} variant='caption' sx={{ opacity: 0.7 }}></Typography>
+          {name} <Typography component={'span'} variant='caption' sx={{ opacity: 0.7 }}>{moterType}</Typography>
         </Typography>
         <Typography variant="body2" color="white">
           {description}
