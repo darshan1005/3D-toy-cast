@@ -63,7 +63,7 @@ const Bento = () => {
               <Box
                 sx={{
                   flex: 1,
-                  borderRadius: '20px',
+                  borderRadius: isSmallScreen ? '10px' : '20px',
                   display: 'flex',
                   alignItems: 'start',
                   justifyContent: 'center',
@@ -107,7 +107,7 @@ const Bento = () => {
               <Box
                 sx={{
                   flex: 1,
-                  borderRadius: '20px',
+                  borderRadius: isSmallScreen ? '10px' : '20px',
                   display: 'flex',
                   alignItems: 'start',
                   justifyContent: 'center',
@@ -152,7 +152,7 @@ const Bento = () => {
             <Box
               sx={{
                 flex: 1,
-                borderRadius: '20px',
+                borderRadius: isSmallScreen ? '10px' : '20px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -192,7 +192,7 @@ const Bento = () => {
               sx={{
                 position: 'relative',
                 flex: 1,
-                borderRadius: '20px',
+                borderRadius: isSmallScreen ? '10px' : '20px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -229,7 +229,7 @@ const Bento = () => {
             <Box
               sx={{
                 flex: 2,
-                borderRadius: '20px',
+                borderRadius: isSmallScreen ? '10px' : '20px',
                 display: 'flex',
                 alignItems: 'start',
                 justifyContent: 'center',
@@ -275,7 +275,7 @@ const Bento = () => {
         <Box
           sx={{
             width: isSmallScreen ? '100%' : '20%',
-            borderRadius: '20px',
+            borderRadius: isSmallScreen ? '10px' : '20px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',

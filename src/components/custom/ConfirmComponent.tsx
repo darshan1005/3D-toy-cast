@@ -4,7 +4,8 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { Link } from 'react-router-dom'
 
 interface ConfirmComponentProps {
-  onConfirm: () => void
+  onConfirm: () => void;
+  navigateTo?: string;
   selectedToy?: {
     id: number
     name: string
@@ -19,6 +20,7 @@ interface ConfirmComponentProps {
 
 const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
   onConfirm,
+  navigateTo = '/',
   selectedToy,
   selectedFrame,
 }) => {
@@ -46,7 +48,7 @@ const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
       }}
     >
       {/* Back Button */}
-      <Link to="/" style={{ textDecoration: 'none' }}>
+      <Link to={navigateTo} style={{ textDecoration: 'none' }}>
         <Button
           variant="outlined"
           sx={{

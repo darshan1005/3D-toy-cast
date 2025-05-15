@@ -49,7 +49,7 @@ const ToyCard: React.FC<ToyCardProps> = ({
         alt={name}
         sx={{
           height: 120,
-          backgroundColor: 'red',
+          // backgroundColor: 'red',
           objectFit: 'contain',
           mb: 2,
         }}

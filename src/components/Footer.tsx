@@ -27,7 +27,7 @@ const Footer = () => {
   };
 
   return (
-    <Box sx={{ backgroundColor: 'red', p: 2, pb: 1 }}>
+    <Box sx={{ backgroundColor: 'red', p: 2, pb: 2 }} id='footer'>
       <Box sx={{
         backgroundColor: 'white',
         padding: 4,
@@ -134,7 +134,9 @@ const Footer = () => {
                 <Button
                   variant="contained"
                   disabled={emailError || !email}
+
                   sx={{
+                    width: 'max-content',
                     bgcolor: 'black',
                     '&:hover': { bgcolor: 'red' },
                     fontSize: { xs: '0.8rem', md: '1rem' },

@@ -44,7 +44,7 @@ const FramePage = () => {
         p: 2,
       }}
     >
-      <ConfirmComponent onConfirm={handleConfirm} selectedFrame={selectedFrame} />
+      <ConfirmComponent onConfirm={handleConfirm} selectedFrame={selectedFrame} navigateTo='/toyspage' />
       <Box
         sx={{
           backgroundColor: 'white',

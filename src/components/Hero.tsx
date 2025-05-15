@@ -1,10 +1,11 @@
-import { Box, Button, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Button, IconButton, keyframes, Typography, useMediaQuery, useTheme } from '@mui/material';
 import Logo from '../assets/Logo.svg';
 import BikeImage from '../assets/Bike.svg';
 import CarImage from '../assets/Car.svg';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useState } from 'react';
-import { isMainThread } from 'worker_threads';
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import { Link } from 'react-router-dom';
 
 const likeCount = 0;
 
@@ -13,6 +14,15 @@ const Hero = () => {
   const [count, setCount] = useState(likeCount);
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const shake = keyframes`
+  0% { transform: rotate(0deg); }
+  20% { transform: rotate(-15deg); }
+  40% { transform: rotate(15deg); }
+  60% { transform: rotate(-10deg); }
+  80% { transform: rotate(10deg); }
+  100% { transform: rotate(0deg); }
+`;
 
   const handleLikeClick = () => {
     setLiked(!liked);
@@ -81,11 +91,20 @@ const Hero = () => {
               display: 'flex',
               alignItems: 'center',
               gap: 1,
-              cursor: 'pointer',
             }}
-            onClick={handleLikeClick}
           >
-            <FavoriteIcon sx={{ color: liked ? 'red' : 'black' }} />
+            <IconButton
+              sx={{
+                cursor: 'pointer',
+                animation: `${shake} 0.7s infinite`,
+                animationTimingFunction: 'ease-in-out'
+              }}
+              onClick={() => {
+                document.getElementById('footer')?.scrollIntoView({
+                  behavior: 'smooth',
+                });
+              }}><LocalPhoneIcon /></IconButton>
+            <FavoriteIcon sx={{ color: liked ? 'red' : 'black', cursor: 'pointer' }} onClick={handleLikeClick} />
             <Typography
               variant={isSmallScreen ? 'body1' : 'h5'}
               color="black"
@@ -136,7 +155,7 @@ const Hero = () => {
             sx={{
               width: isSmallScreen ? '100%' : '60%',
               px: isSmallScreen ? 1 : 2,
-              height: isSmallScreen ? 'auto' : '500px',
+              height: isSmallScreen ? 'auto' : '450px',
               overflow: 'hidden',
               mb: isSmallScreen ? 2 : 0,
             }}
@@ -181,6 +200,8 @@ const Hero = () => {
                   backgroundColor: 'white',
                   color: 'black',
                 },
+                animation: `${shake} 0.7s `,
+                animationTimingFunction: 'ease-in-out'
               }}
             >
               Order Now !
