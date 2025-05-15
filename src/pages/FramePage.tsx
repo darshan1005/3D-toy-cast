@@ -52,12 +52,12 @@ const FramePage = () => {
           borderRadius: 3,
         }}
       >
+
         <Box
           sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 4,
-            maxWidth: 1280,
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, auto)',
+            gap: 2,
             margin: '0 auto',
           }}
         >

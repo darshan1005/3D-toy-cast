@@ -5,6 +5,7 @@ import CarImage from '../assets/Car.svg';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useState } from 'react';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import { Palette } from '../theme';
 
 const likeCount = 0;
 
@@ -32,7 +33,7 @@ const Hero = () => {
     <>
       <Box
         sx={{
-          backgroundColor: 'white',
+          backgroundColor: Palette.background.paper,
           padding: 2,
           borderRadius: 3,
           height: isSmallScreen ? 'auto' : '100vh',
@@ -71,7 +72,7 @@ const Hero = () => {
                 fontWeight: 600,
                 backgroundColor: 'rgb(255, 0, 0)',
                 width: 'max-content',
-                color: '#fff',
+                color: Palette.text.white,
                 padding: isSmallScreen ? 0.5 : 1,
                 fontSize: isSmallScreen ? '16px' : '20px',
               }}
@@ -97,10 +98,17 @@ const Hero = () => {
                   behavior: 'smooth',
                 });
               }}><LocalPhoneIcon /></IconButton>
-            <FavoriteIcon sx={{ color: liked ? 'red' : 'black', cursor: 'pointer' }} onClick={handleLikeClick} />
+            <FavoriteIcon
+              sx={{
+                color: liked
+                  ? Palette.error.dark
+                  : Palette.text.primary,
+                cursor: 'pointer'
+              }}
+              onClick={handleLikeClick} />
             <Typography
               variant={isSmallScreen ? 'body1' : 'h5'}
-              color="black"
+              color={Palette.text.primary}
               fontWeight="bold"
             >
               {count}
@@ -186,11 +194,11 @@ const Hero = () => {
               sx={{
                 backgroundColor: 'black',
                 color: 'white',
-                border: '2px solid black',
                 alignSelf: isSmallScreen ? 'center' : 'flex-end',
                 padding: isSmallScreen ? '5px 10px' : '10px 20px',
                 fontWeight: 'bold',
                 '&:hover': {
+                  border: '2px solid black',
                   backgroundColor: 'white',
                   color: 'black',
                 },

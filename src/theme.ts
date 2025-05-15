@@ -1,4 +1,4 @@
-export const blueGreenPalette = {
+export const Palette = {
   primary: {
     main: '#1976d2',
     light: '#63a4ff',
@@ -16,6 +16,7 @@ export const blueGreenPalette = {
   text: {
     primary: '#222222',
     secondary: '#555555',
+    white: '#fff'
   },
   success: {
     main: '#388e3c',

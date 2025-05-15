@@ -96,7 +96,7 @@ const Bento = () => {
                       },
                     }}
                   >
-                    High-quality materials • Multiple sizes available • Custom color options • UV-resistant coating
+                    High-quality materials • Multiple variants available
                   </Box>
                 </Typography>
               </Box>

@@ -4,6 +4,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import CustomPopupHOC from './custom/CustomPopup'
 import OrderForm from './custom/OrderFrom'
+import { Palette } from '../theme'
 
 const selectionButtonObj = [
   { label: 'Toy', link: '/toyspage' },
@@ -65,7 +66,7 @@ const Selection = () => {
       <Box id="selection">
         <Stack
           sx={{
-            bgcolor: 'white',
+            bgcolor: Palette.background.paper,
             p: 4,
             height: isSmallScreen ? 'auto' : '540px',
             position: 'relative',
@@ -99,7 +100,7 @@ const Selection = () => {
               fontWeight="bold"
               textAlign={isSmallScreen ? 'center' : 'right'}
               zIndex={4}
-              color={isSmallScreen ? 'white' : 'red'}
+              color={isSmallScreen ? Palette.text.white : Palette.error.dark}
             >
               Select Your Toy and Frame
             </Typography>
@@ -109,14 +110,13 @@ const Selection = () => {
                 width: isSmallScreen ? '100%' : '50%',
                 textAlign: isSmallScreen ? 'center' : 'right',
                 fontSize: isSmallScreen ? '1rem' : '1.2rem',
-                color: 'rgb(0,0,0)',
+                color: Palette.text.secondary,
                 fontWeight: 600,
                 zIndex: 2,
               }}
             >
-              Build your perfect gift! Start by selecting your favorite toy and a matching frame to
-              make it truly yours. Only when both are chosen, the magic happens -
-              <Typography component="span" sx={{ color: 'red', fontWeight: 700 }}>
+              Build your perfect gift! Start by selecting your favorite toy and a matching frame to make it truly yours. Only when both are chosen, the magic happens -
+              <Typography component="span" sx={{ color: Palette.error.light, fontWeight: 700 }}>
                 3D Toy Cast
               </Typography>
             </Typography>
@@ -142,19 +142,24 @@ const Selection = () => {
                           width: '100%',
                           fontSize: isSmallScreen ? '1rem' : '1.4rem',
                           fontWeight: 600,
-                          borderColor: isSelected ? 'teal' : 'grey.500',
+                          borderColor: isSelected
+                            ? Palette.secondary.main
+                            : Palette.text.secondary,
                           bgcolor: isSmallScreen
                             ? isSelected
-                              ? 'teal'
-                              : 'grey.800'
+                              ? Palette.secondary.light
+                              : Palette.text.secondary
                             : isSelected
-                              ? 'teal'
+                              ? Palette.secondary.light
                               : 'transparent',
-                          color: isSmallScreen ? 'white' : isSelected ? 'white' : 'grey.800',
+                          color: isSmallScreen ? Palette.text.white : isSelected ? Palette.text.white : Palette.text.secondary,
                           '&:hover': {
-                            borderColor: isSelected ? 'teal' : 'orange',
-                            color: isSelected ? 'white' : 'orange',
-                            bgcolor: isSelected ? 'teal' : 'transparent',
+                            borderColor: isSelected
+                              ? Palette.secondary.dark : Palette.warning.light,
+                            color: isSelected
+                              ? Palette.text.white : Palette.warning.light,
+                            bgcolor: isSelected
+                              ? Palette.secondary.dark : 'transparent',
                           },
                         }}
                       >
@@ -172,14 +177,11 @@ const Selection = () => {
                 sx={{
                   width: isSmallScreen ? '100%' : '30%',
                   alignSelf: 'center',
-                  bgcolor: isItemSelected('Toy') && isItemSelected('Frame') ? 'teal' : 'orange',
-                  color: 'white',
+                  bgcolor: 'transparent',
+                  color: Palette.success.dark,
+                  border: `2px solid ${Palette.success.main}`,
                   fontWeight: 600,
                   fontSize: isSmallScreen ? '1rem' : '1.2rem',
-                  '&:hover': {
-                    bgcolor:
-                      isItemSelected('Toy') && isItemSelected('Frame') ? 'darkslategray' : 'darkorange',
-                  },
                   '&.Mui-disabled': {
                     bgcolor: 'grey.400',
                     color: 'white',
