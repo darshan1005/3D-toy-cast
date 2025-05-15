@@ -42,6 +42,7 @@ const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
         top: 0,
         zIndex: 1000,
         width: '100%',
+        boxShadow: 2
       }}
     >
       {/* Back Button */}

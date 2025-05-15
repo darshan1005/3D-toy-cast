@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, Button, Typography, Card, Divider } from '@mui/material'
+import { Box, Button, Typography, Card, Divider, Dialog } from '@mui/material'
 import TruncatedText from './TruncatedText'
 interface FrameDetails {
   type: string
@@ -28,20 +28,24 @@ const FrameCard: React.FC<FrameCardProps> = ({
   isSelected = false,
   isExpanded,
 }) => {
+  const [previewOpen, setPreviewOpen] = useState(false);
+
   return (
     <Card
       sx={{
-        bgcolor: isSelected ? '#cccba4' : '#FFFECE',
-        color: '#black',
+        bgcolor: isSelected ? '#e0f2f1' : '#f5faff',
+        color: '#222',
         display: 'flex',
-        padding: 2,
+        flexDirection: { xs: 'column', sm: 'row' },
+        padding: { xs: 1, sm: 2 },
         width: '100%',
-        height: isExpanded ? 'auto' : '300px',
+        height: isExpanded ? 'auto' : { xs: 'auto', sm: 300 },
         maxWidth: 1280,
-        borderRadius: 2,
-        transition: 'height 0.3s ease-in-out',
+        borderRadius: 3,
+        boxShadow: 3,
+        transition: 'background 0.3s, height 0.3s',
         '&:hover': {
-          bgcolor: isSelected ? '#b2b190' : '#99987b',
+          bgcolor: isSelected ? '#b2dfdb' : '#e3f2fd',
         },
       }}
     >
@@ -52,28 +56,43 @@ const FrameCard: React.FC<FrameCardProps> = ({
           flexDirection: 'column',
           alignItems: 'center',
           gap: 1,
-          mr: 2,
+          mr: { xs: 0, sm: 2 },
+          mb: { xs: 2, sm: 0 },
         }}
       >
         {/* Frame Preview */}
         <Box
           sx={{
-            width: 200,
-            height: 270,
-            bgcolor: 'black',
+            width: { xs: 180, sm: 200 },
+            height: { xs: 120, sm: 270 },
+            bgcolor: '#222',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             overflow: 'hidden',
+            borderRadius: 2,
             '& img': {
               width: '100%',
               height: '100%',
-              objectFit: 'cover',
+              objectFit: 'contain',
             },
           }}
+          onClick={() => setPreviewOpen(true)}
         >
           <img src={frameDetails.image} alt={frameDetails.type} />
         </Box>
+        <Dialog open={previewOpen} onClose={() => setPreviewOpen(false)} maxWidth="md">
+          <Box sx={{ p: 2, bgcolor: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <img
+              src={frameDetails.image}
+              alt={frameDetails.type}
+              style={{ maxWidth: '90vw', maxHeight: '80vh', borderRadius: 8 }}
+            />
+            <Button onClick={() => setPreviewOpen(false)} sx={{ mt: 2 }} variant="outlined">
+              Close
+            </Button>
+          </Box>
+        </Dialog>
       </Box>
 
       {/* Right Section */}
@@ -89,13 +108,14 @@ const FrameCard: React.FC<FrameCardProps> = ({
         {/* Frame Details */}
         <Box
           sx={{
-            bgcolor: '#FFD0C7',
+            bgcolor: '#e3f2fd',
             height: isExpanded ? 'auto' : '80%',
             minHeight: 100,
             padding: 2,
             display: 'flex',
             flexDirection: 'column',
             gap: 1,
+            borderRadius: 2,
           }}
         >
           <Typography variant="h6" fontWeight="bold" noWrap>
@@ -142,7 +162,8 @@ const FrameCard: React.FC<FrameCardProps> = ({
         <Box
           sx={{
             display: 'flex',
-            justifyContent: 'center',
+            flexDirection: { xs: 'column', sm: 'row' },
+            justifyContent: 'start',
             alignItems: 'center',
             gap: 2,
             mt: 1,
@@ -152,28 +173,30 @@ const FrameCard: React.FC<FrameCardProps> = ({
             onClick={onSelect}
             variant="contained"
             sx={{
-              bgcolor: 'black',
-              color: '#FFFECE',
+              bgcolor: isSelected ? '#00796b' : '#1976d2',
+              color: '#fff',
               fontWeight: 'bold',
-              '&:hover': { bgcolor: 'darkred' },
+              '&:hover': { bgcolor: isSelected ? '#004d40' : '#1565c0' },
               fontSize: '1rem',
               py: 0.5,
               minWidth: 80,
+              width: { xs: '100%', sm: 'auto' },
             }}
           >
             {isSelected ? 'Selected' : 'Select'}
           </Button>
           <Box
             sx={{
-              bgcolor: 'black',
+              bgcolor: '#1976d2',
               fontWeight: 'bold',
               fontSize: '1.5rem',
               py: 0.5,
               px: 1,
               textAlign: 'center',
-              color: '#FFFECE',
+              color: '#fff',
               minWidth: 80,
               borderRadius: 1,
+              width: { xs: '100%', sm: 'auto' },
             }}
           >
             ₹ {frameDetails.price} /-
