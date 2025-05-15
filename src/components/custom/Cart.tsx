@@ -36,11 +36,14 @@ const Cart: React.FC<CartProps> = ({ open, onClose }) => {
     updatedToys.length === 0
       ? sessionStorage.removeItem('selectedToys')
       : sessionStorage.setItem('selectedToys', JSON.stringify(updatedToys))
+
+    window.dispatchEvent(new Event('storageUpdate'))
   }
 
   const handleRemoveFrame = () => {
     setSelectedFrame(null)
     sessionStorage.removeItem('selectedFrame')
+    window.dispatchEvent(new Event('storageUpdate'))
   }
 
   return (
@@ -75,7 +78,14 @@ const Cart: React.FC<CartProps> = ({ open, onClose }) => {
               >
                 <DeleteIcon color="error" />
               </IconButton>
-              <ToyCard isSelected={true} onSelect={() => { } } image={undefined} name={''} description={''} price={0} moterType={''} />
+              <ToyCard
+                isSelected={true}
+                onSelect={() => { return }}
+                image={toy.image}
+                name={toy.name}
+                description={toy.description}
+                price={toy.price}
+                moterType={toy.type} />
             </Paper>
           ))
         ) : (
