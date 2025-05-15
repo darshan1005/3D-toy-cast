@@ -25,7 +25,6 @@ const ToysPage = () => {
   const [filteredData, setFilteredData] = useState(carToyData)
   const [selectedToys, setSelectedToys] = useState<ToyDataProps[]>([])
 
-  // Load selected toys from sessionStorage on component mount
   useEffect(() => {
     const savedToys = sessionStorage.getItem('selectedToys')
     if (savedToys) {
@@ -100,8 +99,7 @@ const ToysPage = () => {
   }
 
   const handleConfirm = () => {
-    // Navigate to home page after confirming
-    navigate('/', {
+    navigate('/framespage', {
       state: { scrollToSelection: true },
     })
   }

@@ -34,7 +34,6 @@ const FramePage = () => {
   }
 
   const handleConfirm = () => {
-    // Navigate to home page after confirming
     navigate('/', {
       state: { scrollToSelection: true },
     })

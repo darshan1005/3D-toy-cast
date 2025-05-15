@@ -158,8 +158,8 @@ const Selection = () => {
                               ? 'green'
                               : 'black'
                             : isSelected
-                            ? 'green'
-                            : 'none',
+                              ? 'green'
+                              : 'none',
                           color: isSmallScreen ? 'white' : isSelected ? 'white' : 'common.black',
                           '&:hover': {
                             borderColor: isSelected ? 'green' : 'red',
@@ -208,7 +208,6 @@ const Selection = () => {
           onClose={function (): void {
             setModalOpen(false)
           }}
-          title="Order Summary"
           centerTitle
           width={500}
         >
