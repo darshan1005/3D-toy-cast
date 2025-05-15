@@ -1,5 +1,5 @@
-import React, { JSX, useState } from 'react'
-import { Box, Button } from '@mui/material'
+import React, { JSX, useEffect, useState } from 'react'
+import { Badge, Box, Button, IconButton } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import { useNavigate } from 'react-router-dom'
@@ -28,8 +28,14 @@ const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
   selectedToy,
   selectedFrame,
 }) => {
-  const [cartOpen, setCartOpen] = useState(false)
+  const [cartOpen, setCartOpen] = useState(false);
+  const [storgaCount, setStorageCount] = useState<number>(0);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setStorageCount(sessionStorage.length);
+  })
+
   const handleConfirm = () => {
     onConfirm()
   }
@@ -93,14 +99,13 @@ const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
         >
           {label}
         </Button>
-        <Button
-          variant="outlined"
+
+        <IconButton
           sx={{
             minWidth: 40,
             width: 40,
             height: 40,
             borderRadius: '50%',
-            bgcolor: 'grey.100',
             color: 'black',
             '&:hover': {
               bgcolor: 'grey.300',
@@ -108,8 +113,14 @@ const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
           }}
           onClick={() => setCartOpen(true)}
         >
-          <ShoppingCartIcon />
-        </Button>
+          <Badge
+            color="error"
+            overlap="circular"
+            variant="dot"
+            invisible={storgaCount === 0}>
+            <ShoppingCartIcon />
+          </Badge>
+        </IconButton>
       </Box>
 
       {/* Cart Component (Simple Drawer/Modal) */}

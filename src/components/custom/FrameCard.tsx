@@ -19,14 +19,12 @@ interface FrameCardProps {
   frameDetails: FrameDetails
   onSelect?: () => void
   isSelected?: boolean
-  isExpanded?: boolean
 }
 
 const FrameCard: React.FC<FrameCardProps> = ({
   frameDetails,
   onSelect,
   isSelected = false,
-  isExpanded,
 }) => {
   const [previewOpen, setPreviewOpen] = useState(false);
 
@@ -39,7 +37,7 @@ const FrameCard: React.FC<FrameCardProps> = ({
         flexDirection: { xs: 'column', sm: 'row' },
         padding: { xs: 1, sm: 2 },
         width: '100%',
-        height: isExpanded ? 'auto' : { xs: 'auto', sm: 300 },
+        height: { xs: 'auto', sm: 300 },
         borderRadius: 3,
         boxShadow: 3,
       }}
@@ -69,11 +67,7 @@ const FrameCard: React.FC<FrameCardProps> = ({
             alignItems: 'center',
             overflow: 'hidden',
             borderRadius: 2,
-            '& img': {
-              width: '100%',
-              height: '100%',
-              objectFit: 'contain',
-            },
+            objectFit: 'contain'
           }}
           onClick={() => setPreviewOpen(true)}
         />
@@ -158,7 +152,8 @@ const FrameCard: React.FC<FrameCardProps> = ({
             <Typography variant="body2" sx={{ minWidth: 100 }} fontWeight={'bold'}>
               Description:
             </Typography>
-            <Typography variant='subtitle1' lineHeight={1.4}>         {frameDetails.description}
+            <Typography variant='subtitle1' lineHeight={1.4}>
+              {frameDetails.description}
             </Typography>
           </Box>
         </Box>
@@ -167,7 +162,6 @@ const FrameCard: React.FC<FrameCardProps> = ({
         <Box
           sx={{
             display: 'flex',
-            flexDirection: { xs: 'column', sm: 'row' },
             justifyContent: 'start',
             alignItems: 'center',
             gap: 2,

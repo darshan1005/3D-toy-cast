@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import { Box, useMediaQuery, useTheme } from '@mui/material'
 import FrameCard from '@components/custom/FrameCard'
 import { frameCardData, FrameDetailsProps } from '../data/FrameData'
 import ConfirmComponent from '@components/custom/ConfirmComponent'
@@ -6,7 +6,9 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const FramePage = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const [selectedFrame, setSelectedFrame] = useState<FrameDetailsProps | null>(null)
 
   // Load selected frame from sessionStorage on component mount
@@ -26,7 +28,7 @@ const FramePage = () => {
       }
 
       // Select the new frame
-      sessionStorage.setItem('selectedFrame', JSON.stringify(frame))
+      sessionStorage.setItem('selectedFrame', JSON.stringify(frame));
       return frame
     })
   }
@@ -44,32 +46,31 @@ const FramePage = () => {
         p: 2,
       }}
     >
-      <ConfirmComponent onConfirm={handleConfirm} selectedFrame={selectedFrame} navigateTo='/toyspage' label={'Proceed To Order'} />
+      <ConfirmComponent
+        onConfirm={handleConfirm}
+        selectedFrame={selectedFrame}
+        navigateTo='/toyspage'
+        label={'Proceed To Order'}
+      />
       <Box
         sx={{
+          display: 'grid',
+          gridTemplateColumns: isSmallScreen ? 'repeat(1, auto)' : 'repeat(2, auto)',
+          gap: 2,
+          margin: '0 auto',
           backgroundColor: 'white',
           padding: 2,
           borderRadius: 3,
         }}
       >
-
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2, auto)',
-            gap: 2,
-            margin: '0 auto',
-          }}
-        >
-          {frameCardData.map(frame => (
-            <FrameCard
-              key={frame.id}
-              frameDetails={frame}
-              onSelect={() => handleFrameSelect(frame)}
-              isSelected={selectedFrame?.id === frame.id}
-            />
-          ))}
-        </Box>
+        {frameCardData.map(frame => (
+          <FrameCard
+            key={frame.id}
+            frameDetails={frame}
+            onSelect={() => handleFrameSelect(frame)}
+            isSelected={selectedFrame?.id === frame.id}
+          />
+        ))}
       </Box>
     </Box>
   )

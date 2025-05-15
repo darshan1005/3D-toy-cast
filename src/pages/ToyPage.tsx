@@ -17,16 +17,16 @@ import { useNavigate } from 'react-router-dom'
 
 const ToysPage = () => {
   const navigate = useNavigate()
-  const theme = useTheme()
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const [selectedType, setSelectedType] = useState('')
-  const [selectedBrands, setSelectedBrands] = useState<string[]>([])
-  const [filteredData, setFilteredData] = useState(carToyData)
-  const [selectedToys, setSelectedToys] = useState<ToyDataProps[]>([])
+  const [selectedType, setSelectedType] = useState('');
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [filteredData, setFilteredData] = useState(carToyData);
+  const [selectedToys, setSelectedToys] = useState<ToyDataProps[]>([]);
 
   useEffect(() => {
-    const savedToys = sessionStorage.getItem('selectedToys')
+    const savedToys = sessionStorage.getItem('selectedToys');
     if (savedToys) {
       setSelectedToys(JSON.parse(savedToys))
     }
