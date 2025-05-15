@@ -262,11 +262,12 @@ const ToysPage = () => {
           {/* Toys Grid */}
           <Box
             sx={{
-              display: 'grid',
-              gridTemplateColumns: isSmallScreen ? '1fr' : 'repeat(auto-fit, minmax(200px, 1fr))',
-              gap: '33px',
-              placeItems: isSmallScreen ? 'center' : 'start',
-              maxWidth: isSmallScreen ? '100%' : '98%',
+              display: 'flex',
+              justifyContent: 'center',
+              flexWrap: 'wrap',
+              gap: 3,
+              width: '100%',
+              mx: 'auto',
             }}
           >
             {filteredData.map(toy => (

@@ -22,13 +22,11 @@ const FramePage = () => {
       // If the same frame is clicked again, unselect it
       if (prevFrame?.id === frame.id) {
         sessionStorage.removeItem('selectedFrame')
-        console.log('Frame unselected, removed from sessionStorage')
         return null
       }
 
       // Select the new frame
       sessionStorage.setItem('selectedFrame', JSON.stringify(frame))
-      console.log('Selected frame in sessionStorage:', frame)
       return frame
     })
   }
