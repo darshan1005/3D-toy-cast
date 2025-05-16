@@ -1,17 +1,11 @@
-import { Box, Button, IconButton, keyframes, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Button, keyframes, Typography, useMediaQuery, useTheme } from '@mui/material';
 import Logo from '../assets/Logo.svg';
 import BikeImage from '../assets/Bike.svg';
 import CarImage from '../assets/Car.svg';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import { useState } from 'react';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import { Palette } from '../theme';
 
-const likeCount = 0;
-
 const Hero = () => {
-  const [liked, setLiked] = useState(false);
-  const [count, setCount] = useState(likeCount);
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -22,12 +16,7 @@ const Hero = () => {
   60% { transform: rotate(-10deg); }
   80% { transform: rotate(10deg); }
   100% { transform: rotate(0deg); }
-`;
-
-  const handleLikeClick = () => {
-    setLiked(!liked);
-    setCount(liked ? count - 1 : count + 1);
-  };
+  `;
 
   return (
     <>
@@ -87,32 +76,20 @@ const Hero = () => {
               gap: 1,
             }}
           >
-            <IconButton
+            <Button
+              variant='contained'
               sx={{
                 cursor: 'pointer',
-                animation: `${shake} 0.7s infinite`,
-                animationTimingFunction: 'ease-in-out'
+                backgroundColor: Palette.text.primary
               }}
               onClick={() => {
                 document.getElementById('footer')?.scrollIntoView({
                   behavior: 'smooth',
                 });
-              }}><LocalPhoneIcon /></IconButton>
-            <FavoriteIcon
-              sx={{
-                color: liked
-                  ? Palette.error.dark
-                  : Palette.text.primary,
-                cursor: 'pointer'
               }}
-              onClick={handleLikeClick} />
-            <Typography
-              variant={isSmallScreen ? 'body1' : 'h5'}
-              color={Palette.text.primary}
-              fontWeight="bold"
-            >
-              {count}
-            </Typography>
+              startIcon={<LocalPhoneIcon />}>
+              Contact
+            </Button>
           </Box>
         </Box>
 
