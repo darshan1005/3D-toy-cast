@@ -10,7 +10,7 @@ export interface ToyDataProps {
   type: string;
 }
 
-export const carToyData: ToyDataProps[] = [
+export const ToyData: ToyDataProps[] = [
   {
     id: 1,
     image: superCar,

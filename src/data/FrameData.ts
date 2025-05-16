@@ -15,7 +15,7 @@ export interface FrameDetailsProps {
   price: number
 }
 
-export const frameCardData: FrameDetailsProps[] = [
+export const frameData: FrameDetailsProps[] = [
   {
     id: 1,
     type: 'Basic Box',

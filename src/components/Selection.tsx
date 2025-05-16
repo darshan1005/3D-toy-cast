@@ -179,13 +179,11 @@ const Selection = () => {
                   alignSelf: 'center',
                   bgcolor: 'transparent',
                   color: Palette.success.dark,
-                  border: `2px solid ${Palette.success.main}`,
+                  border: (!isItemSelected('Toy') || !isItemSelected('Frame'))
+                    ? undefined
+                    : `2px solid ${Palette.secondary.main}`,
                   fontWeight: 600,
                   fontSize: isSmallScreen ? '1rem' : '1.2rem',
-                  '&.Mui-disabled': {
-                    bgcolor: 'grey.400',
-                    color: 'white',
-                  },
                 }}
               >
                 Order

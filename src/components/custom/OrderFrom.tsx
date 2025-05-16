@@ -69,7 +69,8 @@ const OrderForm = () => {
   }
 
   const handleClearOrder = () => {
-    setIsOrderCancelled(false)
+    setModalOpen(false)
+    setIsOrderCancelled(true)
     sessionStorage.removeItem('selectedToys')
     sessionStorage.removeItem('selectedFrame')
     setSelectedToys([])
@@ -87,20 +88,20 @@ const OrderForm = () => {
         return !value.trim()
           ? 'Name is required'
           : !/^[a-zA-Z\s]+$/.test(value)
-          ? 'Only alphabets are allowed'
-          : ''
+            ? 'Only alphabets are allowed'
+            : ''
       case 'phone':
         return !value.trim()
           ? 'Phone number is required'
           : !/^\d{10}$/.test(value)
-          ? 'Phone must be a 10-digit number'
-          : ''
+            ? 'Phone must be a 10-digit number'
+            : ''
       case 'email':
         return !value.trim()
           ? 'Email is required'
           : !value.includes('@gmail.com')
-          ? 'Email must be a Gmail address'
-          : ''
+            ? 'Email must be a Gmail address'
+            : ''
       case 'state':
         return !value.trim() ? 'State is required' : ''
       case 'city':
@@ -109,8 +110,8 @@ const OrderForm = () => {
         return !value.trim()
           ? 'Pin code is required'
           : !/^\d{6}$/.test(value)
-          ? 'Pin code must be 6 digits'
-          : ''
+            ? 'Pin code must be 6 digits'
+            : ''
       case 'address':
         return !value.trim() ? 'Address is required' : ''
       default:
@@ -337,7 +338,7 @@ const OrderForm = () => {
           >
             <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
               <Button onClick={handleClearOrder} sx={{ mr: 2 }}>
-                Cancel
+                Yes
               </Button>
               <Button onClick={handleCloseModal}>Order</Button>
             </Box>

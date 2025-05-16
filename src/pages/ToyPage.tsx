@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 import React, { useState, useEffect } from 'react'
 import ToyCard from '@components/custom/ToyCard'
-import { carToyData, ToyDataProps } from '../data/ToyData'
+import { ToyData, ToyDataProps } from '../data/ToyData'
 import ConfirmComponent from '@components/custom/ConfirmComponent'
 import { useNavigate } from 'react-router-dom'
 
@@ -22,7 +22,7 @@ const ToysPage = () => {
 
   const [selectedType, setSelectedType] = useState('');
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-  const [filteredData, setFilteredData] = useState(carToyData);
+  const [filteredData, setFilteredData] = useState(ToyData);
   const [selectedToys, setSelectedToys] = useState<ToyDataProps[]>([]);
 
   useEffect(() => {
@@ -38,12 +38,12 @@ const ToysPage = () => {
   }
 
   const getTypeOptions = () => {
-    return [...new Set(carToyData.map(toy => toy.type))]
+    return [...new Set(ToyData.map(toy => toy.type))]
   }
 
   const getBrandOptions = () => {
     if (!selectedType) return []
-    return [...new Set(carToyData.filter(toy => toy.type === selectedType).map(toy => toy.name))]
+    return [...new Set(ToyData.filter(toy => toy.type === selectedType).map(toy => toy.name))]
   }
 
   const getDisplayedBrands = () => {
@@ -52,7 +52,7 @@ const ToysPage = () => {
   }
 
   const handleApplyFilters = () => {
-    let filtered = carToyData
+    let filtered = ToyData
 
     if (selectedType) {
       filtered = filtered.filter(toy => toy.type === selectedType)
@@ -66,7 +66,7 @@ const ToysPage = () => {
   }
 
   const handleResetFilters = () => {
-    setFilteredData(carToyData)
+    setFilteredData(ToyData)
     setSelectedType('')
     setSelectedBrands([])
   }

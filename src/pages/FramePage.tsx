@@ -1,6 +1,6 @@
 import { Box, useMediaQuery, useTheme } from '@mui/material'
 import FrameCard from '@components/custom/FrameCard'
-import { frameCardData, FrameDetailsProps } from '../data/FrameData'
+import { frameData, FrameDetailsProps } from '../data/FrameData'
 import ConfirmComponent from '@components/custom/ConfirmComponent'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -63,7 +63,7 @@ const FramePage = () => {
           borderRadius: 3,
         }}
       >
-        {frameCardData.map(frame => (
+        {frameData.map(frame => (
           <FrameCard
             key={frame.id}
             frameDetails={frame}
