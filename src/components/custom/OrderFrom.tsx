@@ -2,6 +2,7 @@ import { Box, Typography, TextField, Button, FormGroup, FormControlLabel, Checkb
 import { useEffect, useState } from 'react'
 import CustomPopup from './CustomPopup'
 import emailjs from '@emailjs/browser'
+import { generateUniqueId } from '../../utils/uniqueId'
 
 interface Toy {
   id: number
@@ -66,8 +67,9 @@ const OrderForm = () => {
     const updateCost = () => {
       const keyChainCost = isKeyChainSelected ? 99 : 0
       const raceTrackCost = isRaceTrackSelected ? 149 : 0
-      const deliveryCharges = 100
-      setFinalCost(toysCost + frameCost + keyChainCost + raceTrackCost + deliveryCharges)
+      const deliveryCharges = 99
+      const Other = 49 // print , magnets, stickers
+      setFinalCost(toysCost + frameCost + keyChainCost + raceTrackCost + Other + deliveryCharges)
     }
 
     updateCost()
@@ -154,8 +156,8 @@ const OrderForm = () => {
     }
   }
 
-  const keyChainSelected = isKeyChainSelected ? 'yes' : 'no';
-  const raceMapSelected = isRaceTrackSelected ? 'yes' : 'no';
+  const keyChainSelected = isKeyChainSelected ? 'Yes' : 'No';
+  const raceMapSelected = isRaceTrackSelected ? 'Yes' : 'No';
   const selectedToyStr = selectedToys.map(toy => toy.name).join(' & ') || 'No Toy Selected';
   const selectedFraeStr = selectedFrame;
 
@@ -170,6 +172,7 @@ const OrderForm = () => {
     const publicKey = 'e8_krUrIuF3wLcOUt';
 
     const templateParams = {
+      orderId: generateUniqueId(formData.name, formData.phone),
       name: formData.name,
       phoneNumber: formData.phone,
       to: 'buzzmakers071@gmail.com', // temp mail for testing
@@ -235,7 +238,6 @@ const OrderForm = () => {
         </Box>
       ) : (
         <Box sx={{ p: 1, maxWidth: '600px', mx: 'auto' }}>
-          <Typography variant='caption'>Complete your order by filling the bellow fileds</Typography>
           <Box display="flex" flexDirection={{ xs: 'column', sm: 'row' }} gap={1} mb={1}>
             <TextField
               fullWidth
