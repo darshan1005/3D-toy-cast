@@ -31,7 +31,7 @@ const FrameCard: React.FC<FrameCardProps> = ({
   return (
     <Card
       sx={{
-        bgcolor: isSelected ? Palette.warning.light : Palette.text.primary,
+        bgcolor: isSelected ? 'grey.800' : Palette.text.primary,
         color: '#222',
         display: 'flex',
         flexDirection: { xs: 'column', sm: 'row' },
@@ -59,15 +59,16 @@ const FrameCard: React.FC<FrameCardProps> = ({
           src={frameDetails.image}
           alt={frameDetails.type}
           sx={{
-            width: { xs: 180, sm: 200 },
-            height: { xs: 120, sm: 270 },
+            width: 200,
+            height: { xs: 170, sm: 270 },
             bgcolor: '#222',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             overflow: 'hidden',
             borderRadius: 2,
-            objectFit: 'contain'
+            objectFit: 'contain',
+            backgroundColor: 'transparent'
           }}
           onClick={() => setPreviewOpen(true)}
         />
@@ -110,7 +111,7 @@ const FrameCard: React.FC<FrameCardProps> = ({
             padding: 2,
             display: 'flex',
             flexDirection: 'column',
-            borderRadius: 2,
+            borderRadius: { xs: 1, sm: 2 },
             overflowY: 'auto',
             scrollbarWidth: 'none',
             height: 230,

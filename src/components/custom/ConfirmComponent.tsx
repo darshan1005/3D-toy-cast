@@ -4,7 +4,6 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import { useNavigate } from 'react-router-dom'
 import Cart from './Cart'
-import { Palette } from '../../theme'
 
 interface ConfirmComponentProps {
   onConfirm: () => void;
