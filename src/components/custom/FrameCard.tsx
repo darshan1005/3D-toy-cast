@@ -38,9 +38,9 @@ const FrameCard: React.FC<FrameCardProps> = ({
         padding: { xs: 1, sm: 2 },
         width: '100%',
         height: { xs: 'auto', sm: 300 },
-        borderRadius: 3,
-        boxShadow: 3,
+        borderRadius: 3
       }}
+      onClick={onSelect}
     >
       {/* Left Section */}
       <Box
