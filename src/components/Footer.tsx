@@ -30,7 +30,7 @@ const Footer = () => {
     <Box sx={{ p: 2 }} id='footer'>
       <Box sx={{
         backgroundColor: 'white',
-        padding: 4,
+        padding: 2,
         borderRadius: 3,
       }}>
         <Stack direction={{ xs: 'column', md: 'row' }} spacing={4}>
