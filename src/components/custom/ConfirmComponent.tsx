@@ -4,6 +4,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import { useNavigate } from 'react-router-dom'
 import Cart from './Cart'
+import { Palette } from '../../theme'
 
 interface ConfirmComponentProps {
   onConfirm: () => void;
@@ -65,27 +66,23 @@ const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
       }}
     >
       {/* Back Button */}
-      <Button
-        variant="outlined"
+      <IconButton
+        size='small'
         sx={{
           minWidth: 40,
           width: 40,
           height: 40,
-          borderRadius: '50%',
-          bgcolor: 'grey.400',
-          color: 'white',
-          '&:hover': {
-            bgcolor: 'grey.600',
-          },
+          bgcolor: '#3331'
         }}
         onClick={handleBackNav}
       >
         <ArrowBackIcon />
-      </Button>
+      </IconButton>
 
       {/* Confirm Button and Cart */}
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
         <Button
+          size='small'
           onClick={handleConfirm}
           variant="contained"
           sx={{

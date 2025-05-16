@@ -70,7 +70,7 @@ const Bento = () => {
                 }}
               >
                 <Typography
-                  variant={isSmallScreen ? 'h5' : 'h3'}
+                  variant={isSmallScreen ? 'h5' : 'h4'}
                   sx={{ color: 'white', fontWeight: 600 }}
                 >
                   3D Printed Frames
@@ -114,7 +114,7 @@ const Bento = () => {
                 }}
               >
                 <Typography
-                  variant={isSmallScreen ? 'h5' : 'h3'}
+                  variant={isSmallScreen ? 'h5' : 'h4'}
                   sx={{ color: 'white', fontWeight: 600 }}
                 >
                   Die-Cast Collection
@@ -157,7 +157,7 @@ const Bento = () => {
                 backgroundColor: 'black',
               }}
             >
-              <Typography
+              {/* <Typography
                 variant={isSmallScreen ? 'h3' : 'h2'}
                 sx={{
                   fontWeight: 700,
@@ -165,9 +165,9 @@ const Bento = () => {
                 }}
               >
                 700+
-              </Typography>
+              </Typography> */}
               <Typography
-                variant={isSmallScreen ? 'body1' : 'h4'}
+                variant={isSmallScreen ? 'h6' : 'h4'}
                 sx={{
                   ...styles.textGradient,
                   fontWeight: 600,
@@ -175,7 +175,7 @@ const Bento = () => {
                   textAlign: 'center',
                 }}
               >
-                Order's Completed
+                Make your first Order's now
               </Typography>
             </Box>
           </Box>
@@ -211,7 +211,7 @@ const Bento = () => {
               }}
             >
               <Typography
-                variant={isSmallScreen ? 'body1' : 'h5'}
+                variant={isSmallScreen ? 'h6' : 'h5'}
                 sx={{
                   color: 'white',
                   fontWeight: 600,
@@ -236,7 +236,7 @@ const Bento = () => {
               }}
             >
               <Typography
-                variant={isSmallScreen ? 'h5' : 'h3'}
+                variant={isSmallScreen ? 'h5' : 'h4'}
                 sx={{ color: 'white', fontWeight: 600 }}
               >
                 Custom Displays
@@ -293,7 +293,7 @@ const Bento = () => {
               position: 'absolute',
               zIndex: 1,
               opacity: 0.8,
-              fontSize: isSmallScreen ? '3rem' : '4rem',
+              fontSize: isSmallScreen ? '2.5rem' : '4rem',
             }}
           >
             3D TOY CAST

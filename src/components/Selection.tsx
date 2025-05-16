@@ -86,7 +86,6 @@ const Selection = () => {
                 : 'translateY(-50%) rotate(-50deg)',
               filter: 'blur(3px)',
               width: isSmallScreen ? '80%' : 'auto',
-              opacity: 0.7
             }}
           />
           <Stack
@@ -110,13 +109,15 @@ const Selection = () => {
                 width: isSmallScreen ? '100%' : '50%',
                 textAlign: isSmallScreen ? 'center' : 'right',
                 fontSize: isSmallScreen ? '1rem' : '1.2rem',
-                color: Palette.text.secondary,
+                color: isSmallScreen ? Palette.text.white : Palette.text.secondary,
                 fontWeight: 600,
                 zIndex: 2,
+                p: 1,
+                background: isSmallScreen ? 'rgba(0,0,0, 0.4)' : 'transparent',
               }}
             >
               Build your perfect gift! Start by selecting your favorite toy and a matching frame to make it truly yours. Only when both are chosen, the magic happens -
-              <Typography component="span" sx={{ color: Palette.error.light, fontWeight: 700 }}>
+              <Typography component="span" sx={{ color: 'red', fontWeight: 700 }}>
                 3D Toy Cast
               </Typography>
             </Typography>

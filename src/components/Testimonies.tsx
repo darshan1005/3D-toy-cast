@@ -70,9 +70,15 @@ const Testimonies = () => {
     <Box sx={{ backgroundColor: 'red', p: 2 }}>
       <Box sx={{ backgroundColor: 'white', padding: 2, borderRadius: 3 }}>
         <Stack spacing={3} sx={{ p: 4 }}>
-          <Typography variant="h4" fontWeight="bold" textAlign="center" mb={3}>
+          <Typography
+            sx={{ fontSize: { xs: '1.75rem', sm: '2.125rem' } }}
+            fontWeight="bold"
+            textAlign="center"
+            mb={{ xs: 2, sm: 3 }}
+          >
             What Our Customers Say
           </Typography>
+
           <Box sx={{
             position: 'relative',
             overflow: 'hidden',
@@ -135,7 +141,7 @@ const Testimonies = () => {
           </Box>
         </Stack>
       </Box>
-    </Box>
+    </Box >
   );
 };
 

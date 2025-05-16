@@ -4,6 +4,7 @@ import BikeImage from '../assets/Bike.svg';
 import CarImage from '../assets/Car.svg';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import { Palette } from '../theme';
+import { red } from '@mui/material/colors';
 
 const Hero = () => {
   const theme = useTheme();
@@ -33,15 +34,15 @@ const Hero = () => {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            mb: isSmallScreen ? 1 : 2,
+            mb: 2,
           }}
         >
           <Box
             sx={{
               display: 'flex',
               alignItems: 'center',
-              gap: 1,
-              mb: isSmallScreen ? 1 : 0,
+              justifyContent: 'center',
+              gap: 1
             }}
           >
             <Box
@@ -63,7 +64,7 @@ const Hero = () => {
                 width: 'max-content',
                 color: Palette.text.white,
                 padding: isSmallScreen ? 0.5 : 1,
-                fontSize: isSmallScreen ? '16px' : '20px',
+                fontSize: isSmallScreen ? '18px' : '20px',
               }}
             >
               3D TOY CAST
@@ -78,9 +79,11 @@ const Hero = () => {
           >
             <Button
               variant='contained'
+              size='small'
               sx={{
                 cursor: 'pointer',
-                backgroundColor: Palette.text.primary
+                backgroundColor: Palette.text.primary,
+                fontSize: '0.85rem',
               }}
               onClick={() => {
                 document.getElementById('footer')?.scrollIntoView({

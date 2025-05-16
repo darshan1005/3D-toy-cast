@@ -11,7 +11,7 @@ const FooterContent = 'Refund/Return Policy: We accept returns or offer replacem
 
 const Footer = () => {
   return (
-    <Box sx={{ p: 2 }} id='footer'>
+    <Box id='footer'>
       <Box sx={{
         backgroundColor: 'white',
         padding: 2,
@@ -20,7 +20,7 @@ const Footer = () => {
         <Stack direction={{ xs: 'column', md: 'row' }} spacing={4}>
           {/* Left Section */}
           <Stack
-            spacing={2}
+            spacing={1}
             sx={{
               bgcolor: 'black',
               color: 'white',
@@ -59,7 +59,7 @@ const Footer = () => {
           </Stack>
 
           {/* Right Section */}
-          <Stack spacing={4} flex={1}>
+          <Stack spacing={2} flex={1}>
             {/* Contact Info */}
             <Stack spacing={2}>
               <Typography variant="h6" fontWeight="bold" sx={{ fontSize: { xs: '1rem', md: '1.25rem' } }}>
@@ -100,8 +100,8 @@ const Footer = () => {
               </Stack>
             </Stack>
 
-            <Stack spacing={2}>
-              <Typography variant="h6" fontWeight="bold" sx={{ fontSize: { xs: '1rem', md: '1.25rem' } }}>
+            <Stack spacing={1}>
+              <Typography variant="h6" fontWeight="bold" sx={{ fontSize: { xs: '1rem' } }}>
                 For Business
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: '0.8rem', md: '1rem' } }}>
