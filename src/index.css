@@ -6,3 +6,8 @@ html, body, #root {
   box-sizing: border-box;
 }
 
+.contact {
+  color: black;
+  text-decoration: none;
+}
+

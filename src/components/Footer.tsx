@@ -6,26 +6,10 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import TelegramIcon from '@mui/icons-material/Telegram';
-import Logo from '../assets/Logo.svg';
-import { useState } from 'react';
 
 const FooterContent = 'Refund/Return Policy: We accept returns or offer replacements for products with manufacturing defects (e.g., torn or broken items) or if the wrong product was delivered. To process a claim, please provide a video and photo documentation of the unboxing process, from the beginning to the end. Email this documentation to the order confirmation email address.'
 
 const Footer = () => {
-  const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState(false);
-
-  const validateEmail = (email: string) => {
-    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return regex.test(email);
-  };
-
-  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setEmail(value);
-    setEmailError(!validateEmail(value) && value.length > 0);
-  };
-
   return (
     <Box sx={{ p: 2 }} id='footer'>
       <Box sx={{
@@ -88,11 +72,17 @@ const Footer = () => {
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
                   <EmailIcon color="primary" />
-                  <Typography sx={{ fontSize: { xs: '0.9rem', md: '1rem' } }}>contact@3dtoycast.com</Typography>
+                  <Typography sx={{ fontSize: { xs: '0.9rem', md: '1rem' } }} >
+                    <a className='contact' href="mailto:contact@3dtoycast.com">
+                      contact@3dtoycast.com
+                    </a>
+                  </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
                   <PhoneIcon color="secondary" />
-                  <Typography sx={{ fontSize: { xs: '0.9rem', md: '1rem' } }}>+1 9XX XXX XX1</Typography>
+                  <Typography sx={{ fontSize: { xs: '0.9rem', md: '1rem' } }}>
+                    <a href="tel:99XXXXXX0" className='contact'>+91 99X XXX XX0</a>
+                  </Typography>
                 </Box>
               </Stack>
             </Stack>
@@ -110,46 +100,13 @@ const Footer = () => {
               </Stack>
             </Stack>
 
-            {/* Newsletter */}
             <Stack spacing={2}>
               <Typography variant="h6" fontWeight="bold" sx={{ fontSize: { xs: '1rem', md: '1.25rem' } }}>
                 For Business
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: '0.8rem', md: '1rem' } }}>
-                Please send us the business mail below
+                Please send us the business mail to <mark style={{ fontWeight: 'bold' }}>contact@3dtoycast.com / +91 99X XXX XX0</mark>
               </Typography>
-              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1}>
-                <Input
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={handleEmailChange}
-                  error={emailError}
-                  sx={{
-                    flex: 1,
-                    '&:before': { borderColor: 'rgba(0, 0, 0, 0.23)' },
-                    '& input': { color: emailError ? 'error.main' : 'inherit' },
-                    fontSize: { xs: '0.8rem', md: '1rem' },
-                  }}
-                />
-                <Button
-                  variant="contained"
-                  disabled={emailError || !email}
-
-                  sx={{
-                    width: 'max-content',
-                    bgcolor: 'black',
-                    '&:hover': { bgcolor: 'red' },
-                    fontSize: { xs: '0.8rem', md: '1rem' },
-                  }}
-                >
-                  SEND
-                </Button>
-              </Stack>
-              {emailError && (
-                <Typography variant="caption" color="error" sx={{ fontSize: { xs: '0.7rem', md: '0.9rem' } }}>
-                  Please enter a valid email address
-                </Typography>
-              )}
             </Stack>
           </Stack>
         </Stack>
