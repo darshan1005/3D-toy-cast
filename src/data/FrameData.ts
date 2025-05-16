@@ -18,7 +18,7 @@ export interface FrameDetailsProps {
 export const frameData: FrameDetailsProps[] = [
   {
     id: 1,
-    type: 'Basic Box',
+    type: 'Basic Box (Regular)',
     material: 'Hard Plastic',
     dimensions: {
       width: 20,
@@ -63,7 +63,7 @@ export const frameData: FrameDetailsProps[] = [
   },
   {
     id: 4,
-    type: 'Toy Fall',
+    type: 'Edge Square',
     material: 'Hard Plastic',
     dimensions: {
       width: 20,
@@ -78,7 +78,7 @@ export const frameData: FrameDetailsProps[] = [
   },
   {
     id: 5,
-    type: 'Image Fall',
+    type: 'Gravity Hold',
     material: 'Hard Plastic',
     dimensions: {
       width: 20,
@@ -93,7 +93,7 @@ export const frameData: FrameDetailsProps[] = [
   },
   {
     id: 6,
-    type: 'Hang Box',
+    type: 'Edge Cut',
     material: 'Hard Plastic',
     dimensions: {
       width: 20,
@@ -108,7 +108,7 @@ export const frameData: FrameDetailsProps[] = [
   },
   {
     id: 7,
-    type: 'Hang Toy',
+    type: 'Edge Cut Square',
     material: 'Hard Plastic',
     dimensions: {
       width: 20,
@@ -123,7 +123,7 @@ export const frameData: FrameDetailsProps[] = [
   },
   {
     id: 8,
-    type: 'Open Type',
+    type: 'Flate open box',
     material: 'Hard Plastic',
     dimensions: {
       width: 20,
