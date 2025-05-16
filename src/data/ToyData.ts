@@ -1,4 +1,4 @@
-import superCar from "../assets/superCar.png";
+import superCar from "../assets/supercar.png";
 import bikeImage from "../assets/Bike.svg";
 
 export interface ToyDataProps {

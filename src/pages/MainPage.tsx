@@ -3,7 +3,6 @@ import Footer from '@components/Footer'
 import Hero from '@components/Hero'
 import Selection from '@components/Selection'
 import Testimonies from '@components/Testimonies'
-import { Box } from '@mui/material'
 
 const MainPage = () => {
   return (
