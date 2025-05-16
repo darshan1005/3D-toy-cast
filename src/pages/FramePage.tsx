@@ -6,9 +6,9 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const FramePage = () => {
-  const navigate = useNavigate();
-  const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const navigate = useNavigate()
+  const theme = useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
   const [selectedFrame, setSelectedFrame] = useState<FrameDetailsProps | null>(null)
 
   // Load selected frame from sessionStorage on component mount
@@ -16,6 +16,23 @@ const FramePage = () => {
     const savedFrame = sessionStorage.getItem('selectedFrame')
     if (savedFrame && savedFrame !== 'null') {
       setSelectedFrame(JSON.parse(savedFrame))
+    }
+  }, [])
+
+  // Listen for storage updates
+  useEffect(() => {
+    const handleStorageUpdate = () => {
+      const savedFrame = sessionStorage.getItem('selectedFrame')
+      if (savedFrame && savedFrame !== 'null') {
+        setSelectedFrame(JSON.parse(savedFrame))
+      } else {
+        setSelectedFrame(null)
+      }
+    }
+
+    window.addEventListener('storageUpdate', handleStorageUpdate)
+    return () => {
+      window.removeEventListener('storageUpdate', handleStorageUpdate)
     }
   }, [])
 
@@ -28,7 +45,7 @@ const FramePage = () => {
       }
 
       // Select the new frame
-      sessionStorage.setItem('selectedFrame', JSON.stringify(frame));
+      sessionStorage.setItem('selectedFrame', JSON.stringify(frame))
       return frame
     })
   }
@@ -49,7 +66,7 @@ const FramePage = () => {
       <ConfirmComponent
         onConfirm={handleConfirm}
         selectedFrame={selectedFrame}
-        navigateTo='/toyspage'
+        navigateTo="/toyspage"
         label={'Proceed To Order'}
       />
       <Box

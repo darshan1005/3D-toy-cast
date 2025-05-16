@@ -130,7 +130,7 @@ const Hero = () => {
               position: 'relative',
               background: isSmallScreen ? 'linear-gradient(to right, black, white)' : 'linear-gradient(to bottom, black, white)',
               width: isSmallScreen ? '100%' : '20%',
-              height: isSmallScreen ? '100px' : '540px',
+              height: isSmallScreen ? '100px' : '500px',
               overflow: 'visible',
               mb: isSmallScreen ? 2 : 0,
             }}
@@ -214,7 +214,7 @@ const Hero = () => {
               position: 'relative',
               background: isSmallScreen ? 'linear-gradient(to left, red, white)' : 'linear-gradient(to bottom, red, white)',
               width: isSmallScreen ? '100%' : '20%',
-              height: isSmallScreen ? '200px' : '540px',
+              height: isSmallScreen ? '200px' : '500px',
               overflow: 'visible',
             }}
           >

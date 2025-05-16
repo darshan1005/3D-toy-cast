@@ -17,18 +17,36 @@ import { useNavigate } from 'react-router-dom'
 
 const ToysPage = () => {
   const navigate = useNavigate()
-  const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const theme = useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
 
-  const [selectedType, setSelectedType] = useState('');
-  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-  const [filteredData, setFilteredData] = useState(ToyData);
-  const [selectedToys, setSelectedToys] = useState<ToyDataProps[]>([]);
+  const [selectedType, setSelectedType] = useState('')
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([])
+  const [filteredData, setFilteredData] = useState(ToyData)
+  const [selectedToys, setSelectedToys] = useState<ToyDataProps[]>([])
 
+  // Load selected toys from sessionStorage on component mount
   useEffect(() => {
-    const savedToys = sessionStorage.getItem('selectedToys');
+    const savedToys = sessionStorage.getItem('selectedToys')
     if (savedToys) {
       setSelectedToys(JSON.parse(savedToys))
+    }
+  }, [])
+
+  // Listen for storage updates
+  useEffect(() => {
+    const handleStorageUpdate = () => {
+      const savedToys = sessionStorage.getItem('selectedToys')
+      if (savedToys) {
+        setSelectedToys(JSON.parse(savedToys))
+      } else {
+        setSelectedToys([])
+      }
+    }
+
+    window.addEventListener('storageUpdate', handleStorageUpdate)
+    return () => {
+      window.removeEventListener('storageUpdate', handleStorageUpdate)
     }
   }, [])
 
