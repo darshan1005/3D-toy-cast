@@ -21,7 +21,6 @@ const CustomPopup: React.FC<CustomPopupProps> = ({
   height = 'auto',
   centerTitle = false,
 }) => {
-  const theme = useTheme()
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -57,6 +56,7 @@ const CustomPopup: React.FC<CustomPopupProps> = ({
             }}
             onClick={onClose}
             aria-label="Close"
+            size='small'
           >
             <CloseIcon />
           </IconButton>

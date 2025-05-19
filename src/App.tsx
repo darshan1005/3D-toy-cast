@@ -4,10 +4,12 @@ import ScrollToTop from '@components/ScrollToTop'
 import ToysPage from './pages/ToyPage'
 import FramePage from './pages/FramePage'
 import ScrollTop from './helpers/scrollTop'
+import Guide from '@components/custom/Guide'
 
 const App = () => {
   return (
     <Router>
+      <Guide />
       <ScrollToTop />
       <ScrollTop /> {/* trigger scroll to top on route change */}
       <Routes>
