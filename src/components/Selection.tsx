@@ -106,6 +106,17 @@ const Selection = () => {
     setModalOpen(true)
   }
 
+  const isOrderButtonDisabled = () => {
+    if (is3DToyFrame) {
+      return !(isItemSelected('Toy') && isItemSelected('Frame'))
+    } else if (isOnlyToys) {
+      return !isItemSelected('Toy')
+    } else if (isOnlyFrames) {
+      return !isItemSelected('Frame')
+    }
+    return true
+  }
+
   return (
     <>
       <Box id="selection">
@@ -274,7 +285,7 @@ const Selection = () => {
               <Button
                 variant="contained"
                 onClick={handleOrder}
-                disabled={!isItemSelected('Toy') || !isItemSelected('Frame')}
+                disabled={isOrderButtonDisabled()}
                 sx={{
                   width: isSmallScreen ? '100%' : '30%',
                   alignSelf: 'center',
