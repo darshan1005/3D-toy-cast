@@ -2,13 +2,15 @@ import React, { JSX, useEffect, useState } from 'react'
 import { Badge, Box, Button, IconButton } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Cart from './Cart'
+import HomeIcon from '@mui/icons-material/Home';
 
 interface ConfirmComponentProps {
   onConfirm: () => void;
   navigateTo?: string;
   label?: string | JSX.Element;
+  showHome?: boolean;
   selectedToy?: {
     id: number
     name: string
@@ -24,6 +26,7 @@ interface ConfirmComponentProps {
 const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
   onConfirm,
   navigateTo = '/',
+  showHome = true,
   label = 'Confrim',
   selectedToy,
   selectedFrame,
@@ -46,6 +49,12 @@ const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
     })
   }
 
+  const handleScollHome = () => {
+    navigate('/', {
+      state: { scrollToSelection: true },
+    })
+  }
+
   return (
     <Box
       sx={{
@@ -64,19 +73,32 @@ const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
         boxShadow: 2
       }}
     >
-      {/* Back Button */}
-      <IconButton
-        size='small'
-        sx={{
-          minWidth: 40,
-          width: 40,
-          height: 40,
-          bgcolor: '#3331'
-        }}
-        onClick={handleBackNav}
-      >
-        <ArrowBackIcon />
-      </IconButton>
+      <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+        <IconButton
+          size='small'
+          sx={{
+            minWidth: 40,
+            width: 40,
+            height: 40,
+            bgcolor: '#3331'
+          }}
+          onClick={handleBackNav}
+        >
+          <ArrowBackIcon />
+        </IconButton>
+
+        {showHome && <IconButton
+          size='small'
+          sx={{
+            minWidth: 40,
+            width: 40,
+            height: 40,
+          }}
+          onClick={handleScollHome}
+        >
+          <HomeIcon />
+        </IconButton>}
+      </Box>
 
       {/* Confirm Button and Cart */}
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>

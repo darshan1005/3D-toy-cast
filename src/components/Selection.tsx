@@ -1,4 +1,4 @@
-import { Box, Button, Stack, Typography, useMediaQuery, useTheme } from '@mui/material'
+import { Box, Button, Checkbox, FormControlLabel, FormGroup, Stack, Typography, useMediaQuery, useTheme } from '@mui/material'
 import orangeCar from '../assets/orangeCar.png'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -19,7 +19,11 @@ const Selection = () => {
   const [selectedToy, setSelectedToy] = useState<any>(null)
   const [selectedFrame, setSelectedFrame] = useState<any>(null)
 
-  const [openModal, setModalOpen] = useState(false)
+  const [is3DToyFrame, setIs3DToyFrame] = useState<boolean>(true);
+  const [isOnlyToys, setIsOnlyToys] = useState<boolean>(false);
+  const [isOnlyFrames, setIsOnlyFrame] = useState<boolean>(false);
+
+  const [openModal, setModalOpen] = useState(false);
 
   // Function to check if an item is selected
   const isItemSelected = (item: string) => {
@@ -29,7 +33,7 @@ const Selection = () => {
   }
 
   useEffect(() => {
-    // Load selections from sessionStorage
+    // Load toy/frame selections
     const toy = sessionStorage.getItem('selectedToys')
     const frame = sessionStorage.getItem('selectedFrame')
 
@@ -45,20 +49,61 @@ const Selection = () => {
       setSelectedFrame(null)
     }
 
-    // Check if we need to scroll to selection
+    // Load persisted availability preference
+    const availabilityType = sessionStorage.getItem('availabilityType') as '3d' | 'toy' | 'frame' | null
+    if (availabilityType) {
+      updateAvailabilityState(availabilityType)
+    }
+
+    // Scroll if needed
     if (location.state?.scrollToSelection) {
       document.getElementById('selection')?.scrollIntoView({
         behavior: 'smooth',
       })
-      // Clear the state after scrolling
       navigate(location.pathname, { replace: true, state: {} })
     }
   }, [location, navigate])
 
+  const updateAvailabilityState = (type: '3d' | 'toy' | 'frame') => {
+    setIs3DToyFrame(type === '3d')
+    setIsOnlyToys(type === 'toy')
+    setIsOnlyFrame(type === 'frame')
+  }
+
+  const handleAvailability = (type: '3d' | 'toy' | 'frame') => {
+    sessionStorage.setItem('availabilityType', type)
+    updateAvailabilityState(type)
+
+    if (type === 'toy') {
+      // Clear frame if any
+      sessionStorage.removeItem('selectedFrame')
+      setSelectedFrame(null)
+    } else if (type === 'frame') {
+      // Clear toy if any
+      sessionStorage.removeItem('selectedToys')
+      setSelectedToy(null)
+    } else if (type === '3d') {
+      // Check and trim toys to max 2
+      const toyData = sessionStorage.getItem('selectedToys')
+      if (toyData) {
+        try {
+          const parsedToys = JSON.parse(toyData)
+          if (Array.isArray(parsedToys) && parsedToys.length > 2) {
+            const trimmedToys = parsedToys.slice(0, 2)
+            sessionStorage.setItem('selectedToys', JSON.stringify(trimmedToys))
+            setSelectedToy(trimmedToys)
+          }
+        } catch (e) {
+          console.error('Invalid toy data in sessionStorage')
+          sessionStorage.removeItem('selectedToys')
+          setSelectedToy(null)
+        }
+      }
+    }
+  }
+
   const handleOrder = () => {
     setModalOpen(true)
-    // Handle order logic here
-    console.log('Order placed with:', { toy: selectedToy, frame: selectedFrame })
   }
 
   return (
@@ -122,6 +167,39 @@ const Selection = () => {
               </Typography>
             </Typography>
 
+            <Box display={'flex'} flexDirection={'column'} alignItems={isSmallScreen ? 'center' : 'end'}>
+              <Typography variant='h6' fontWeight={'bold'} zIndex={2}>Avalible Product Types</Typography>
+              <FormGroup row>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={is3DToyFrame}
+                      onChange={() => handleAvailability('3d')}
+                    />
+                  }
+                  label="3D Toy Frame"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={isOnlyToys}
+                      onChange={() => handleAvailability('toy')}
+                    />
+                  }
+                  label="Only Toys"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={isOnlyFrames}
+                      onChange={() => handleAvailability('frame')}
+                    />
+                  }
+                  label="Only Frame"
+                />
+              </FormGroup>
+            </Box>
+
             <Stack width={isSmallScreen ? '100%' : '50%'} spacing={isSmallScreen ? 2 : 3}>
               <Stack
                 direction={isSmallScreen ? 'column' : 'row'}
@@ -131,6 +209,11 @@ const Selection = () => {
               >
                 {selectionButtonObj.map(item => {
                   const isSelected = isItemSelected(item.label)
+                  const isToyDisabled = isOnlyFrames && item.label === 'Toy'
+                  const isFrameDisabled = isOnlyToys && item.label === 'Frame'
+
+                  const isDisabled = isToyDisabled || isFrameDisabled
+
                   return (
                     <Link
                       to={item.link}
@@ -139,6 +222,7 @@ const Selection = () => {
                     >
                       <Button
                         variant={isSmallScreen ? 'contained' : 'outlined'}
+                        disabled={isDisabled}
                         sx={{
                           width: '100%',
                           fontSize: isSmallScreen ? '1rem' : '1.4rem',
@@ -174,7 +258,7 @@ const Selection = () => {
               <Button
                 variant="contained"
                 onClick={handleOrder}
-                disabled={!isItemSelected('Toy') && !isItemSelected('Frame')}
+                disabled={!isItemSelected('Toy') || !isItemSelected('Frame')}
                 sx={{
                   width: isSmallScreen ? '100%' : '30%',
                   alignSelf: 'center',

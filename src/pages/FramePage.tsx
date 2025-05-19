@@ -66,8 +66,8 @@ const FramePage = () => {
       <ConfirmComponent
         onConfirm={handleConfirm}
         selectedFrame={selectedFrame}
-        navigateTo="/toyspage"
-        label={'Proceed To Order'}
+        navigateTo={sessionStorage.getItem('availabilityType') === '3d' ? "/toyspage" : '/'}
+        label={'Proceed'}
       />
       <Box
         sx={{

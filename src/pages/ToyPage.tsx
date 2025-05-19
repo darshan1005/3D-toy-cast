@@ -90,22 +90,27 @@ const ToysPage = () => {
   }
 
   const handleToySelect = (toy: ToyDataProps) => {
+    const availabilityType = sessionStorage.getItem('availabilityType')
+
     setSelectedToys(prevSelected => {
-      let newSelected
+      let newSelected: ToyDataProps[]
       const isAlreadySelected = prevSelected.some(t => t.id === toy.id)
 
       if (isAlreadySelected) {
-        // If toy is already selected, remove it
         newSelected = prevSelected.filter(t => t.id !== toy.id)
-      } else if (prevSelected.length < 2) {
-        // If less than 2 toys are selected, add the new toy
-        newSelected = [...prevSelected, toy]
       } else {
-        // If 2 toys are already selected, replace the first one
-        newSelected = [prevSelected[1], toy]
+        if (availabilityType === 'toy') {
+          newSelected = [...prevSelected, toy]
+        } else {
+          if (prevSelected.length < 2) {
+            newSelected = [...prevSelected, toy]
+          } else {
+            newSelected = [prevSelected[1], toy]
+          }
+        }
       }
 
-      // Update sessionStorage
+      // Save to sessionStorage
       if (newSelected.length === 0) {
         sessionStorage.removeItem('selectedToys')
       } else {
@@ -117,7 +122,9 @@ const ToysPage = () => {
   }
 
   const handleConfirm = () => {
-    navigate('/framespage', {
+    const availabilityType = sessionStorage.getItem('availabilityType');
+    const nav = availabilityType === '3d' ? '/framespage' : '/'
+    navigate(nav, {
       state: { scrollToSelection: true },
     })
   }
@@ -133,7 +140,11 @@ const ToysPage = () => {
           flexDirection: 'column',
         }}
       >
-        <ConfirmComponent onConfirm={handleConfirm} selectedToy={selectedToys[0]} label={'Next'} />
+        <ConfirmComponent
+          onConfirm={handleConfirm}
+          selectedToy={selectedToys[0]}
+          label={sessionStorage.getItem('availabilityType') === '3d' ? 'Next' : 'Proceed'}
+          showHome={false} />
         <Box
           sx={{
             backgroundColor: 'white',
