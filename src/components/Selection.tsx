@@ -128,7 +128,7 @@ const Selection = () => {
               top: isSmallScreen ? '10%' : '30%',
               transform: isSmallScreen
                 ? 'translate(-50%, -50%) rotate(-45deg)'
-                : 'translateY(-50%) rotate(-50deg)',
+                : 'translateY(-50%) rotate(90deg)',
               filter: 'blur(3px)',
               width: isSmallScreen ? '80%' : 'auto',
             }}
@@ -167,8 +167,8 @@ const Selection = () => {
               </Typography>
             </Typography>
 
-            <Box display={'flex'} flexDirection={'column'} alignItems={isSmallScreen ? 'center' : 'end'}>
-              <Typography variant='h6' fontWeight={'bold'} zIndex={2}>Avalible Product Types</Typography>
+            <Box display={'flex'} flexDirection={'column'} alignItems={isSmallScreen ? 'center' : 'end'} zIndex={2}>
+              <Typography variant='h6' fontWeight={'bold'}>Avalible Product Types</Typography>
               <FormGroup row>
                 <FormControlLabel
                   control={

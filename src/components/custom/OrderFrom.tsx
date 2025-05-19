@@ -379,7 +379,7 @@ const OrderForm = () => {
 
           <Box
             display="flex"
-            flexDirection={{ xs: 'column', sm: 'row' }}
+            flexDirection={'row'}
             justifyContent="space-between"
             gap={1}
           >
@@ -388,10 +388,11 @@ const OrderForm = () => {
               fullWidth
               sx={{ bgcolor: 'red', color: 'white' }}
               onClick={handlePlaceOrder}
+              size='small'
             >
               Place Order
             </Button>
-            <Button variant="outlined" fullWidth color="error" onClick={handleCancelOrder}>
+            <Button variant="outlined" fullWidth color="error" onClick={handleCancelOrder} size='small'>
               Cancel
             </Button>
           </Box>
