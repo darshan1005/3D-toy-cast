@@ -96,7 +96,7 @@ const Bento = () => {
                       },
                     }}
                   >
-                    High-quality materials • Multiple variants available
+                    Quality materials • 8 Multiple variants available
                   </Box>
                 </Typography>
               </Box>
@@ -127,21 +127,6 @@ const Bento = () => {
                   }}
                 >
                   Detailed diecast metal toys with precision engineering
-                  <Box
-                    component="span"
-                    sx={{
-                      display: isSmallScreen ? 'none' : 'block',
-                      mt: 1,
-                      fontSize: isSmallScreen ? '0.8rem' : '1rem',
-                      opacity: 0.7,
-                      transition: 'opacity 0.2s ease',
-                      '&:hover': {
-                        opacity: 1,
-                      },
-                    }}
-                  >
-                    1:18 & 1:24 scale • Opening parts • Premium detailing • Limited editions
-                  </Box>
                 </Typography>
               </Box>
             </Box>
@@ -167,7 +152,7 @@ const Bento = () => {
                 700+
               </Typography> */}
               <Typography
-                variant={isSmallScreen ? 'h6' : 'h4'}
+                variant={isSmallScreen ? 'h5' : 'h4'}
                 sx={{
                   ...styles.textGradient,
                   fontWeight: 600,
@@ -236,19 +221,13 @@ const Bento = () => {
               }}
             >
               <Typography
-                variant={isSmallScreen ? 'h5' : 'h4'}
-                sx={{ color: 'white', fontWeight: 600 }}
-              >
-                Custom Displays
-              </Typography>
-              <Typography
                 sx={{
-                  color: 'rgba(255, 255, 255, 0.8)',
+                  color: 'rgb(255, 255, 255)',
                   fontSize: isSmallScreen ? '1rem' : '1.5rem',
                   fontWeight: 400,
                 }}
               >
-                Personalized display environments designed for your models
+                "Even after placing your order, we're here to help! Feel free to reach out if you'd like to discuss or customize any part of your order — your satisfaction is our priority."
                 <Box
                   component="span"
                   sx={{
@@ -262,7 +241,7 @@ const Bento = () => {
                     },
                   }}
                 >
-                  Key chain • Race map outline • Modular design • Custom backgrounds
+                  Key chain • Race map outline • Backgrounds • Toy • Backgrounds
                 </Box>
               </Typography>
             </Box>

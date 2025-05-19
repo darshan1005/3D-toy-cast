@@ -2,13 +2,14 @@ import React from 'react'
 import { Card, CardContent, Typography, Box, Button, CardMedia, useMediaQuery, useTheme } from '@mui/material'
 
 interface ToyCardProps {
-  image: any
-  name: string
-  description: string
-  price: number
-  moterType: string
-  onSelect?: () => void
-  isSelected?: boolean
+  image: any;
+  name: string;
+  description: string;
+  price: number;
+  moterType: string;
+  scale: string;
+  onSelect?: () => void;
+  isSelected?: boolean;
 }
 
 const ToyCard: React.FC<ToyCardProps> = ({
@@ -17,6 +18,7 @@ const ToyCard: React.FC<ToyCardProps> = ({
   description,
   price,
   moterType,
+  scale,
   onSelect,
   isSelected = false,
 }) => {
@@ -26,7 +28,7 @@ const ToyCard: React.FC<ToyCardProps> = ({
   return (
     <Card
       sx={{
-        width: isSmallScreen ? '100%' : 240,
+        width: isSmallScreen ? '100%' : 270,
         bgcolor: isSelected ? 'grey.800' : 'black',
         color: 'white',
         p: 2,
@@ -58,7 +60,7 @@ const ToyCard: React.FC<ToyCardProps> = ({
       {/* Content */}
       <CardContent sx={{ p: 0, flexGrow: 1 }}>
         <Typography variant="body1" fontWeight="bold" gutterBottom>
-          {name} <Typography component={'span'} variant='caption' sx={{ opacity: 0.7 }}>{moterType}</Typography>
+          {name} <Typography component={'span'} variant='caption' sx={{ opacity: 0.7 }}>{moterType} {scale}</Typography>
         </Typography>
         <Typography variant="body2" color="white">
           {description}

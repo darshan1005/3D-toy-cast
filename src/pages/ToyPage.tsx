@@ -294,7 +294,7 @@ const ToysPage = () => {
               display: 'flex',
               justifyContent: 'center',
               flexWrap: 'wrap',
-              gap: 3,
+              gap: 2,
               width: '100%',
               mx: 'auto',
             }}
@@ -307,6 +307,7 @@ const ToysPage = () => {
                   description={toy.description}
                   price={toy.price}
                   moterType={toy.type}
+                  scale={toy.scale}
                   onSelect={() => handleToySelect(toy)}
                   isSelected={selectedToys.some(t => t.id === toy.id)}
                 />

@@ -149,17 +149,16 @@ const Selection = () => {
             alignItems={isSmallScreen ? 'center' : 'flex-end'}
             justifyContent="center"
             height="100%"
-            spacing={isSmallScreen ? 2 : 3}
-            mr={2}
+            gap={isSmallScreen ? 2 : 3}
+            mr={isSmallScreen ? 0 : 2}
           >
             <Typography
               variant={isSmallScreen ? 'h5' : 'h3'}
               fontWeight="bold"
               textAlign={isSmallScreen ? 'center' : 'right'}
               zIndex={4}
-              color={Palette.text.primary}
             >
-              Select Your Toy and Frame
+              Customise your order
             </Typography>
 
             <Typography
@@ -181,7 +180,7 @@ const Selection = () => {
             </Typography>
 
             <Box display={'flex'} flexDirection={'column'} alignItems={isSmallScreen ? 'center' : 'end'} zIndex={2}>
-              <Typography variant='h6' fontWeight={'bold'} color={'#000'} mr={2}>Avalible Product Types</Typography>
+              <Typography variant='h6' fontWeight={'bold'} mr={isSmallScreen ? 0 : 2}>Available Product Types</Typography>
               <FormGroup row>
                 <FormControlLabel
                   control={

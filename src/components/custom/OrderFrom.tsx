@@ -46,6 +46,19 @@ const OrderForm = () => {
   const [isRaceTrackSelected, setIsRaceTrackSelected] = useState(true)
   const [isBGSelected, setIsBGSelected] = useState(true);
 
+  const availabilityType = sessionStorage.getItem('availabilityType');
+  const isToy = availabilityType === 'toy';
+
+  useEffect(() => {
+    if (!isToy) {
+      setIsRaceTrackSelected(true);
+      setIsBGSelected(true);
+    } else {
+      setIsRaceTrackSelected(false);
+      setIsBGSelected(false);
+    }
+  }, [])
+
   useEffect(() => {
     const toyData = sessionStorage.getItem('selectedToys')
     const frameData = sessionStorage.getItem('selectedFrame')
@@ -158,8 +171,8 @@ const OrderForm = () => {
   }
 
   const keyChainSelected = isKeyChainSelected ? 'Yes' : 'No';
-  const raceMapSelected = isRaceTrackSelected ? 'Yes' : 'No';
-  const backgroundSelected = isBGSelected ? 'Yes' : 'No';
+  const raceMapSelected = isRaceTrackSelected && !isToy ? 'Yes' : 'No';
+  const backgroundSelected = isBGSelected && !isToy ? 'Yes' : 'No';
   const selectedToyStr = selectedToys.map(toy => toy.name).join(' & ') || 'No Toy Selected';
   const selectedFraeStr = selectedFrame || 'No Frame Selected';
 
@@ -356,6 +369,7 @@ const OrderForm = () => {
                 />
               }
               label="Race map Outline"
+              disabled={isToy}
             />
             <FormControlLabel
               control={
@@ -370,6 +384,7 @@ const OrderForm = () => {
                 />
               }
               label="Background"
+              disabled={isToy}
             />
           </FormGroup>
 
