@@ -112,7 +112,7 @@ const Selection = () => {
         <Stack
           sx={{
             bgcolor: Palette.background.paper,
-            p: 4,
+            p: isSmallScreen ? 2 : 4,
             height: isSmallScreen ? 'auto' : '540px',
             position: 'relative',
             overflow: 'hidden',
@@ -127,10 +127,11 @@ const Selection = () => {
               left: isSmallScreen ? '50%' : 0,
               top: isSmallScreen ? '10%' : '30%',
               transform: isSmallScreen
-                ? 'translate(-50%, -50%) rotate(-45deg)'
-                : 'translateY(-50%) rotate(90deg)',
+                ? 'translate(-50%, -50%) rotate(0deg)'
+                : 'translateY(-50%) rotate(-50deg)',
               filter: 'blur(3px)',
               width: isSmallScreen ? '80%' : 'auto',
+              opacity: 0.7
             }}
           />
           <Stack
@@ -144,7 +145,7 @@ const Selection = () => {
               fontWeight="bold"
               textAlign={isSmallScreen ? 'center' : 'right'}
               zIndex={4}
-              color={isSmallScreen ? Palette.text.white : Palette.error.dark}
+              color={Palette.text.primary}
             >
               Select Your Toy and Frame
             </Typography>
@@ -168,41 +169,56 @@ const Selection = () => {
             </Typography>
 
             <Box display={'flex'} flexDirection={'column'} alignItems={isSmallScreen ? 'center' : 'end'} zIndex={2}>
-              <Typography variant='h6' fontWeight={'bold'}>Avalible Product Types</Typography>
+              <Typography variant='h6' fontWeight={'bold'} color={'#000'}>Avalible Product Types</Typography>
               <FormGroup row>
                 <FormControlLabel
                   control={
                     <Checkbox
                       checked={is3DToyFrame}
                       onChange={() => handleAvailability('3d')}
+                      sx={{
+                        '&.Mui-checked': {
+                          color: 'red',
+                        },
+                      }}
                     />
                   }
-                  label="3D Toy Frame"
+                  label="Toy & Frame"
                 />
                 <FormControlLabel
                   control={
                     <Checkbox
                       checked={isOnlyToys}
                       onChange={() => handleAvailability('toy')}
+                      sx={{
+                        '&.Mui-checked': {
+                          color: 'red',
+                        },
+                      }}
                     />
                   }
-                  label="Only Toys"
+                  label="Toys"
                 />
                 <FormControlLabel
                   control={
                     <Checkbox
                       checked={isOnlyFrames}
                       onChange={() => handleAvailability('frame')}
+                      sx={{
+                        '&.Mui-checked': {
+                          color: 'red',
+                        },
+                      }}
                     />
                   }
-                  label="Only Frame"
+                  label="Frame"
                 />
               </FormGroup>
             </Box>
 
             <Stack width={isSmallScreen ? '100%' : '50%'} spacing={isSmallScreen ? 2 : 3}>
               <Stack
-                direction={isSmallScreen ? 'column' : 'row'}
+                direction={'row'}
                 spacing={isSmallScreen ? 2 : 3}
                 width="100%"
                 justifyContent="center"

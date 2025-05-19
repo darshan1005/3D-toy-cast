@@ -334,6 +334,11 @@ const OrderForm = () => {
                 <Checkbox
                   checked={isKeyChainSelected}
                   onChange={(e) => setIsKeyChainSelected(e.target.checked)}
+                  sx={{
+                    '&.Mui-checked': {
+                      color: 'red',
+                    },
+                  }}
                 />
               }
               label="Key Chain"
@@ -343,6 +348,11 @@ const OrderForm = () => {
                 <Checkbox
                   checked={isRaceTrackSelected}
                   onChange={(e) => setIsRaceTrackSelected(e.target.checked)}
+                  sx={{
+                    '&.Mui-checked': {
+                      color: 'red',
+                    },
+                  }}
                 />
               }
               label="Race map Outline"
@@ -352,6 +362,11 @@ const OrderForm = () => {
                 <Checkbox
                   checked={isBGSelected}
                   onChange={(e) => setIsBGSelected(e.target.checked)}
+                  sx={{
+                    '&.Mui-checked': {
+                      color: 'red',
+                    },
+                  }}
                 />
               }
               label="Background"

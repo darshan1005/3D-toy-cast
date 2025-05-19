@@ -34,6 +34,7 @@ const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
   const [cartOpen, setCartOpen] = useState(false);
   const [storgaCount, setStorageCount] = useState<number>(0);
   const navigate = useNavigate();
+  const availabilityType = sessionStorage.getItem('availabilityType')
 
   useEffect(() => {
     setStorageCount(sessionStorage.length);
@@ -87,7 +88,7 @@ const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
           <ArrowBackIcon />
         </IconButton>
 
-        {showHome && <IconButton
+        {showHome && availabilityType === '3d' && <IconButton
           size='small'
           sx={{
             minWidth: 40,
