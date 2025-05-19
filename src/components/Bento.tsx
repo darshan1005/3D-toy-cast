@@ -262,7 +262,7 @@ const Bento = () => {
                     },
                   }}
                 >
-                  LED lighting • Dust protection • Modular design • Custom backgrounds
+                  Key chain • Race map outline • Modular design • Custom backgrounds
                 </Box>
               </Typography>
             </Box>

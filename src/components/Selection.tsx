@@ -142,7 +142,7 @@ const Selection = () => {
                 : 'translateY(-50%) rotate(-50deg)',
               filter: 'blur(3px)',
               width: isSmallScreen ? '80%' : 'auto',
-              opacity: 0.7
+              transition: 'tranform 0.3 ease',
             }}
           />
           <Stack
@@ -150,6 +150,7 @@ const Selection = () => {
             justifyContent="center"
             height="100%"
             spacing={isSmallScreen ? 2 : 3}
+            mr={2}
           >
             <Typography
               variant={isSmallScreen ? 'h5' : 'h3'}
@@ -180,7 +181,7 @@ const Selection = () => {
             </Typography>
 
             <Box display={'flex'} flexDirection={'column'} alignItems={isSmallScreen ? 'center' : 'end'} zIndex={2}>
-              <Typography variant='h6' fontWeight={'bold'} color={'#000'}>Avalible Product Types</Typography>
+              <Typography variant='h6' fontWeight={'bold'} color={'#000'} mr={2}>Avalible Product Types</Typography>
               <FormGroup row>
                 <FormControlLabel
                   control={
