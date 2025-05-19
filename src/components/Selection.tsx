@@ -174,7 +174,7 @@ const Selection = () => {
               <Button
                 variant="contained"
                 onClick={handleOrder}
-                disabled={!isItemSelected('Toy') || !isItemSelected('Frame')}
+                disabled={!isItemSelected('Toy') && !isItemSelected('Frame')}
                 sx={{
                   width: isSmallScreen ? '100%' : '30%',
                   alignSelf: 'center',

@@ -44,6 +44,7 @@ const OrderForm = () => {
 
   const [isKeyChainSelected, setIsKeyChainSelected] = useState(true)
   const [isRaceTrackSelected, setIsRaceTrackSelected] = useState(true)
+  const [isBGSelected, setIsBGSelected] = useState(true);
 
   useEffect(() => {
     const toyData = sessionStorage.getItem('selectedToys')
@@ -67,13 +68,13 @@ const OrderForm = () => {
     const updateCost = () => {
       const keyChainCost = isKeyChainSelected ? 99 : 0
       const raceTrackCost = isRaceTrackSelected ? 149 : 0
+      const background = isBGSelected ? 29 : 0
       const deliveryCharges = 99
-      const Other = 49 // print , magnets, stickers
-      setFinalCost(toysCost + frameCost + keyChainCost + raceTrackCost + Other + deliveryCharges)
+      setFinalCost(toysCost + frameCost + keyChainCost + raceTrackCost + background + deliveryCharges)
     }
 
     updateCost()
-  }, [isKeyChainSelected, isRaceTrackSelected])
+  }, [isKeyChainSelected, isRaceTrackSelected, isBGSelected])
 
 
   const handleCancelOrder = () => {
@@ -158,8 +159,9 @@ const OrderForm = () => {
 
   const keyChainSelected = isKeyChainSelected ? 'Yes' : 'No';
   const raceMapSelected = isRaceTrackSelected ? 'Yes' : 'No';
+  const backgroundSelected = isBGSelected ? 'Yes' : 'No';
   const selectedToyStr = selectedToys.map(toy => toy.name).join(' & ') || 'No Toy Selected';
-  const selectedFraeStr = selectedFrame;
+  const selectedFraeStr = selectedFrame || 'No Frame Selected';
 
   const handlePlaceOrder = () => {
 
@@ -185,6 +187,7 @@ const OrderForm = () => {
       frame: selectedFraeStr,
       keyChain: keyChainSelected,
       raceMap: raceMapSelected,
+      withBackground: backgroundSelected,
       finalCost: finalCost,
       orderDate: new Date()
     }
@@ -325,8 +328,7 @@ const OrderForm = () => {
               helperText={errors.address}
             />
           </Box>
-
-          <FormGroup>
+          <FormGroup row>
             <FormControlLabel
               control={
                 <Checkbox
@@ -344,6 +346,15 @@ const OrderForm = () => {
                 />
               }
               label="Race map Outline"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={isBGSelected}
+                  onChange={(e) => setIsBGSelected(e.target.checked)}
+                />
+              }
+              label="Background"
             />
           </FormGroup>
 
