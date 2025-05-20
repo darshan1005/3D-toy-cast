@@ -1,16 +1,6 @@
 # 3D-toy-cast
 This is a business site which handle the users placing orders.
 
-
-## Table of Contents
-- [About](#about)
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Expanding the ESLint Configuration](#expanding-the-eslint-configuration)
-- [Contributing](#contributing)
-- [License](#license)
-
 ## About
 
 3D-toy-cast is a React + TypeScript + Vite project designed to provide a seamless experience for users to browse and order 3D toy models. It leverages modern web technologies for fast performance and scalability.
