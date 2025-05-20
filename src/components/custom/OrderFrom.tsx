@@ -1,4 +1,12 @@
-import { Box, Typography, TextField, Button, FormGroup, FormControlLabel, Checkbox } from '@mui/material'
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+} from '@mui/material'
 import { useEffect, useState } from 'react'
 import CustomPopup from './CustomPopup'
 import emailjs from '@emailjs/browser'
@@ -10,16 +18,19 @@ interface Toy {
   id: number
   name: string
   price: number
+  scale: string
 }
 
 interface Frame {
   type: string
   price: number
+  selectedDimension: string
 }
 
 const OrderForm = () => {
   const [selectedToys, setSelectedToys] = useState<Toy[]>([])
   const [selectedFrame, setSelectedFrame] = useState<string>('')
+  const [selectedFrameDimension, setSelectedFrameDimension] = useState<string>('')
   const [finalCost, setFinalCost] = useState<number>(0)
   const [openModal, setModalOpen] = useState<boolean>(false)
   const [isOrderCancelled, setIsOrderCancelled] = useState<boolean>(false)
@@ -46,23 +57,23 @@ const OrderForm = () => {
 
   const [isKeyChainSelected, setIsKeyChainSelected] = useState(true)
   const [isRaceTrackSelected, setIsRaceTrackSelected] = useState(true)
-  const [isBGSelected, setIsBGSelected] = useState(true);
+  const [isBGSelected, setIsBGSelected] = useState(true)
 
-  const availabilityType = sessionStorage.getItem('availabilityType');
-  const isToy = availabilityType === 'toy';
-  const is3D = availabilityType === '3d';
+  const availabilityType = sessionStorage.getItem('availabilityType')
+  const isToy = availabilityType === 'toy'
+  const is3D = availabilityType === '3d'
 
   useEffect(() => {
     if (!isToy) {
-      setIsRaceTrackSelected(true);
-      setIsBGSelected(true);
+      setIsRaceTrackSelected(true)
+      setIsBGSelected(true)
     } else {
-      setIsRaceTrackSelected(false);
-      setIsBGSelected(false);
+      setIsRaceTrackSelected(false)
+      setIsBGSelected(false)
     }
 
     if (is3D) {
-      setIsBGSelected(true);
+      setIsBGSelected(true)
     }
   }, [])
 
@@ -82,6 +93,7 @@ const OrderForm = () => {
     if (frameData) {
       const parsedFrame: Frame = JSON.parse(frameData)
       setSelectedFrame(parsedFrame?.type || 'No Frame Selected')
+      setSelectedFrameDimension(parsedFrame?.selectedDimension || '')
       frameCost = parsedFrame?.price || 0
     }
 
@@ -90,12 +102,13 @@ const OrderForm = () => {
       const raceTrackCost = isRaceTrackSelected ? 149 : 0
       const background = isBGSelected ? 29 : 0
       const servicecharges = 99
-      setFinalCost(toysCost + frameCost + keyChainCost + raceTrackCost + background + servicecharges)
+      setFinalCost(
+        toysCost + frameCost + keyChainCost + raceTrackCost + background + servicecharges,
+      )
     }
 
     updateCost()
   }, [isKeyChainSelected, isRaceTrackSelected, isBGSelected])
-
 
   const handleCancelOrder = () => {
     setModalOpen(true)
@@ -121,20 +134,20 @@ const OrderForm = () => {
         return !value.trim()
           ? 'Name is required'
           : !/^[a-zA-Z\s]+$/.test(value)
-            ? 'Only alphabets are allowed'
-            : ''
+          ? 'Only alphabets are allowed'
+          : ''
       case 'phone':
         return !value.trim()
           ? 'Phone number is required'
           : !/^\d{10}$/.test(value)
-            ? 'Phone must be a 10-digit number'
-            : ''
+          ? 'Phone must be a 10-digit number'
+          : ''
       case 'email':
         return !value.trim()
           ? 'Email is required'
           : !value.includes('@gmail.com')
-            ? 'Email must be a Gmail address'
-            : ''
+          ? 'Email must be a Gmail address'
+          : ''
       case 'state':
         return !value.trim() ? 'State is required' : ''
       case 'city':
@@ -143,8 +156,8 @@ const OrderForm = () => {
         return !value.trim()
           ? 'Pin code is required'
           : !/^\d{6}$/.test(value)
-            ? 'Pin code must be 6 digits'
-            : ''
+          ? 'Pin code must be 6 digits'
+          : ''
       case 'address':
         return !value.trim() ? 'Address is required' : ''
       default:
@@ -177,21 +190,21 @@ const OrderForm = () => {
     }
   }
 
-  const keyChainSelected = isKeyChainSelected ? 'Yes' : 'No';
-  const raceMapSelected = isRaceTrackSelected && !isToy ? 'Yes' : 'No';
-  const backgroundSelected = isBGSelected && !isToy ? 'Yes' : 'No';
-  const selectedToyStr = selectedToys.map(toy => toy.name).join(' & ') || 'No Toy Selected';
-  const selectedFraeStr = selectedFrame || 'No Frame Selected';
+  const keyChainSelected = isKeyChainSelected ? 'Yes' : 'No'
+  const raceMapSelected = isRaceTrackSelected && !isToy ? 'Yes' : 'No'
+  const backgroundSelected = isBGSelected && !isToy ? 'Yes' : 'No'
+  const selectedToyStr =
+    selectedToys.map(toy => `${toy.name} (${toy.scale})`).join(' & ') || 'No Toy Selected'
+  const selectedFraeStr = selectedFrame || 'No Frame Selected'
 
   const handlePlaceOrder = () => {
-
     if (!validateAllFields()) {
       return
     }
 
-    const serviceId = 'service_12uimx6';
-    const templateId = 'template_4lzj9u8';
-    const publicKey = 'e8_krUrIuF3wLcOUt';
+    const serviceId = 'service_12uimx6'
+    const templateId = 'template_4lzj9u8'
+    const publicKey = 'e8_krUrIuF3wLcOUt'
 
     const templateParams = {
       orderId: generateUniqueId(formData.name, formData.phone),
@@ -209,11 +222,12 @@ const OrderForm = () => {
       raceMap: raceMapSelected,
       withBackground: backgroundSelected,
       finalCost: finalCost,
-      orderDate: new Date()
+      orderDate: new Date(),
     }
 
-    emailjs.send(serviceId, templateId, templateParams, publicKey)
-      .then((res) => {
+    emailjs
+      .send(serviceId, templateId, templateParams, publicKey)
+      .then(res => {
         if (res.status === 200) {
           setOrderPlaced(true)
           setModalOpen(true)
@@ -224,9 +238,9 @@ const OrderForm = () => {
           setFinalCost(0)
         }
       })
-      .catch((error) => {
+      .catch(error => {
         console.error('error sending email:', error)
-      });
+      })
   }
 
   return (
@@ -246,8 +260,8 @@ const OrderForm = () => {
             Please track your email for order updates.
           </Typography>
           <Typography variant="body2" textAlign="center" fontWeight="bold" sx={{ opacity: 0.7 }}>
-            Your order will be confirmed after a phone call with you. Other details will
-            be shared in our follow-up email with your order summary.
+            Your order will be confirmed after a phone call with you. Other details will be shared
+            in our follow-up email with your order summary.
           </Typography>
           <Typography variant="h6" textAlign="center" fontWeight="bold" mt={1}>
             Thanks for choosing us !
@@ -353,7 +367,7 @@ const OrderForm = () => {
               control={
                 <Checkbox
                   checked={isKeyChainSelected}
-                  onChange={(e) => setIsKeyChainSelected(e.target.checked)}
+                  onChange={e => setIsKeyChainSelected(e.target.checked)}
                   sx={{
                     '&.Mui-checked': {
                       color: 'red',
@@ -374,7 +388,7 @@ const OrderForm = () => {
               control={
                 <Checkbox
                   checked={isRaceTrackSelected}
-                  onChange={(e) => setIsRaceTrackSelected(e.target.checked)}
+                  onChange={e => setIsRaceTrackSelected(e.target.checked)}
                   sx={{
                     '&.Mui-checked': {
                       color: 'red',
@@ -396,7 +410,7 @@ const OrderForm = () => {
               control={
                 <Checkbox
                   checked={isBGSelected}
-                  onChange={(e) => setIsBGSelected(e.target.checked)}
+                  onChange={e => setIsBGSelected(e.target.checked)}
                   sx={{
                     '&.Mui-checked': {
                       color: is3D ? '#3333' : 'red',
@@ -424,33 +438,37 @@ const OrderForm = () => {
             gap={1}
           >
             <Button variant="contained" fullWidth sx={{ bgcolor: 'red' }}>
-              {selectedToys.map(toy => toy.name).join(' & ') || 'No Toy Selected'}
+              {selectedToys.map(toy => `${toy.name} (${toy.scale})`).join(' & ') ||
+                'No Toy Selected'}
             </Button>
             <Button variant="contained" fullWidth sx={{ bgcolor: 'red' }}>
-              {selectedFrame || 'No Frame Selected'}
+              {`${selectedFrame} - ${selectedFrameDimension}` || 'No Frame Selected'}
             </Button>
           </Box>
 
           <Box sx={{ bgcolor: 'black', color: 'white', textAlign: 'center', py: 1, mb: 2 }}>
-            <Typography variant="h6" fontWeight={'bold'}>Final Cost: ₹{finalCost.toFixed(2)}</Typography>
+            <Typography variant="h6" fontWeight={'bold'}>
+              Final Cost: ₹{finalCost.toFixed(2)}
+            </Typography>
           </Box>
 
-          <Box
-            display="flex"
-            flexDirection={'row'}
-            justifyContent="space-between"
-            gap={1}
-          >
+          <Box display="flex" flexDirection={'row'} justifyContent="space-between" gap={1}>
             <Button
               variant="contained"
               fullWidth
               sx={{ bgcolor: 'red', color: 'white' }}
               onClick={handlePlaceOrder}
-              size='small'
+              size="small"
             >
               Place Order
             </Button>
-            <Button variant="outlined" fullWidth color="error" onClick={handleCancelOrder} size='small'>
+            <Button
+              variant="outlined"
+              fullWidth
+              color="error"
+              onClick={handleCancelOrder}
+              size="small"
+            >
               Cancel
             </Button>
           </Box>

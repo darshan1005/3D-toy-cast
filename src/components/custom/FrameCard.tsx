@@ -1,14 +1,20 @@
 import React, { useState } from 'react'
-import { Box, Button, Typography, Card, Divider, Dialog } from '@mui/material'
+import {
+  Box,
+  Button,
+  Typography,
+  Card,
+  Dialog,
+  FormControl,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from '@mui/material'
 import { Palette } from '../../theme'
 interface FrameDetails {
   type: string
   material: string
-  dimensions: {
-    width: number
-    height: number
-    depth: number
-  }
+  dimensions: string[]
   weight: number
   description: string
   image: string
@@ -19,14 +25,23 @@ interface FrameCardProps {
   frameDetails: FrameDetails
   onSelect?: () => void
   isSelected?: boolean
+  selectedDimension: string
+  onDimensionChange: (dimension: string) => void
 }
 
 const FrameCard: React.FC<FrameCardProps> = ({
   frameDetails,
   onSelect,
   isSelected = false,
+  selectedDimension,
+  onDimensionChange,
 }) => {
-  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false)
+
+  const handleDimensionChange = (event: SelectChangeEvent) => {
+    const newDimension = event.target.value
+    onDimensionChange(newDimension)
+  }
 
   return (
     <Card
@@ -71,26 +86,26 @@ const FrameCard: React.FC<FrameCardProps> = ({
             overflow: 'hidden',
             borderRadius: 2,
             objectFit: 'contain',
-            backgroundColor: 'transparent'
+            backgroundColor: 'transparent',
           }}
           onClick={() => setPreviewOpen(true)}
         />
         <Dialog open={previewOpen} onClose={() => setPreviewOpen(false)} maxWidth="md">
-          <Box sx={{
-            p: 2,
-            bgcolor: Palette.background.paper,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center'
-          }}
+          <Box
+            sx={{
+              p: 2,
+              bgcolor: Palette.background.paper,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
           >
             <img
               src={frameDetails.image}
               alt={frameDetails.type}
               style={{ maxWidth: '90vw', maxHeight: '80vh', borderRadius: 8 }}
             />
-            <Button onClick={() => setPreviewOpen(false)}
-              sx={{ mt: 2 }} variant="outlined">
+            <Button onClick={() => setPreviewOpen(false)} sx={{ mt: 2 }} variant="outlined">
               Close
             </Button>
           </Box>
@@ -120,7 +135,7 @@ const FrameCard: React.FC<FrameCardProps> = ({
             height: 230,
           }}
         >
-          <Typography variant="h6" fontWeight="bold" >
+          <Typography variant="h6" fontWeight="bold">
             {frameDetails.type}
           </Typography>
 
@@ -128,7 +143,7 @@ const FrameCard: React.FC<FrameCardProps> = ({
             <Typography variant="body2" sx={{ minWidth: 100 }}>
               Material:
             </Typography>
-            <Typography variant="body2" fontWeight={'bold'} >
+            <Typography variant="body2" fontWeight={'bold'}>
               {frameDetails.material}
             </Typography>
           </Box>
@@ -137,17 +152,26 @@ const FrameCard: React.FC<FrameCardProps> = ({
             <Typography variant="body2" sx={{ minWidth: 100 }}>
               Dimensions:
             </Typography>
-            <Typography variant="body2" fontWeight={'bold'} >
-              {frameDetails.dimensions.width} x {frameDetails.dimensions.height} x{' '}
-              {frameDetails.dimensions.depth} cm
-            </Typography>
+            <FormControl size="small" sx={{ minWidth: 120 }}>
+              <Select
+                value={selectedDimension}
+                onChange={handleDimensionChange}
+                sx={{ height: 35 }}
+              >
+                {frameDetails.dimensions.map(dimension => (
+                  <MenuItem key={dimension} value={dimension}>
+                    {dimension}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Box>
 
           <Box sx={{ display: 'flex', gap: 2 }}>
             <Typography variant="body2" sx={{ minWidth: 100 }}>
               Weight:
             </Typography>
-            <Typography variant="body2" fontWeight={'bold'} >
+            <Typography variant="body2" fontWeight={'bold'}>
               {frameDetails.weight} kg
             </Typography>
           </Box>
@@ -156,7 +180,7 @@ const FrameCard: React.FC<FrameCardProps> = ({
             <Typography variant="body2" sx={{ minWidth: 100 }} fontWeight={'bold'}>
               Description:
             </Typography>
-            <Typography variant='subtitle1' lineHeight={1.4}>
+            <Typography variant="subtitle1" lineHeight={1.4}>
               {frameDetails.description}
             </Typography>
           </Box>

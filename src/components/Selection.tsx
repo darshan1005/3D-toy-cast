@@ -1,4 +1,14 @@
-import { Box, Button, Checkbox, FormControlLabel, FormGroup, Stack, Typography, useMediaQuery, useTheme } from '@mui/material'
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  Stack,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material'
 import orangeCar from '../assets/orangeCar.png'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -7,8 +17,8 @@ import OrderForm from './custom/OrderFrom'
 import { Palette } from '../theme'
 
 const selectionButtonObj = [
-  { label: 'Toy', link: '/toyspage' },
   { label: 'Frame', link: '/framespage' },
+  { label: 'Toy', link: '/toyspage' },
 ]
 
 const Selection = () => {
@@ -17,11 +27,11 @@ const Selection = () => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const [is3DToyFrame, setIs3DToyFrame] = useState<boolean>(true);
-  const [isOnlyToys, setIsOnlyToys] = useState<boolean>(false);
-  const [isOnlyFrames, setIsOnlyFrame] = useState<boolean>(false);
+  const [is3DToyFrame, setIs3DToyFrame] = useState<boolean>(true)
+  const [isOnlyToys, setIsOnlyToys] = useState<boolean>(false)
+  const [isOnlyFrames, setIsOnlyFrame] = useState<boolean>(false)
 
-  const [openModal, setModalOpen] = useState(false);
+  const [openModal, setModalOpen] = useState(false)
 
   // Function to check if an item is selected
   const isItemSelected = (item: string) => {
@@ -31,7 +41,11 @@ const Selection = () => {
   }
 
   useEffect(() => {
-    const availabilityType = sessionStorage.getItem('availabilityType') as '3d' | 'toy' | 'frame' | null
+    const availabilityType = sessionStorage.getItem('availabilityType') as
+      | '3d'
+      | 'toy'
+      | 'frame'
+      | null
     if (availabilityType) updateAvailabilityState(availabilityType)
 
     if (location.state?.scrollToSelection) {
@@ -141,14 +155,22 @@ const Selection = () => {
                 background: isSmallScreen ? 'rgba(0,0,0, 0.4)' : 'transparent',
               }}
             >
-              Build your perfect gift! Start by selecting your favorite toy and a matching frame to make it truly yours. Only when both are chosen, the magic happens -
+              Build your perfect gift! Start by selecting your favorite toy and a matching frame to
+              make it truly yours. Only when both are chosen, the magic happens -
               <Typography component="span" sx={{ color: 'red', fontWeight: 700 }}>
                 3D Toy Cast
               </Typography>
             </Typography>
 
-            <Box display={'flex'} flexDirection={'column'} alignItems={isSmallScreen ? 'center' : 'end'} zIndex={2}>
-              <Typography variant='h6' fontWeight={'bold'} mr={isSmallScreen ? 0 : 2}>Available Product Types</Typography>
+            <Box
+              display={'flex'}
+              flexDirection={'column'}
+              alignItems={isSmallScreen ? 'center' : 'end'}
+              zIndex={2}
+            >
+              <Typography variant="h6" fontWeight={'bold'} mr={isSmallScreen ? 0 : 2}>
+                Available Product Types
+              </Typography>
               <FormGroup row>
                 <FormControlLabel
                   control={
@@ -222,24 +244,25 @@ const Selection = () => {
                           width: '100%',
                           fontSize: isSmallScreen ? '1rem' : '1.4rem',
                           fontWeight: 600,
-                          borderColor: isSelected
-                            ? Palette.secondary.main
-                            : Palette.text.secondary,
+                          borderColor: isSelected ? Palette.secondary.main : Palette.text.secondary,
                           bgcolor: isSmallScreen
                             ? isSelected
                               ? Palette.secondary.light
                               : Palette.text.secondary
                             : isSelected
-                              ? Palette.secondary.light
-                              : 'transparent',
-                          color: isSmallScreen ? Palette.text.white : isSelected ? Palette.text.white : Palette.text.secondary,
+                            ? Palette.secondary.light
+                            : 'transparent',
+                          color: isSmallScreen
+                            ? Palette.text.white
+                            : isSelected
+                            ? Palette.text.white
+                            : Palette.text.secondary,
                           '&:hover': {
                             borderColor: isSelected
-                              ? Palette.secondary.dark : Palette.warning.light,
-                            color: isSelected
-                              ? Palette.text.white : Palette.warning.light,
-                            bgcolor: isSelected
-                              ? Palette.secondary.dark : 'transparent',
+                              ? Palette.secondary.dark
+                              : Palette.warning.light,
+                            color: isSelected ? Palette.text.white : Palette.warning.light,
+                            bgcolor: isSelected ? Palette.secondary.dark : 'transparent',
                           },
                         }}
                       >
@@ -259,9 +282,10 @@ const Selection = () => {
                   alignSelf: 'center',
                   bgcolor: 'transparent',
                   color: Palette.success.dark,
-                  border: (!isItemSelected('Toy') || !isItemSelected('Frame'))
-                    ? undefined
-                    : `2px solid ${Palette.secondary.main}`,
+                  border:
+                    !isItemSelected('Toy') || !isItemSelected('Frame')
+                      ? undefined
+                      : `2px solid ${Palette.secondary.main}`,
                   fontWeight: 600,
                   fontSize: isSmallScreen ? '1rem' : '1.2rem',
                 }}
@@ -271,7 +295,7 @@ const Selection = () => {
             </Stack>
           </Stack>
         </Stack>
-      </Box >
+      </Box>
       {openModal && (
         <CustomPopupHOC
           open={openModal}
@@ -280,12 +304,11 @@ const Selection = () => {
           }}
           centerTitle
           width={500}
-          title='Order Summary'
+          title="Order Summary"
         >
           <OrderForm />
         </CustomPopupHOC>
-      )
-      }
+      )}
     </>
   )
 }

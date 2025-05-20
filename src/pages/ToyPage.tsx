@@ -139,10 +139,8 @@ const ToysPage = () => {
     })
   }
 
-  const handleConfirm = () => {
-    const availabilityType = sessionStorage.getItem('availabilityType');
-    const nav = availabilityType === '3d' ? '/framespage' : '/'
-    navigate(nav, {
+    const handleConfirm = () => {
+    navigate('/', {
       state: { scrollToSelection: true },
     })
   }
@@ -161,8 +159,8 @@ const ToysPage = () => {
         <ConfirmComponent
           onConfirm={handleConfirm}
           selectedToy={selectedToys[0]}
-          label={sessionStorage.getItem('availabilityType') === '3d' ? 'Next' : 'Proceed'}
-          showHome={false} />
+          label={"Proceed"}
+          navigateTo={sessionStorage.getItem('availabilityType') === '3d' ? "/framespage" : '/'} />
         <Box
           sx={{
             backgroundColor: 'white',
