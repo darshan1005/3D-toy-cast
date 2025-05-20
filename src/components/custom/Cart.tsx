@@ -5,13 +5,13 @@ import {
   IconButton,
   Paper,
   Drawer,
-  Button,
   Divider,
 } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ToyCard from './ToyCard'
 import { FrameDetailsProps } from 'src/data/FrameData'
 import { ToyDataProps } from 'src/data/ToyData'
+import CloseIcon from '@mui/icons-material/Close'
 
 interface CartProps {
   open: boolean
@@ -48,10 +48,16 @@ const Cart: React.FC<CartProps> = ({ open, onClose }) => {
 
   return (
     <Drawer anchor="right" open={open} onClose={onClose}>
-      <Box sx={{ width: 400, p: 2 }}>
-        <Typography variant="h6" fontWeight="bold" mb={2}>
-          Your Cart
-        </Typography>
+      <Box sx={{ width: { xs: 350, sm: 400 }, p: 2 }}>
+        <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'} mb={2}>
+          <Typography variant="h6" fontWeight="bold">
+            Your Cart
+          </Typography>
+          <IconButton onClick={onClose}>
+            <CloseIcon />
+          </IconButton>
+        </Box>
+
 
         {/* TOYS LIST */}
         {selectedToys.length > 0 ? (
@@ -72,8 +78,6 @@ const Cart: React.FC<CartProps> = ({ open, onClose }) => {
                   position: 'absolute',
                   top: 8,
                   right: 8,
-                  bgcolor: 'rgba(255,255,255,0.8)',
-                  '&:hover': { bgcolor: 'rgba(255,255,255,0.9)' },
                 }}
               >
                 <DeleteIcon color="error" />
@@ -142,16 +146,6 @@ const Cart: React.FC<CartProps> = ({ open, onClose }) => {
         ) : (
           <Typography color="text.secondary">No frame selected.</Typography>
         )}
-
-        <Button
-          variant="contained"
-          color="primary"
-          fullWidth
-          sx={{ mt: 3 }}
-          onClick={onClose}
-        >
-          Close Cart
-        </Button>
       </Box>
     </Drawer>
   )
