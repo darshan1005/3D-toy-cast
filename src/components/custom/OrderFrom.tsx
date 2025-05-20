@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react'
 import CustomPopup from './CustomPopup'
 import emailjs from '@emailjs/browser'
 import { generateUniqueId } from '../../utils/uniqueId'
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
+import { Tooltip } from '@mui/material'
 
 interface Toy {
   id: number
@@ -48,6 +50,7 @@ const OrderForm = () => {
 
   const availabilityType = sessionStorage.getItem('availabilityType');
   const isToy = availabilityType === 'toy';
+  const is3D = availabilityType === '3d';
 
   useEffect(() => {
     if (!isToy) {
@@ -56,6 +59,10 @@ const OrderForm = () => {
     } else {
       setIsRaceTrackSelected(false);
       setIsBGSelected(false);
+    }
+
+    if (is3D) {
+      setIsBGSelected(true);
     }
   }, [])
 
@@ -79,11 +86,11 @@ const OrderForm = () => {
     }
 
     const updateCost = () => {
-      const keyChainCost = isKeyChainSelected ? 99 : 0
+      const keyChainCost = isKeyChainSelected ? 49 : 0
       const raceTrackCost = isRaceTrackSelected ? 149 : 0
       const background = isBGSelected ? 29 : 0
-      const deliveryCharges = 99
-      setFinalCost(toysCost + frameCost + keyChainCost + raceTrackCost + background + deliveryCharges)
+      const servicecharges = 99
+      setFinalCost(toysCost + frameCost + keyChainCost + raceTrackCost + background + servicecharges)
     }
 
     updateCost()
@@ -354,7 +361,14 @@ const OrderForm = () => {
                   }}
                 />
               }
-              label="Key Chain"
+              label={
+                <Box display="flex" alignItems="center" gap={0.5}>
+                  Key Chain
+                  <Tooltip title={`Add a custom keychain for ₹49`}>
+                    <InfoOutlinedIcon fontSize="small" />
+                  </Tooltip>
+                </Box>
+              }
             />
             <FormControlLabel
               control={
@@ -368,7 +382,14 @@ const OrderForm = () => {
                   }}
                 />
               }
-              label="Race map Outline"
+              label={
+                <Box display="flex" alignItems="center" gap={0.5}>
+                  Race map Outline
+                  <Tooltip title="Add a race track outline for ₹149">
+                    <InfoOutlinedIcon fontSize="small" />
+                  </Tooltip>
+                </Box>
+              }
               disabled={isToy}
             />
             <FormControlLabel
@@ -383,8 +404,15 @@ const OrderForm = () => {
                   }}
                 />
               }
-              label="Background"
-              disabled={isToy}
+              label={
+                <Box display="flex" alignItems="center" gap={0.5}>
+                  Background
+                  <Tooltip title="Add background styling for ₹29">
+                    <InfoOutlinedIcon fontSize="small" />
+                  </Tooltip>
+                </Box>
+              }
+              disabled={isToy || is3D}
             />
           </FormGroup>
 
