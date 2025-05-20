@@ -9,6 +9,7 @@ import {
   Autocomplete,
   TextField,
   Chip,
+  Typography,
 } from '@mui/material'
 import React, { useState, useEffect } from 'react'
 import ToyCard from '@components/custom/ToyCard'
@@ -22,6 +23,7 @@ const ToysPage = () => {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
 
   const [selectedType, setSelectedType] = useState('')
+  const [selectedScale, setSelecyedScale] = useState('')
   const [selectedBrands, setSelectedBrands] = useState<string[]>([])
   const [filteredData, setFilteredData] = useState(ToyData)
   const [selectedToys, setSelectedToys] = useState<ToyDataProps[]>([])
@@ -56,8 +58,18 @@ const ToysPage = () => {
     setSelectedBrands([])
   }
 
+
+  const handleScaleChange = (scale: string) => {
+    setSelecyedScale(scale)
+    setSelectedBrands([])
+  }
+
   const getTypeOptions = () => {
     return [...new Set(ToyData.map(toy => toy.type))]
+  }
+
+  const getScaleOptions = () => {
+    return [...new Set(ToyData.map(toy => toy.scale))]
   }
 
   const getBrandOptions = () => {
@@ -77,6 +89,10 @@ const ToysPage = () => {
       filtered = filtered.filter(toy => toy.type === selectedType)
     }
 
+    if (selectedScale) {
+      filtered = filtered.filter(toy => toy.scale === selectedScale)
+    }
+
     if (selectedBrands.length > 0) {
       filtered = filtered.filter(toy => selectedBrands.some(brand => toy.name.includes(brand)))
     }
@@ -87,6 +103,7 @@ const ToysPage = () => {
   const handleResetFilters = () => {
     setFilteredData(ToyData)
     setSelectedType('')
+    setSelecyedScale('')
     setSelectedBrands([])
   }
 
@@ -182,6 +199,24 @@ const ToysPage = () => {
               ))}
             </Select>
 
+            <Select
+              value={selectedScale}
+              onChange={e => handleScaleChange(e.target.value)}
+              displayEmpty
+              sx={{
+                minWidth: 250,
+                height: isSmallScreen ? '40px' : 'auto',
+                width: isSmallScreen ? '100%' : 'auto',
+              }}
+            >
+              <MenuItem value="">Select Scale</MenuItem>
+              {getScaleOptions().map((scale, index) => (
+                <MenuItem key={index} value={scale}>
+                  {scale}
+                </MenuItem>
+              ))}
+            </Select>
+
             <Autocomplete
               multiple
               disableCloseOnSelect
@@ -209,7 +244,7 @@ const ToysPage = () => {
             <Button
               variant="contained"
               onClick={handleApplyFilters}
-              disabled={!selectedType && selectedBrands.length === 0}
+              disabled={!selectedScale && !selectedType && selectedBrands.length === 0}
               sx={{
                 fontWeight: 600,
                 bgcolor: 'black',
@@ -276,7 +311,7 @@ const ToysPage = () => {
           )}
 
           {/* Toys Grid */}
-          <Box
+          {filteredData.length !== 0 ? <Box
             sx={{
               display: 'flex',
               justifyContent: 'center',
@@ -300,7 +335,7 @@ const ToysPage = () => {
                 />
               </React.Fragment>
             ))}
-          </Box>
+          </Box> : <Typography variant='h6' fontWeight={'bold'} color='#3337' textAlign={'center'} mt={2}>No items found</Typography>}
         </Box>
       </Box>
     </>

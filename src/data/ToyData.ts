@@ -28,7 +28,7 @@ export const ToyData: ToyDataProps[] = [
     description: "The timeless German sports car that combines daily usability with track-ready performance.",
     price: 119.99,
     type: "Car",
-    scale: '1:18'
+    scale: '1:24'
   },
   {
     id: 3,
@@ -46,7 +46,7 @@ export const ToyData: ToyDataProps[] = [
     description: "America's iconic muscle car that brings raw power and classic styling to the streets.",
     price: 89.99,
     type: "Car",
-    scale: '1:18'
+    scale: '1:32'
   },
   {
     id: 5,
@@ -55,7 +55,7 @@ export const ToyData: ToyDataProps[] = [
     description: "The engineering marvel that redefined speed limits with its quad-turbo W16 engine.",
     price: 149.99,
     type: "Car",
-    scale: '1:18'
+    scale: '1:24'
   },
   {
     id: 6,
@@ -64,7 +64,7 @@ export const ToyData: ToyDataProps[] = [
     description: "The revolutionary British supercar that held the production car speed record for over a decade.",
     price: 159.99,
     type: "Car",
-    scale: '1:18'
+    scale: '1:43'
   },
   {
     id: 7,
@@ -82,7 +82,7 @@ export const ToyData: ToyDataProps[] = [
     description: "The iconic Gullwing doors and elegant design make this German classic a true automotive legend.",
     price: 119.99,
     type: "Car",
-    scale: '1:18'
+    scale: '1:43'
   },
   {
     id: 9,
@@ -181,7 +181,7 @@ export const ToyData: ToyDataProps[] = [
     description: "The iconic cruiser that defines the spirit of freedom and adventure.",
     price: 89.99,
     type: "Bike",
-    scale: '1:18'
+    scale: '1:64'
   },
   {
     id: 20,
@@ -190,7 +190,7 @@ export const ToyData: ToyDataProps[] = [
     description: "The German superbike that delivers precision engineering and blistering performance.",
     price: 119.99,
     type: "Bike",
-    scale: '1:18'
+    scale: '1:64'
   },
   {
     id: 21,
@@ -199,6 +199,6 @@ export const ToyData: ToyDataProps[] = [
     description: "The Japanese superbike that brings MotoGP technology to the streets.",
     price: 109.99,
     type: "Bike",
-    scale: '1:18'
+    scale: '1:64'
   }
 ];
