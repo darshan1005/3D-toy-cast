@@ -156,10 +156,11 @@ const FrameCard: React.FC<FrameCardProps> = ({
               <Select
                 value={selectedDimension}
                 onChange={handleDimensionChange}
-                sx={{ height: 35 }}
+                sx={{ height: 20, fontSize: 12 }}
+                variant="standard"
               >
                 {frameDetails.dimensions.map(dimension => (
-                  <MenuItem key={dimension} value={dimension}>
+                  <MenuItem key={dimension} value={dimension} sx={{ fontSize: 12 }}>
                     {dimension}
                   </MenuItem>
                 ))}

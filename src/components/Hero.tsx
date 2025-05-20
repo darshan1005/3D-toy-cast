@@ -4,7 +4,6 @@ import BikeImage from '../assets/Bike.svg';
 import CarImage from '../assets/Car.svg';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import { Palette } from '../theme';
-import { red } from '@mui/material/colors';
 
 const Hero = () => {
   const theme = useTheme();

@@ -88,17 +88,18 @@ const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
           <ArrowBackIcon />
         </IconButton>
 
-        {showHome && availabilityType === '3d' && <IconButton
-          size='small'
-          sx={{
-            minWidth: 40,
-            width: 40,
-            height: 40,
-          }}
-          onClick={handleScollHome}
-        >
-          <HomeIcon />
-        </IconButton>}
+        {showHome && availabilityType === '3d' &&
+          <IconButton
+            size='small'
+            sx={{
+              minWidth: 40,
+              width: 40,
+              height: 40,
+            }}
+            onClick={handleScollHome}
+          >
+            <HomeIcon />
+          </IconButton>}
       </Box>
 
       {/* Confirm Button and Cart */}
