@@ -1,4 +1,4 @@
-# 3D-toy-cast
+# [3D-toy-cast](https://3dtoycast.netlify.app/)
 This is a business site which handle the users placing orders.
 
 ## About
