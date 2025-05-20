@@ -8,6 +8,7 @@ import {
   MenuItem,
   Autocomplete,
   TextField,
+  Chip,
 } from '@mui/material'
 import React, { useState, useEffect } from 'react'
 import ToyCard from '@components/custom/ToyCard'
@@ -183,6 +184,7 @@ const ToysPage = () => {
 
             <Autocomplete
               multiple
+              disableCloseOnSelect
               options={getBrandOptions()}
               value={selectedBrands}
               onChange={(event, newValue) => setSelectedBrands(newValue)}
@@ -194,18 +196,6 @@ const ToysPage = () => {
                   {getDisplayedBrands().map((option, index) => (
                     <span {...getTagProps({ index })}>{option}</span>
                   ))}
-                  {selectedBrands.length > 1 && (
-                    <span
-                      style={{
-                        backgroundColor: 'lightgrey',
-                        color: 'black',
-                        borderRadius: '3rem',
-                        padding: 4,
-                      }}
-                    >
-                      +{selectedBrands.length - 1}
-                    </span>
-                  )}
                 </>
               )}
               sx={{
@@ -258,7 +248,6 @@ const ToysPage = () => {
               sx={{
                 display: 'flex',
                 margin: '0 auto',
-                flexWrap: 'wrap',
                 gap: 1,
                 maxHeight: '100px',
                 overflowY: 'auto',
@@ -270,20 +259,18 @@ const ToysPage = () => {
               }}
             >
               {selectedBrands.map((brand, index) => (
-                <Box
+                <Chip
                   key={index}
-                  sx={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    backgroundColor: '#f0f0f0',
-                    borderRadius: '16px',
-                    padding: '4px 8px',
-                    fontSize: '14px',
-                    fontWeight: 500,
+                  label={brand}
+                  onDelete={() => {
+                    const updated = selectedBrands.filter(b => b !== brand)
+                    setSelectedBrands(updated)
                   }}
-                >
-                  {brand}
-                </Box>
+                  sx={{
+                    fontWeight: 500,
+                    backgroundColor: '#f0f0f0',
+                  }}
+                />
               ))}
             </Box>
           )}
