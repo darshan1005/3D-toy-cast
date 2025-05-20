@@ -127,6 +127,21 @@ const Bento = () => {
                   }}
                 >
                   Detailed diecast metal toys with precision engineering
+                  <Box
+                    component="span"
+                    sx={{
+                      display: isSmallScreen ? 'none' : 'block',
+                      mt: 1,
+                      fontSize: isSmallScreen ? '0.8rem' : '1rem',
+                      opacity: 0.7,
+                      transition: 'opacity 0.2s ease',
+                      '&:hover': {
+                        opacity: 1,
+                      },
+                    }}
+                  >
+                    1:18 • 1:24 • 1:32 • 1:43 • 1:64 • Car • Bike
+                  </Box>
                 </Typography>
               </Box>
             </Box>
