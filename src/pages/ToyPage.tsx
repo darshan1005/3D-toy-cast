@@ -11,7 +11,7 @@ import {
   Chip,
   Typography,
 } from '@mui/material'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import ToyCard from '@components/custom/ToyCard'
 import { ToyData, ToyDataProps } from '../data/ToyData'
 import ConfirmComponent from '@components/custom/ConfirmComponent'
@@ -27,6 +27,12 @@ const ToysPage = () => {
   const [selectedBrands, setSelectedBrands] = useState<string[]>([])
   const [filteredData, setFilteredData] = useState(ToyData)
   const [selectedToys, setSelectedToys] = useState<ToyDataProps[]>([])
+
+  const [appliedFilters, setAppliedFilters] = useState({
+    type: '',
+    scale: '',
+    brands: [] as string[],
+  })
 
   // Load selected toys from sessionStorage on component mount
   useEffect(() => {
@@ -58,7 +64,6 @@ const ToysPage = () => {
     setSelectedBrands([])
   }
 
-
   const handleScaleChange = (scale: string) => {
     setSelecyedScale(scale)
     setSelectedBrands([])
@@ -82,7 +87,25 @@ const ToysPage = () => {
     return selectedBrands.slice(0, 1)
   }
 
-  const handleApplyFilters = () => {
+  const currentFilters = useMemo(() => ({
+    type: selectedType,
+    scale: selectedScale,
+    brands: [...selectedBrands].sort(), // sort to ensure consistent comparison
+  }), [selectedType, selectedScale, selectedBrands])
+
+  const filtersChanged = useMemo(() => {
+    const brandsMatch =
+      appliedFilters.brands.length === currentFilters.brands.length &&
+      appliedFilters.brands.every(b => currentFilters.brands.includes(b))
+
+    return (
+      appliedFilters.type !== currentFilters.type ||
+      appliedFilters.scale !== currentFilters.scale ||
+      !brandsMatch
+    )
+  }, [appliedFilters, currentFilters])
+
+  const handleApplyFilters = useCallback(() => {
     let filtered = ToyData
 
     if (selectedType) {
@@ -94,11 +117,17 @@ const ToysPage = () => {
     }
 
     if (selectedBrands.length > 0) {
-      filtered = filtered.filter(toy => selectedBrands.some(brand => toy.name.includes(brand)))
+      filtered = filtered.filter(toy =>
+        selectedBrands.some(brand => toy.name.includes(brand))
+      )
     }
 
     setFilteredData(filtered)
-  }
+
+    // Update the applied filters
+    setAppliedFilters(currentFilters)
+  }, [selectedType, selectedScale, selectedBrands, currentFilters])
+
 
   const handleResetFilters = () => {
     setFilteredData(ToyData)
@@ -139,7 +168,7 @@ const ToysPage = () => {
     })
   }
 
-    const handleConfirm = () => {
+  const handleConfirm = () => {
     navigate('/', {
       state: { scrollToSelection: true },
     })
@@ -238,41 +267,37 @@ const ToysPage = () => {
               }}
               disabled={!selectedType}
             />
+            <Box display={'flex'} flexDirection={'row'} gap={2} alignItems={'center'} justifyContent={'space-between'}>
+              <Button
+                variant={filtersChanged ? 'contained' : 'outlined'}
+                onClick={handleApplyFilters}
+                disabled={!selectedScale && !selectedType && selectedBrands.length === 0}
+                sx={{
+                  fontWeight: 600,
+                  bgcolor: filtersChanged ? 'black' : '#eee',
+                  color: filtersChanged ? 'white' : 'black',
+                  border: '2px solid #6665',
+                }}
+              >
+                Apply
+              </Button>
 
-            <Button
-              variant="contained"
-              onClick={handleApplyFilters}
-              disabled={!selectedScale && !selectedType && selectedBrands.length === 0}
-              sx={{
-                fontWeight: 600,
-                bgcolor: 'black',
-                color: 'white',
-                width: isSmallScreen ? '100%' : 'auto',
-                '&:hover': {
-                  bgcolor: 'white',
+              <Button
+                variant="outlined"
+                onClick={handleResetFilters}
+                sx={{
+                  fontWeight: 600,
                   color: 'black',
-                },
-              }}
-            >
-              Apply
-            </Button>
-
-            <Button
-              variant="outlined"
-              onClick={handleResetFilters}
-              sx={{
-                fontWeight: 600,
-                color: 'black',
-                width: isSmallScreen ? '100%' : 'auto',
-                '&:hover': {
-                  bgcolor: 'white',
-                  color: 'black',
-                },
-              }}
-              disabled={selectedBrands.length === 0}
-            >
-              Clear Filters
-            </Button>
+                  '&:hover': {
+                    bgcolor: 'white',
+                    color: 'black',
+                  },
+                }}
+                disabled={!appliedFilters}
+              >
+                Clear Filters
+              </Button>
+            </Box>
           </Stack>
 
           {/* Selected Brands Display */}

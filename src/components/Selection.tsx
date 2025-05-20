@@ -140,7 +140,7 @@ const Selection = () => {
               textAlign={isSmallScreen ? 'center' : 'right'}
               zIndex={4}
             >
-              Customise your order
+              Customise Your Order
             </Typography>
 
             <Typography
@@ -157,7 +157,7 @@ const Selection = () => {
             >
               Build your perfect gift! Start by selecting your favorite toy and a matching frame to
               make it truly yours. Only when both are chosen, the magic happens -
-              <Typography component="span" sx={{ color: 'red', fontWeight: 700 }}>
+              <Typography component="span" sx={{ color: 'red', fontWeight: 700, pl: 1 }}>
                 3D Toy Cast
               </Typography>
             </Typography>
@@ -217,7 +217,7 @@ const Selection = () => {
               </FormGroup>
             </Box>
 
-            <Stack width={isSmallScreen ? '100%' : '50%'} spacing={isSmallScreen ? 2 : 3}>
+            <Stack width={isSmallScreen ? '100%' : '50%'} gap={isSmallScreen ? 2 : 3}>
               <Stack
                 direction={'row'}
                 spacing={isSmallScreen ? 2 : 3}
@@ -250,13 +250,13 @@ const Selection = () => {
                               ? Palette.secondary.light
                               : Palette.text.secondary
                             : isSelected
-                            ? Palette.secondary.light
-                            : 'transparent',
+                              ? Palette.secondary.light
+                              : 'transparent',
                           color: isSmallScreen
                             ? Palette.text.white
                             : isSelected
-                            ? Palette.text.white
-                            : Palette.text.secondary,
+                              ? Palette.text.white
+                              : Palette.text.secondary,
                           '&:hover': {
                             borderColor: isSelected
                               ? Palette.secondary.dark

@@ -132,8 +132,7 @@ const Cart: React.FC<CartProps> = ({ open, onClose }) => {
                 <strong>Material:</strong> {selectedFrame.material}
               </Typography>
               <Typography variant="body2">
-                <strong>Size:</strong> {selectedFrame.dimensions.width} x{' '}
-                {selectedFrame.dimensions.height} x {selectedFrame.dimensions.depth} cm
+                <strong>Size:</strong> {selectedFrame?.selectedDimension}
               </Typography>
               <Typography variant="body2">
                 <strong>Weight:</strong> {selectedFrame.weight} kg
