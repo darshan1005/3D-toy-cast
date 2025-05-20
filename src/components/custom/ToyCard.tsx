@@ -29,7 +29,7 @@ const ToyCard: React.FC<ToyCardProps> = ({
     <Card
       sx={{
         width: isSmallScreen ? '100%' : 270,
-        bgcolor: isSelected ? 'grey.800' : 'black',
+        bgcolor: isSelected ? 'teal' : 'black',
         color: 'white',
         p: 2,
         display: 'flex',

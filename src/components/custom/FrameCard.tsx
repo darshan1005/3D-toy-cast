@@ -31,7 +31,7 @@ const FrameCard: React.FC<FrameCardProps> = ({
   return (
     <Card
       sx={{
-        bgcolor: isSelected ? 'grey.800' : Palette.text.primary,
+        bgcolor: isSelected ? 'teal' : Palette.text.primary,
         color: '#222',
         display: 'flex',
         flexDirection: { xs: 'column', sm: 'row' },

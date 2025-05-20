@@ -399,7 +399,7 @@ const OrderForm = () => {
                   onChange={(e) => setIsBGSelected(e.target.checked)}
                   sx={{
                     '&.Mui-checked': {
-                      color: 'red',
+                      color: is3D ? '#3333' : 'red',
                     },
                   }}
                 />
