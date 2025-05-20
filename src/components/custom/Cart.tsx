@@ -85,7 +85,8 @@ const Cart: React.FC<CartProps> = ({ open, onClose }) => {
                 name={toy.name}
                 description={toy.description}
                 price={toy.price}
-                moterType={toy.type} />
+                moterType={toy.type}
+                scale={toy.scale} />
             </Paper>
           ))
         ) : (
