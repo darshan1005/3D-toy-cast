@@ -16,8 +16,6 @@ const Selection = () => {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
   const navigate = useNavigate()
   const location = useLocation()
-  const [selectedToy, setSelectedToy] = useState<any>(null)
-  const [selectedFrame, setSelectedFrame] = useState<any>(null)
 
   const [is3DToyFrame, setIs3DToyFrame] = useState<boolean>(true);
   const [isOnlyToys, setIsOnlyToys] = useState<boolean>(false);
@@ -33,33 +31,11 @@ const Selection = () => {
   }
 
   useEffect(() => {
-    // Load toy/frame selections
-    const toy = sessionStorage.getItem('selectedToys')
-    const frame = sessionStorage.getItem('selectedFrame')
-
-    if (toy && toy !== '[]' && toy !== 'null') {
-      setSelectedToy(JSON.parse(toy))
-    } else {
-      setSelectedToy(null)
-    }
-
-    if (frame && frame !== '[]' && frame !== 'null') {
-      setSelectedFrame(JSON.parse(frame))
-    } else {
-      setSelectedFrame(null)
-    }
-
-    // Load persisted availability preference
     const availabilityType = sessionStorage.getItem('availabilityType') as '3d' | 'toy' | 'frame' | null
-    if (availabilityType) {
-      updateAvailabilityState(availabilityType)
-    }
+    if (availabilityType) updateAvailabilityState(availabilityType)
 
-    // Scroll if needed
     if (location.state?.scrollToSelection) {
-      document.getElementById('selection')?.scrollIntoView({
-        behavior: 'smooth',
-      })
+      document.getElementById('selection')?.scrollIntoView({ behavior: 'smooth' })
       navigate(location.pathname, { replace: true, state: {} })
     }
   }, [location, navigate])
@@ -75,28 +51,20 @@ const Selection = () => {
     updateAvailabilityState(type)
 
     if (type === 'toy') {
-      // Clear frame if any
       sessionStorage.removeItem('selectedFrame')
-      setSelectedFrame(null)
     } else if (type === 'frame') {
-      // Clear toy if any
       sessionStorage.removeItem('selectedToys')
-      setSelectedToy(null)
     } else if (type === '3d') {
-      // Check and trim toys to max 2
       const toyData = sessionStorage.getItem('selectedToys')
       if (toyData) {
         try {
-          const parsedToys = JSON.parse(toyData)
-          if (Array.isArray(parsedToys) && parsedToys.length > 2) {
-            const trimmedToys = parsedToys.slice(0, 2)
-            sessionStorage.setItem('selectedToys', JSON.stringify(trimmedToys))
-            setSelectedToy(trimmedToys)
+          const parsed = JSON.parse(toyData)
+          if (Array.isArray(parsed) && parsed.length > 2) {
+            const trimmed = parsed.slice(0, 2)
+            sessionStorage.setItem('selectedToys', JSON.stringify(trimmed))
           }
-        } catch (e) {
-          console.error('Invalid toy data in sessionStorage')
+        } catch {
           sessionStorage.removeItem('selectedToys')
-          setSelectedToy(null)
         }
       }
     }
@@ -243,7 +211,7 @@ const Selection = () => {
 
                   return (
                     <Link
-                      to={item.link}
+                      to={isDisabled ? '' : item.link}
                       key={item.label}
                       style={{ textDecoration: 'none', width: '100%' }}
                     >
