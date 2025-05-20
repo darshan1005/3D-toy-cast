@@ -40,7 +40,7 @@ const ToyCard: React.FC<ToyCardProps> = ({
         cursor: onSelect ? 'pointer' : 'default',
         transition: 'background-color 0.3s ease',
         '&:hover': {
-          bgcolor: isSelected ? 'grey.700' : 'grey.900',
+          bgcolor: isSelected ? '#004d4d' : '#333',
         },
       }}
       onClick={onSelect}

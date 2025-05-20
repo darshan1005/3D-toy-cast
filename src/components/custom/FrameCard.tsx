@@ -38,7 +38,11 @@ const FrameCard: React.FC<FrameCardProps> = ({
         padding: { xs: 1, sm: 2 },
         width: '100%',
         height: { xs: 'auto', sm: 300 },
-        borderRadius: 3
+        borderRadius: 3,
+        ransition: 'background-color 0.3s ease',
+        '&:hover': {
+          bgcolor: isSelected ? '#004d4d' : '#333',
+        },
       }}
     >
       {/* Left Section */}
