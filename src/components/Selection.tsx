@@ -134,7 +134,7 @@ const Selection = () => {
             mr={isSmallScreen ? 0 : 2}
           >
             <Typography
-              variant={isSmallScreen ? 'h5' : 'h3'}
+              variant={isSmallScreen ? 'h4' : 'h3'}
               fontWeight="bold"
               textAlign={isSmallScreen ? 'center' : 'right'}
               zIndex={4}
