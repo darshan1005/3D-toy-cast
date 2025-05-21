@@ -63,6 +63,12 @@ const OrderForm = () => {
   const isToy = availabilityType === 'toy'
   const is3D = availabilityType === '3d'
 
+  const discount = is3D ? 0.48 : isToy ? 0.12 : 0.22
+  const price = finalCost + (finalCost * discount)
+  const formattedPrice = price.toFixed(2)
+
+  const deliveryFee = finalCost > 1299;
+
   useEffect(() => {
     if (!isToy) {
       setIsRaceTrackSelected(true)
@@ -93,7 +99,7 @@ const OrderForm = () => {
     if (frameData) {
       const parsedFrame: Frame = JSON.parse(frameData)
       setSelectedFrame(parsedFrame?.type || 'No Frame Selected')
-      setSelectedFrameDimension(parsedFrame?.selectedDimension || '')
+      setSelectedFrameDimension(parsedFrame?.selectedDimension || 'No Dimensions')
       frameCost = parsedFrame?.price || 0
     }
 
@@ -195,7 +201,7 @@ const OrderForm = () => {
   const backgroundSelected = isBGSelected && !isToy ? 'Yes' : 'No'
   const selectedToyStr =
     selectedToys.map(toy => `${toy.name} (${toy.scale})`).join(' & ') || 'No Toy Selected'
-  const selectedFraeStr = selectedFrame || 'No Frame Selected'
+  const selectedFrameStr = selectedFrame || 'No Frame Selected'
 
   const handlePlaceOrder = () => {
     if (!validateAllFields()) {
@@ -217,7 +223,7 @@ const OrderForm = () => {
       state: formData.state,
       pincode: formData.pincode,
       toy: selectedToyStr,
-      frame: selectedFraeStr,
+      frame: selectedFrameStr,
       keyChain: keyChainSelected,
       raceMap: raceMapSelected,
       withBackground: backgroundSelected,
@@ -362,7 +368,7 @@ const OrderForm = () => {
               helperText={errors.address}
             />
           </Box>
-          <FormGroup row>
+          <FormGroup row sx={{ m: 0 }}>
             <FormControlLabel
               control={
                 <Checkbox
@@ -387,28 +393,6 @@ const OrderForm = () => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={isRaceTrackSelected}
-                  onChange={e => setIsRaceTrackSelected(e.target.checked)}
-                  sx={{
-                    '&.Mui-checked': {
-                      color: 'red',
-                    },
-                  }}
-                />
-              }
-              label={
-                <Box display="flex" alignItems="center" gap={0.5}>
-                  Race map Outline
-                  <Tooltip title="Add a race track outline for ₹149">
-                    <InfoOutlinedIcon fontSize="small" />
-                  </Tooltip>
-                </Box>
-              }
-              disabled={isToy}
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
                   checked={isBGSelected}
                   onChange={e => setIsBGSelected(e.target.checked)}
                   sx={{
@@ -428,6 +412,28 @@ const OrderForm = () => {
               }
               disabled={isToy || is3D}
             />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={isRaceTrackSelected}
+                  onChange={e => setIsRaceTrackSelected(e.target.checked)}
+                  sx={{
+                    '&.Mui-checked': {
+                      color: 'red',
+                    },
+                  }}
+                />
+              }
+              label={
+                <Box display="flex" alignItems="center" gap={0.5}>
+                  Race map Outline
+                  <Tooltip title="Add a race track outline for ₹149">
+                    <InfoOutlinedIcon fontSize="small" />
+                  </Tooltip>
+                </Box>
+              }
+              disabled={isToy}
+            />
           </FormGroup>
 
           <Box
@@ -446,9 +452,48 @@ const OrderForm = () => {
             </Button>
           </Box>
 
-          <Box sx={{ bgcolor: 'black', color: 'white', textAlign: 'center', py: 1, mb: 2 }}>
+          <Box display="flex" alignItems="center" gap={0.5} sx={{ color: '#3337' }}>
+            <Typography variant='subtitle2' >
+              {`Delivery Fee - ${deliveryFee ? `₹0` : `₹59`}`}
+            </Typography>
+            <Tooltip title="₹0 delivery fee on order above 1299/-">
+              <InfoOutlinedIcon fontSize="small" />
+            </Tooltip>
+          </Box>
+
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              gap: 1,
+              bgcolor: 'black',
+              color: 'white',
+              textAlign: 'center',
+              py: 1,
+              mb: 2
+            }}>
             <Typography variant="h6" fontWeight={'bold'}>
               Final Cost: ₹{finalCost.toFixed(2)}
+            </Typography>
+            <Typography
+              component={'span'}
+              variant="h6"
+              fontWeight={'bold'}
+              color='#fff6'>
+              <s>₹{formattedPrice}</s>
+            </Typography>
+            <Typography
+              component="span"
+              variant="h6"
+              fontWeight="bold"
+              sx={{
+                background: 'linear-gradient(to right, green, black)',
+                color: '#008008',
+                px: 1,
+                borderRadius: 1,
+              }}
+            >
+              {is3D ? '48%' : isToy ? '12%' : '22%'}
             </Typography>
           </Box>
 
@@ -458,7 +503,7 @@ const OrderForm = () => {
               fullWidth
               sx={{ bgcolor: 'red', color: 'white' }}
               onClick={handlePlaceOrder}
-              size="small"
+              size="medium"
             >
               Place Order
             </Button>
@@ -467,7 +512,7 @@ const OrderForm = () => {
               fullWidth
               color="error"
               onClick={handleCancelOrder}
-              size="small"
+              size="medium"
             >
               Cancel
             </Button>
