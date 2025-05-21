@@ -13,8 +13,7 @@ import { useEffect, useState } from 'react'
 import CustomPopup from './CustomPopup'
 import emailjs from '@emailjs/browser'
 import { generateUniqueId } from '../../utils/uniqueId'
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
-import { Tooltip } from '@mui/material'
+import { Link } from 'react-router-dom'
 
 interface Toy {
   id: number
@@ -30,7 +29,7 @@ interface Frame {
 }
 
 const OrderForm = () => {
-  const theme = useTheme();
+  const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
 
   const [selectedToys, setSelectedToys] = useState<Toy[]>([])
@@ -67,6 +66,7 @@ const OrderForm = () => {
   const availabilityType = sessionStorage.getItem('availabilityType')
   const isToy = availabilityType === 'toy'
   const is3D = availabilityType === '3d'
+  const isFrame = availabilityType === 'frame'
 
   const discount = is3D ? 0.48 : isToy ? 0.12 : 0.22
   const price = finalCost + finalCost * discount
@@ -358,7 +358,7 @@ const OrderForm = () => {
               helperText={errors.pincode}
             />
           </Box>
-          <Box mb={1}>
+          <Box>
             <TextField
               fullWidth
               name="address"
@@ -387,11 +387,11 @@ const OrderForm = () => {
                 />
               }
               label={
-                <Box display="flex" alignItems="center" gap={0.5}>
-                  Key Chain
-                  <Tooltip title={`Add a custom keychain for ₹49`}>
-                    <InfoOutlinedIcon fontSize="small" />
-                  </Tooltip>
+                <Box display="flex" alignItems="baseline" gap={0.5}>
+                  Key Chain -
+                  <Typography component={'span'} variant="caption">
+                    {!isKeyChainSelected ? '₹0' : '₹49'}
+                  </Typography>
                 </Box>
               }
             />
@@ -408,11 +408,11 @@ const OrderForm = () => {
                 />
               }
               label={
-                <Box display="flex" alignItems="center" gap={0.5}>
-                  Background
-                  <Tooltip title="Add background styling for ₹29">
-                    <InfoOutlinedIcon fontSize="small" />
-                  </Tooltip>
+                <Box display="flex" alignItems="baseline" gap={0.5}>
+                  Background -
+                  <Typography component={'span'} variant="caption">
+                    {isToy || !isBGSelected ? '₹0' : '₹29'}
+                  </Typography>
                 </Box>
               }
               disabled={isToy || is3D}
@@ -430,11 +430,11 @@ const OrderForm = () => {
                 />
               }
               label={
-                <Box display="flex" alignItems="center" gap={0.5}>
-                  Race map Outline
-                  <Tooltip title="Add a race track outline for ₹149">
-                    <InfoOutlinedIcon fontSize="small" />
-                  </Tooltip>
+                <Box display="flex" alignItems="baseline" gap={0.5}>
+                  Race map Outline -
+                  <Typography component={'span'} variant="caption">
+                    {isToy || !isRaceTrackSelected ? '₹0' : '₹149'}
+                  </Typography>
                 </Box>
               }
               disabled={isToy}
@@ -445,25 +445,45 @@ const OrderForm = () => {
             display="flex"
             flexDirection={{ xs: 'column', sm: 'row' }}
             justifyContent="space-between"
-            my={2}
-            gap={1}
+            my={1}
+            gap={0.5}
           >
-            <Button variant="contained" fullWidth sx={{ bgcolor: 'red' }}>
-              {selectedToys.map(toy => `${toy.name} (${toy.scale})`).join(' & ') ||
-                'No Toy Selected'}
-            </Button>
-            <Button variant="contained" fullWidth sx={{ bgcolor: 'red' }}>
-              {`${selectedFrame} - ${selectedFrameDimension}` || 'No Frame Selected'}
-            </Button>
+            {(is3D || isToy) && (
+              <Box>
+                <Typography variant="subtitle2" color="#3337">
+                  Selected Toys
+                </Typography>
+                <Link to={'/toyspage'}>
+                  <Button variant="contained" fullWidth sx={{ bgcolor: 'red' }}>
+                    {selectedToys.map(toy => `${toy.name} (${toy.scale})`).join(' & ') ||
+                      'No Toy Selected'}
+                  </Button>
+                </Link>
+              </Box>
+            )}
+            {(is3D || isFrame) && (
+              <Box>
+                <Typography variant="subtitle2" color="#3337">
+                  Selected Frame
+                </Typography>
+                <Link to={'framespage'}>
+                  <Button variant="contained" fullWidth sx={{ bgcolor: 'red' }}>
+                    {`${selectedFrame} - ${selectedFrameDimension}` || 'No Frame Selected'}
+                  </Button>
+                </Link>
+              </Box>
+            )}
           </Box>
 
-          <Box display="flex" alignItems="center" gap={0.5} sx={{ color: '#3337' }}>
+          <Box display="flex" alignItems="center" gap={1} sx={{ color: '#3337' }}>
             <Typography variant="subtitle2">
               {`Delivery Fee - ${deliveryFee ? `₹0` : `₹59`}`}
             </Typography>
-            <Tooltip title="₹0 delivery fee on order above 1299/-">
-              <InfoOutlinedIcon fontSize="small" />
-            </Tooltip>
+            {deliveryFee && (
+              <Typography variant="caption" color="#3335">
+                <s>₹59</s>
+              </Typography>
+            )}
           </Box>
 
           <Box
@@ -477,7 +497,7 @@ const OrderForm = () => {
               color: 'white',
               textAlign: 'center',
               py: { xs: 1, sm: 1.5 },
-              mb: { xs: 2, sm: 3 },
+              mb: { xs: 1, sm: 2 },
             }}
           >
             <Typography
@@ -487,13 +507,13 @@ const OrderForm = () => {
                 fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
               }}
             >
-              Final Cost: ₹{finalCost.toFixed(2)}
+              Final Cost : ₹{finalCost.toFixed(2)}
             </Typography>
 
             <Typography
               component="span"
               fontWeight="bold"
-              color="#fff6"
+              color="#fff9"
               sx={{
                 fontSize: { xs: '0.85rem', sm: '1rem', md: '1.05rem' },
                 textDecoration: 'line-through',
@@ -524,7 +544,7 @@ const OrderForm = () => {
               fullWidth
               sx={{ bgcolor: 'red', color: 'white' }}
               onClick={handlePlaceOrder}
-              size={isSmallScreen ? "small" : "medium"}
+              size={isSmallScreen ? 'small' : 'medium'}
             >
               Place Order
             </Button>
@@ -533,7 +553,7 @@ const OrderForm = () => {
               fullWidth
               color="error"
               onClick={handleCancelOrder}
-              size={isSmallScreen ? "small" : "medium"}
+              size={isSmallScreen ? 'small' : 'medium'}
             >
               Cancel
             </Button>

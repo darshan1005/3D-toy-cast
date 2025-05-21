@@ -11,6 +11,8 @@ import {
   SelectChangeEvent,
 } from '@mui/material'
 import { Palette } from '../../theme'
+import PreviewIcon from '@mui/icons-material/Preview'
+
 interface FrameDetails {
   type: string
   material: string
@@ -88,7 +90,6 @@ const FrameCard: React.FC<FrameCardProps> = ({
             objectFit: 'contain',
             backgroundColor: 'transparent',
           }}
-          onClick={() => setPreviewOpen(true)}
         />
         <Dialog open={previewOpen} onClose={() => setPreviewOpen(false)} maxWidth="md">
           <Box
@@ -135,9 +136,24 @@ const FrameCard: React.FC<FrameCardProps> = ({
             height: 230,
           }}
         >
-          <Typography variant="h6" fontWeight="bold">
-            {frameDetails.type}
-          </Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'start',
+              alignItems: 'center',
+              gap: 1,
+            }}
+          >
+            <Typography variant="h6" fontWeight="bold">
+              {frameDetails.type}
+            </Typography>
+            <PreviewIcon
+              onClick={() => setPreviewOpen(true)}
+              sx={{ color: '#3338', cursor: 'pointer' }}
+              titleAccess="preview"
+            />
+          </Box>
 
           <Box sx={{ display: 'flex', gap: 2 }}>
             <Typography variant="body2" sx={{ minWidth: 100 }}>

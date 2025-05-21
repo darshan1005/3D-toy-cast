@@ -302,7 +302,7 @@ const Selection = () => {
             setModalOpen(false)
           }}
           centerTitle
-          width={570}
+          width={630}
           title="Order Summary"
         >
           <OrderForm />
