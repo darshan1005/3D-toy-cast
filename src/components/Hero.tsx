@@ -1,15 +1,23 @@
-import { Box, Button, keyframes, Typography, useMediaQuery, useTheme } from '@mui/material';
-import Logo from '../assets/Logo.svg';
-import BikeImage from '../assets/Bike.svg';
-import CarImage from '../assets/Car.svg';
-import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
-import { Palette } from '../theme';
-import { Link } from 'react-router-dom';
-import CollectionsIcon from '@mui/icons-material/Collections';
+import {
+  Box,
+  Button,
+  IconButton,
+  keyframes,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material'
+import Logo from '../assets/Logo.svg'
+import BikeImage from '../assets/Bike.svg'
+import CarImage from '../assets/Car.svg'
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone'
+import { Palette } from '../theme'
+import { Link } from 'react-router-dom'
+import CollectionsIcon from '@mui/icons-material/Collections'
 
 const Hero = () => {
-  const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const theme = useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
 
   const shake = keyframes`
   0% { transform: rotate(0deg); }
@@ -18,7 +26,13 @@ const Hero = () => {
   60% { transform: rotate(-10deg); }
   80% { transform: rotate(10deg); }
   100% { transform: rotate(0deg); }
-  `;
+  `
+
+  const navigate = () => {
+    document.getElementById('footer')?.scrollIntoView({
+      behavior: 'smooth',
+    })
+  }
 
   return (
     <>
@@ -43,7 +57,7 @@ const Hero = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: 1
+              gap: 1,
             }}
           >
             <Box
@@ -79,36 +93,46 @@ const Hero = () => {
             }}
           >
             <Link to={'/gallery'}>
-              <Button
-                variant='outlined'
-                size='small'
-                sx={{
-                  cursor: 'pointer',
-                  fontSize: '0.85rem',
-                  color: '#000',
-                  border: '1px solid #000'
-                }}
-                startIcon={<CollectionsIcon />}>
-                Gallery
-              </Button>
+              {!isSmallScreen ? (
+                <Button
+                  variant="outlined"
+                  size="small"
+                  sx={{
+                    cursor: 'pointer',
+                    fontSize: '0.85rem',
+                    color: '#000',
+                    border: '1px solid #000',
+                  }}
+                  startIcon={<CollectionsIcon />}
+                >
+                  Gallery
+                </Button>
+              ) : (
+                <IconButton>
+                  <CollectionsIcon />
+                </IconButton>
+              )}
             </Link>
 
-            <Button
-              variant='contained'
-              size='small'
-              sx={{
-                cursor: 'pointer',
-                backgroundColor: Palette.text.primary,
-                fontSize: '0.85rem',
-              }}
-              onClick={() => {
-                document.getElementById('footer')?.scrollIntoView({
-                  behavior: 'smooth',
-                });
-              }}
-              startIcon={<LocalPhoneIcon />}>
-              Contact
-            </Button>
+            {!isSmallScreen ? (
+              <Button
+                variant="contained"
+                size="small"
+                sx={{
+                  cursor: 'pointer',
+                  backgroundColor: Palette.text.primary,
+                  fontSize: '0.85rem',
+                }}
+                onClick={() => navigate()}
+                startIcon={<LocalPhoneIcon />}
+              >
+                Contact
+              </Button>
+            ) : (
+              <IconButton onClick={() => navigate()}>
+                <LocalPhoneIcon />
+              </IconButton>
+            )}
           </Box>
         </Box>
 
@@ -124,7 +148,9 @@ const Hero = () => {
           <Box
             sx={{
               position: 'relative',
-              background: isSmallScreen ? 'linear-gradient(to right, black, white)' : 'linear-gradient(to bottom, black, white)',
+              background: isSmallScreen
+                ? 'linear-gradient(to right, black, white)'
+                : 'linear-gradient(to bottom, black, white)',
               width: isSmallScreen ? '100%' : '20%',
               height: isSmallScreen ? '100px' : '550px',
               overflow: 'visible',
@@ -177,7 +203,8 @@ const Hero = () => {
                   width: '95%',
                 }}
               >
-                Transform your collection with our high-resolution 3D diecast toys and detailed model frames.
+                Transform your collection with our high-resolution 3D diecast toys and detailed
+                model frames.
               </Typography>
             </Box>
             <Button
@@ -185,7 +212,7 @@ const Hero = () => {
               onClick={() => {
                 document.getElementById('selection')?.scrollIntoView({
                   behavior: 'smooth',
-                });
+                })
               }}
               sx={{
                 backgroundColor: 'black',
@@ -199,7 +226,7 @@ const Hero = () => {
                   color: 'black',
                 },
                 animation: `${shake} 0.7s `,
-                animationTimingFunction: 'ease-in-out'
+                animationTimingFunction: 'ease-in-out',
               }}
             >
               Order Now !
@@ -208,7 +235,9 @@ const Hero = () => {
           <Box
             sx={{
               position: 'relative',
-              background: isSmallScreen ? 'linear-gradient(to left, red, white)' : 'linear-gradient(to bottom, red, white)',
+              background: isSmallScreen
+                ? 'linear-gradient(to left, red, white)'
+                : 'linear-gradient(to bottom, red, white)',
               width: isSmallScreen ? '100%' : '20%',
               height: isSmallScreen ? '200px' : '500px',
               overflow: 'visible',
@@ -230,7 +259,7 @@ const Hero = () => {
         </Box>
       </Box>
     </>
-  );
-};
+  )
+}
 
-export default Hero;
+export default Hero

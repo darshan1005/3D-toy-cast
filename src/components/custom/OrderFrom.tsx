@@ -64,10 +64,10 @@ const OrderForm = () => {
   const is3D = availabilityType === '3d'
 
   const discount = is3D ? 0.48 : isToy ? 0.12 : 0.22
-  const price = finalCost + (finalCost * discount)
+  const price = finalCost + finalCost * discount
   const formattedPrice = price.toFixed(2)
 
-  const deliveryFee = finalCost > 1299;
+  const deliveryFee = finalCost > 1299
 
   useEffect(() => {
     if (!isToy) {
@@ -453,7 +453,7 @@ const OrderForm = () => {
           </Box>
 
           <Box display="flex" alignItems="center" gap={0.5} sx={{ color: '#3337' }}>
-            <Typography variant='subtitle2' >
+            <Typography variant="subtitle2">
               {`Delivery Fee - ${deliveryFee ? `₹0` : `₹59`}`}
             </Typography>
             <Tooltip title="₹0 delivery fee on order above 1299/-">
@@ -470,16 +470,13 @@ const OrderForm = () => {
               color: 'white',
               textAlign: 'center',
               py: 1,
-              mb: 2
-            }}>
+              mb: 2,
+            }}
+          >
             <Typography variant="h6" fontWeight={'bold'}>
               Final Cost: ₹{finalCost.toFixed(2)}
             </Typography>
-            <Typography
-              component={'span'}
-              variant="h6"
-              fontWeight={'bold'}
-              color='#fff6'>
+            <Typography component={'span'} variant="h6" fontWeight={'bold'} color="#fff6">
               <s>₹{formattedPrice}</s>
             </Typography>
             <Typography

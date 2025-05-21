@@ -123,7 +123,7 @@ const Selection = () => {
                 ? 'translate(-50%, -50%) rotate(0deg)'
                 : 'translateY(-50%) rotate(-50deg)',
               filter: 'blur(3px)',
-              display: isSmallScreen ? 'none': 'block',
+              display: isSmallScreen ? 'none' : 'block',
             }}
           />
           <Stack

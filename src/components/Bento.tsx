@@ -1,6 +1,6 @@
-import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
-import f1 from '../assets/f-1.svg';
-import superCar from '../assets/supercar.png';
+import { Box, Typography, useMediaQuery, useTheme } from '@mui/material'
+import f1 from '../assets/f-1.svg'
+import superCar from '../assets/supercar.png'
 
 const styles = {
   textGradient: {
@@ -8,25 +8,23 @@ const styles = {
     backgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
     color: 'transparent',
-    display: 'inline-block'
+    display: 'inline-block',
   },
   textGradientTwo: {
     background: 'linear-gradient(rgb(255, 255, 255),rgb(0, 0, 0))',
     backgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
     color: 'transparent',
-    display: 'inline-block'
-  }
-};
+    display: 'inline-block',
+  },
+}
 
 const Bento = () => {
-  const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const theme = useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
 
   return (
-    <Box
-      sx={{ backgroundColor: 'red', p: 2 }}
-    >
+    <Box sx={{ backgroundColor: 'red', p: 2 }}>
       <Box
         sx={{
           backgroundColor: 'white',
@@ -50,12 +48,7 @@ const Bento = () => {
             flexDirection={isSmallScreen ? 'column' : 'row'}
             gap={isSmallScreen ? 1 : 2}
           >
-            <Box
-              display="flex"
-              flexDirection="column"
-              gap={isSmallScreen ? 1 : 2}
-              flex={2}
-            >
+            <Box display="flex" flexDirection="column" gap={isSmallScreen ? 1 : 2} flex={2}>
               <Box
                 sx={{
                   flex: 1,
@@ -242,7 +235,9 @@ const Bento = () => {
                   fontWeight: 400,
                 }}
               >
-                "Even after placing your order, we're here to help! Feel free to reach out if you'd like to discuss or customize any part of your order — your satisfaction is our priority."
+                "Even after placing your order, we're here to help! Feel free to reach out if you'd
+                like to discuss or customize any part of your order — your satisfaction is our
+                priority."
                 <Box
                   component="span"
                   sx={{
@@ -309,7 +304,7 @@ const Bento = () => {
         </Box>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default Bento;
+export default Bento

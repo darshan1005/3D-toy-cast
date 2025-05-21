@@ -4,7 +4,7 @@ import Bike from '../assets/Bike.svg';
 import Car from '../assets/Car.svg';
 import orangeCar from '../assets/orangeCar.png';
 import superCar from '../assets/supercar.png';
-import { Box, Divider, IconButton, Typography } from "@mui/material";
+import { Box, Divider, IconButton, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 
@@ -43,6 +43,9 @@ const imagesArray: imagesArrayTypes[] = [
 ];
 
 const GridImages = () => {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
+
   return (
     <Box
       sx={{
@@ -55,7 +58,6 @@ const GridImages = () => {
           backgroundColor: 'white',
           padding: 2,
           borderRadius: 3,
-          height: '100vh'
         }}>
         <Link to={'/'}>
           <IconButton
@@ -71,7 +73,7 @@ const GridImages = () => {
           </IconButton>
         </Link>
         <Typography
-          variant="h4"
+          variant={isSmallScreen ? "h5" : "h4"}
           textAlign={'center'}
           fontWeight={'bold'}
           mb={2}
@@ -84,7 +86,7 @@ const GridImages = () => {
             <Typography
               textAlign={'center'}
               fontWeight={'bold'}
-              variant="h5"
+              variant={isSmallScreen ? "h5" : "h4"}
               color="#3336"
             >
               No Images
@@ -92,9 +94,12 @@ const GridImages = () => {
           </>
           : <ImageGallery
             imagesInfoArray={imagesArray}
-            columnWidth={230}
+            columnWidth={isSmallScreen ? '100%' : 230}
             gapSize={14}
-          />}
+            lazy
+            lazyFromIndex={imagesArray[0].id}
+          />
+        }
       </Box>
     </Box>
   );

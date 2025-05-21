@@ -1,15 +1,24 @@
 import React from 'react'
-import { Card, CardContent, Typography, Box, Button, CardMedia, useMediaQuery, useTheme } from '@mui/material'
+import {
+  Card,
+  CardContent,
+  Typography,
+  Box,
+  Button,
+  CardMedia,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material'
 
 interface ToyCardProps {
-  image: any;
-  name: string;
-  description: string;
-  price: number;
-  moterType: string;
-  scale: string;
-  onSelect?: () => void;
-  isSelected?: boolean;
+  image: any
+  name: string
+  description: string
+  price: number
+  moterType: string
+  scale: string
+  onSelect?: () => void
+  isSelected?: boolean
 }
 
 const ToyCard: React.FC<ToyCardProps> = ({
@@ -22,8 +31,8 @@ const ToyCard: React.FC<ToyCardProps> = ({
   onSelect,
   isSelected = false,
 }) => {
-  const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const theme = useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
 
   return (
     <Card
@@ -60,7 +69,10 @@ const ToyCard: React.FC<ToyCardProps> = ({
       {/* Content */}
       <CardContent sx={{ p: 0, flexGrow: 1 }}>
         <Typography variant="body1" fontWeight="bold" gutterBottom>
-          {name} <Typography component={'span'} variant='caption' sx={{ opacity: 0.7 }}>{moterType} {scale}</Typography>
+          {name}{' '}
+          <Typography component={'span'} variant="caption" sx={{ opacity: 0.7 }}>
+            {moterType} {scale}
+          </Typography>
         </Typography>
         <Typography variant="body2" color="white">
           {description}

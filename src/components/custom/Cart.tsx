@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {
-  Box,
-  Typography,
-  IconButton,
-  Paper,
-  Drawer,
-  Divider,
-} from '@mui/material'
+import { Box, Typography, IconButton, Paper, Drawer, Divider } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ToyCard from './ToyCard'
 import { FrameDetailsProps } from 'src/data/FrameData'
@@ -58,7 +51,6 @@ const Cart: React.FC<CartProps> = ({ open, onClose }) => {
           </IconButton>
         </Box>
 
-
         {/* TOYS LIST */}
         {selectedToys.length > 0 ? (
           selectedToys.map(toy => (
@@ -84,13 +76,16 @@ const Cart: React.FC<CartProps> = ({ open, onClose }) => {
               </IconButton>
               <ToyCard
                 isSelected={true}
-                onSelect={() => { return }}
+                onSelect={() => {
+                  return
+                }}
                 image={toy.image}
                 name={toy.name}
                 description={toy.description}
                 price={toy.price}
                 moterType={toy.type}
-                scale={toy.scale} />
+                scale={toy.scale}
+              />
             </Paper>
           ))
         ) : (

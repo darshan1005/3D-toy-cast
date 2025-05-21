@@ -4,13 +4,13 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import { useNavigate } from 'react-router-dom'
 import Cart from './Cart'
-import HomeIcon from '@mui/icons-material/Home';
+import HomeIcon from '@mui/icons-material/Home'
 
 interface ConfirmComponentProps {
-  onConfirm: () => void;
-  navigateTo?: string;
-  label?: string | JSX.Element;
-  showHome?: boolean;
+  onConfirm: () => void
+  navigateTo?: string
+  label?: string | JSX.Element
+  showHome?: boolean
   selectedToy?: {
     id: number
     name: string
@@ -31,13 +31,13 @@ const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
   selectedToy,
   selectedFrame,
 }) => {
-  const [cartOpen, setCartOpen] = useState(false);
-  const [storgaCount, setStorageCount] = useState<number>(0);
-  const navigate = useNavigate();
+  const [cartOpen, setCartOpen] = useState(false)
+  const [storgaCount, setStorageCount] = useState<number>(0)
+  const navigate = useNavigate()
   const availabilityType = sessionStorage.getItem('availabilityType')
 
   useEffect(() => {
-    setStorageCount(sessionStorage.length);
+    setStorageCount(sessionStorage.length)
   })
 
   const handleConfirm = () => {
@@ -71,26 +71,26 @@ const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
         top: 0,
         zIndex: 1000,
         width: '100%',
-        boxShadow: 2
+        boxShadow: 2,
       }}
     >
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
         <IconButton
-          size='small'
+          size="small"
           sx={{
             minWidth: 40,
             width: 40,
             height: 40,
-            bgcolor: '#3331'
+            bgcolor: '#3331',
           }}
           onClick={handleBackNav}
         >
           <ArrowBackIcon />
         </IconButton>
 
-        {showHome && availabilityType === '3d' &&
+        {showHome && availabilityType === '3d' && (
           <IconButton
-            size='small'
+            size="small"
             sx={{
               minWidth: 40,
               width: 40,
@@ -99,13 +99,14 @@ const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
             onClick={handleScollHome}
           >
             <HomeIcon />
-          </IconButton>}
+          </IconButton>
+        )}
       </Box>
 
       {/* Confirm Button and Cart */}
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
         <Button
-          size='small'
+          size="small"
           onClick={handleConfirm}
           variant="contained"
           sx={{
@@ -133,21 +134,14 @@ const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
           }}
           onClick={() => setCartOpen(true)}
         >
-          <Badge
-            color="error"
-            overlap="circular"
-            variant="dot"
-            invisible={storgaCount === 0}>
+          <Badge color="error" overlap="circular" variant="dot" invisible={storgaCount === 0}>
             <ShoppingCartIcon />
           </Badge>
         </IconButton>
       </Box>
 
       {/* Cart Component (Simple Drawer/Modal) */}
-      {cartOpen && (
-        <Cart open={cartOpen} onClose={() => setCartOpen(false)} />
-      )}
-
+      {cartOpen && <Cart open={cartOpen} onClose={() => setCartOpen(false)} />}
     </Box>
   )
 }

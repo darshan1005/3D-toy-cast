@@ -1,22 +1,22 @@
-import { Box, Stack, Typography } from '@mui/material';
-import StarIcon from '@mui/icons-material/Star';
-import StarBorderIcon from '@mui/icons-material/StarBorder';
+import { Box, Stack, Typography } from '@mui/material'
+import StarIcon from '@mui/icons-material/Star'
+import StarBorderIcon from '@mui/icons-material/StarBorder'
 
 interface TestimonialProps {
-  username: string;
-  stars: number;
-  testimonial: string;
+  username: string
+  stars: number
+  testimonial: string
 }
 
 const Testimonial = ({ username, stars, testimonial }: TestimonialProps) => {
   const renderStars = () => {
-    const totalStars = 5;
+    const totalStars = 5
     return [...Array(totalStars)].map((_, index) => (
       <Box key={index} sx={{ color: 'gold' }}>
         {index < stars ? <StarIcon /> : <StarBorderIcon />}
       </Box>
-    ));
-  };
+    ))
+  }
 
   return (
     <Box
@@ -39,32 +39,36 @@ const Testimonial = ({ username, stars, testimonial }: TestimonialProps) => {
         </Typography>
       </Stack>
     </Box>
-  );
-};
+  )
+}
 
 const Testimonies = () => {
   const testimonials = [
     {
-      username: "David Chen",
+      username: 'David Chen',
       stars: 5,
-      testimonial: "Their 3D modeling precision is outstanding. Every detail in our custom toy designs was perfectly executed, maintaining both aesthetic appeal and manufacturing feasibility."
+      testimonial:
+        'Their 3D modeling precision is outstanding. Every detail in our custom toy designs was perfectly executed, maintaining both aesthetic appeal and manufacturing feasibility.',
     },
     {
-      username: "Sarah Williams",
+      username: 'Sarah Williams',
       stars: 5,
-      testimonial: "Exceptional engineering standards. Their technical documentation and material selection process shows deep understanding of toy manufacturing requirements."
+      testimonial:
+        'Exceptional engineering standards. Their technical documentation and material selection process shows deep understanding of toy manufacturing requirements.',
     },
     {
-      username: "Mike Rodriguez",
+      username: 'Mike Rodriguez',
       stars: 4,
-      testimonial: "Reliable delivery schedules and excellent packaging solutions. Their inventory management system seamlessly integrated with our supply chain."
+      testimonial:
+        'Reliable delivery schedules and excellent packaging solutions. Their inventory management system seamlessly integrated with our supply chain.',
     },
     {
-      username: "Lisa Zhang",
+      username: 'Lisa Zhang',
       stars: 5,
-      testimonial: "Top-notch production quality control. Their attention to manufacturing tolerances and material consistency is impressive. Zero defects in our last batch."
+      testimonial:
+        'Top-notch production quality control. Their attention to manufacturing tolerances and material consistency is impressive. Zero defects in our last batch.',
     },
-  ];
+  ]
 
   return (
     <Box sx={{ backgroundColor: 'red', p: 2 }}>
@@ -79,30 +83,32 @@ const Testimonies = () => {
             What Our Customers Say
           </Typography>
 
-          <Box sx={{
-            position: 'relative',
-            overflow: 'hidden',
-            '&::before': {
-              content: '""',
-              position: 'absolute',
-              left: 0,
-              top: 0,
-              bottom: 0,
-              width: 50,
-              background: 'linear-gradient(to right, white 0%, transparent 100%)',
-              zIndex: 2,
-            },
-            '&::after': {
-              content: '""',
-              position: 'absolute',
-              right: 0,
-              top: 0,
-              bottom: 0,
-              width: 50,
-              background: 'linear-gradient(to left, white 0%, transparent 100%)',
-              zIndex: 2,
-            }
-          }}>
+          <Box
+            sx={{
+              position: 'relative',
+              overflow: 'hidden',
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                bottom: 0,
+                width: 50,
+                background: 'linear-gradient(to right, white 0%, transparent 100%)',
+                zIndex: 2,
+              },
+              '&::after': {
+                content: '""',
+                position: 'absolute',
+                right: 0,
+                top: 0,
+                bottom: 0,
+                width: 50,
+                background: 'linear-gradient(to left, white 0%, transparent 100%)',
+                zIndex: 2,
+              },
+            }}
+          >
             <Box
               sx={{
                 display: 'flex',
@@ -119,7 +125,7 @@ const Testimonies = () => {
                 '&:hover': {
                   animationPlayState: 'paused',
                 },
-                width: 'fit-content'
+                width: 'fit-content',
               }}
             >
               {[...testimonials, ...testimonials].map((item, index) => (
@@ -141,8 +147,8 @@ const Testimonies = () => {
           </Box>
         </Stack>
       </Box>
-    </Box >
-  );
-};
+    </Box>
+  )
+}
 
-export default Testimonies;
+export default Testimonies

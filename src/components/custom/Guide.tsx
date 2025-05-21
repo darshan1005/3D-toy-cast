@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { Button, Typography } from '@mui/material';
-import CustomPopup from './CustomPopup';
+import { useState } from 'react'
+import { Button, Typography } from '@mui/material'
+import CustomPopup from './CustomPopup'
 
 const Guide = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
 
   return (
     <>
@@ -14,7 +14,7 @@ const Guide = () => {
       <Button
         onClick={handleOpen}
         variant="contained"
-        size='small'
+        size="small"
         sx={{
           bgcolor: '#333',
           position: 'fixed',
@@ -30,11 +30,11 @@ const Guide = () => {
       >
         Quick Guide
       </Button>
-      <CustomPopup open={open} onClose={handleClose} title='Quick Guide' centerTitle>
-        <Typography variant='h5'>Guide</Typography>
+      <CustomPopup open={open} onClose={handleClose} title="Quick Guide" centerTitle>
+        <Typography variant="h5">Guide</Typography>
       </CustomPopup>
     </>
-  );
-};
+  )
+}
 
-export default Guide;
+export default Guide

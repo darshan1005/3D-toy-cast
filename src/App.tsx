@@ -15,7 +15,7 @@ const App = () => {
       <ScrollTop /> {/* trigger scroll to top on route change */}
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route path='/gallery' element={<GridImages />} />
+        <Route path="/gallery" element={<GridImages />} />
         <Route path="/toyspage" element={<ToysPage />} />
         <Route path="/framespage" element={<FramePage />} />
       </Routes>

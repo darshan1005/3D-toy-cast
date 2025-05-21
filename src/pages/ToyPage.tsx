@@ -87,11 +87,14 @@ const ToysPage = () => {
     return selectedBrands.slice(0, 1)
   }
 
-  const currentFilters = useMemo(() => ({
-    type: selectedType,
-    scale: selectedScale,
-    brands: [...selectedBrands].sort(), // sort to ensure consistent comparison
-  }), [selectedType, selectedScale, selectedBrands])
+  const currentFilters = useMemo(
+    () => ({
+      type: selectedType,
+      scale: selectedScale,
+      brands: [...selectedBrands].sort(), // sort to ensure consistent comparison
+    }),
+    [selectedType, selectedScale, selectedBrands],
+  )
 
   const filtersChanged = useMemo(() => {
     const brandsMatch =
@@ -117,9 +120,7 @@ const ToysPage = () => {
     }
 
     if (selectedBrands.length > 0) {
-      filtered = filtered.filter(toy =>
-        selectedBrands.some(brand => toy.name.includes(brand))
-      )
+      filtered = filtered.filter(toy => selectedBrands.some(brand => toy.name.includes(brand)))
     }
 
     setFilteredData(filtered)
@@ -127,7 +128,6 @@ const ToysPage = () => {
     // Update the applied filters
     setAppliedFilters(currentFilters)
   }, [selectedType, selectedScale, selectedBrands, currentFilters])
-
 
   const handleResetFilters = () => {
     setFilteredData(ToyData)
@@ -188,8 +188,9 @@ const ToysPage = () => {
         <ConfirmComponent
           onConfirm={handleConfirm}
           selectedToy={selectedToys[0]}
-          label={"Proceed"}
-          navigateTo={sessionStorage.getItem('availabilityType') === '3d' ? "/framespage" : '/'} />
+          label={'Proceed'}
+          navigateTo={sessionStorage.getItem('availabilityType') === '3d' ? '/framespage' : '/'}
+        />
         <Box
           sx={{
             backgroundColor: 'white',
@@ -267,7 +268,13 @@ const ToysPage = () => {
               }}
               disabled={!selectedType}
             />
-            <Box display={'flex'} flexDirection={'row'} gap={2} alignItems={'center'} justifyContent={'space-between'}>
+            <Box
+              display={'flex'}
+              flexDirection={'row'}
+              gap={2}
+              alignItems={'center'}
+              justifyContent={'space-between'}
+            >
               <Button
                 variant={filtersChanged ? 'contained' : 'outlined'}
                 onClick={handleApplyFilters}
@@ -334,31 +341,37 @@ const ToysPage = () => {
           )}
 
           {/* Toys Grid */}
-          {filteredData.length !== 0 ? <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              flexWrap: 'wrap',
-              gap: 2,
-              width: '100%',
-              mx: 'auto',
-            }}
-          >
-            {filteredData.map(toy => (
-              <React.Fragment key={toy.id}>
-                <ToyCard
-                  image={toy.image}
-                  name={toy.name}
-                  description={toy.description}
-                  price={toy.price}
-                  moterType={toy.type}
-                  scale={toy.scale}
-                  onSelect={() => handleToySelect(toy)}
-                  isSelected={selectedToys.some(t => t.id === toy.id)}
-                />
-              </React.Fragment>
-            ))}
-          </Box> : <Typography variant='h6' fontWeight={'bold'} color='#3337' textAlign={'center'} mt={2}>No items found</Typography>}
+          {filteredData.length !== 0 ? (
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                flexWrap: 'wrap',
+                gap: 2,
+                width: '100%',
+                mx: 'auto',
+              }}
+            >
+              {filteredData.map(toy => (
+                <React.Fragment key={toy.id}>
+                  <ToyCard
+                    image={toy.image}
+                    name={toy.name}
+                    description={toy.description}
+                    price={toy.price}
+                    moterType={toy.type}
+                    scale={toy.scale}
+                    onSelect={() => handleToySelect(toy)}
+                    isSelected={selectedToys.some(t => t.id === toy.id)}
+                  />
+                </React.Fragment>
+              ))}
+            </Box>
+          ) : (
+            <Typography variant="h6" fontWeight={'bold'} color="#3337" textAlign={'center'} mt={2}>
+              No items found
+            </Typography>
+          )}
         </Box>
       </Box>
     </>
