@@ -6,6 +6,8 @@ import {
   FormGroup,
   FormControlLabel,
   Checkbox,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import CustomPopup from './CustomPopup'
@@ -28,6 +30,9 @@ interface Frame {
 }
 
 const OrderForm = () => {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
+
   const [selectedToys, setSelectedToys] = useState<Toy[]>([])
   const [selectedFrame, setSelectedFrame] = useState<string>('')
   const [selectedFrameDimension, setSelectedFrameDimension] = useState<string>('')
@@ -464,29 +469,48 @@ const OrderForm = () => {
           <Box
             sx={{
               display: 'flex',
+              flexWrap: 'wrap',
               justifyContent: 'center',
+              alignItems: 'center',
               gap: 1,
               bgcolor: 'black',
               color: 'white',
               textAlign: 'center',
-              py: 1,
-              mb: 2,
+              py: { xs: 1, sm: 1.5 },
+              mb: { xs: 2, sm: 3 },
             }}
           >
-            <Typography variant="h6" fontWeight={'bold'}>
-              Final Cost: ₹{finalCost.toFixed(2)}
-            </Typography>
-            <Typography component={'span'} variant="h6" fontWeight={'bold'} color="#fff6">
-              <s>₹{formattedPrice}</s>
-            </Typography>
             <Typography
-              component="span"
-              variant="h6"
+              variant="body1"
               fontWeight="bold"
               sx={{
+                fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
+              }}
+            >
+              Final Cost: ₹{finalCost.toFixed(2)}
+            </Typography>
+
+            <Typography
+              component="span"
+              fontWeight="bold"
+              color="#fff6"
+              sx={{
+                fontSize: { xs: '0.85rem', sm: '1rem', md: '1.05rem' },
+                textDecoration: 'line-through',
+              }}
+            >
+              ₹{formattedPrice}
+            </Typography>
+
+            <Typography
+              component="span"
+              fontWeight="bold"
+              sx={{
+                fontSize: { xs: '0.8rem', sm: '0.95rem', md: '1rem' },
                 background: 'linear-gradient(to right, green, black)',
                 color: '#008008',
-                px: 1,
+                px: { xs: 1, sm: 1.5 },
+                py: 0.3,
                 borderRadius: 1,
               }}
             >
@@ -500,7 +524,7 @@ const OrderForm = () => {
               fullWidth
               sx={{ bgcolor: 'red', color: 'white' }}
               onClick={handlePlaceOrder}
-              size="medium"
+              size={isSmallScreen ? "small" : "medium"}
             >
               Place Order
             </Button>
@@ -509,7 +533,7 @@ const OrderForm = () => {
               fullWidth
               color="error"
               onClick={handleCancelOrder}
-              size="medium"
+              size={isSmallScreen ? "small" : "medium"}
             >
               Cancel
             </Button>
