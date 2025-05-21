@@ -4,6 +4,8 @@ import BikeImage from '../assets/Bike.svg';
 import CarImage from '../assets/Car.svg';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import { Palette } from '../theme';
+import { Link } from 'react-router-dom';
+import CollectionsIcon from '@mui/icons-material/Collections';
 
 const Hero = () => {
   const theme = useTheme();
@@ -76,6 +78,21 @@ const Hero = () => {
               gap: 1,
             }}
           >
+            <Link to={'/gallery'}>
+              <Button
+                variant='outlined'
+                size='small'
+                sx={{
+                  cursor: 'pointer',
+                  fontSize: '0.85rem',
+                  color: '#000',
+                  border: '1px solid #000'
+                }}
+                startIcon={<CollectionsIcon />}>
+                Gallery
+              </Button>
+            </Link>
+
             <Button
               variant='contained'
               size='small'

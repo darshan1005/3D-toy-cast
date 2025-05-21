@@ -2,7 +2,7 @@ import React, { JSX, useEffect, useState } from 'react'
 import { Badge, Box, Button, IconButton } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Cart from './Cart'
 import HomeIcon from '@mui/icons-material/Home';
 
