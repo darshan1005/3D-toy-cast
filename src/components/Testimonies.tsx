@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from '@mui/material'
+import { Box, Stack, Typography, useMediaQuery, useTheme } from '@mui/material'
 import StarIcon from '@mui/icons-material/Star'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
 
@@ -24,7 +24,8 @@ const Testimonial = ({ username, stars, testimonial }: TestimonialProps) => {
         bgcolor: 'white',
         p: 3,
         borderRadius: 2,
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        boxShadow: '2px 2px 6px rgba(0, 0, 0, 0.1)',
+        height: 300
       }}
     >
       <Stack spacing={2}>
@@ -43,6 +44,9 @@ const Testimonial = ({ username, stars, testimonial }: TestimonialProps) => {
 }
 
 const Testimonies = () => {
+  const theme = useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
+
   const testimonials = [
     {
       username: 'David Chen',
@@ -87,13 +91,14 @@ const Testimonies = () => {
             sx={{
               position: 'relative',
               overflow: 'hidden',
+              p: 2,
               '&::before': {
                 content: '""',
                 position: 'absolute',
                 left: 0,
                 top: 0,
                 bottom: 0,
-                width: 50,
+                width: isSmallScreen ? 10 : 50,
                 background: 'linear-gradient(to right, white 0%, transparent 100%)',
                 zIndex: 2,
               },
@@ -103,7 +108,7 @@ const Testimonies = () => {
                 right: 0,
                 top: 0,
                 bottom: 0,
-                width: 50,
+                width: isSmallScreen ? 10 : 50,
                 background: 'linear-gradient(to left, white 0%, transparent 100%)',
                 zIndex: 2,
               },
