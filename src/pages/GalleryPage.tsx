@@ -4,11 +4,18 @@ import Bike from '../assets/Bike.svg';
 import Car from '../assets/Car.svg';
 import orangeCar from '../assets/orangeCar.png';
 import superCar from '../assets/supercar.png';
-import { Box, Button, IconButton, Typography } from "@mui/material";
+import { Box, Divider, IconButton, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 
-const imagesArray = [
+interface imagesArrayTypes {
+  id: number,
+  alt: string,
+  caption: string
+  src: any
+}
+
+const imagesArray: imagesArrayTypes[] = [
   {
     id: 1,
     alt: "Bike",
@@ -48,6 +55,7 @@ const GridImages = () => {
           backgroundColor: 'white',
           padding: 2,
           borderRadius: 3,
+          height: '100vh'
         }}>
         <Link to={'/'}>
           <IconButton
@@ -70,11 +78,23 @@ const GridImages = () => {
         >
           Gallery
         </Typography>
-        <ImageGallery
-          imagesInfoArray={imagesArray}
-          columnWidth={230}
-          gapSize={14}
-        />
+        {imagesArray.length === 0
+          ? <>
+            <Divider sx={{ mb: 2 }} />
+            <Typography
+              textAlign={'center'}
+              fontWeight={'bold'}
+              variant="h5"
+              color="#3336"
+            >
+              No Images
+            </Typography>
+          </>
+          : <ImageGallery
+            imagesInfoArray={imagesArray}
+            columnWidth={230}
+            gapSize={14}
+          />}
       </Box>
     </Box>
   );
