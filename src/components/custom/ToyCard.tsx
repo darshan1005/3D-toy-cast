@@ -9,6 +9,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material'
+import { calculateSellingPrice } from '@utils/pricing'
 
 interface ToyCardProps {
   image: any
@@ -33,6 +34,7 @@ const ToyCard: React.FC<ToyCardProps> = ({
 }) => {
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
+  const sellingPrice = calculateSellingPrice(price)
 
   return (
     <Card
@@ -95,9 +97,10 @@ const ToyCard: React.FC<ToyCardProps> = ({
             py: 1,
             fontWeight: 'bold',
             fontSize: '0.8rem',
+            borderRadius: 1,
           }}
         >
-          ₹ {price} /-
+          ₹ {sellingPrice} /-
         </Box>
         <Button
           variant="contained"

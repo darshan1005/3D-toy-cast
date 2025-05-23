@@ -8,12 +8,21 @@ import {
   Checkbox,
   useTheme,
   useMediaQuery,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  TableContainer,
+  TableHead,
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import CustomPopup from './CustomPopup'
 import emailjs from '@emailjs/browser'
 import { generateUniqueId } from '../../utils/uniqueId'
-import { Link } from 'react-router-dom'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 interface Toy {
   id: number
@@ -63,16 +72,18 @@ const OrderForm = () => {
   const [isRaceTrackSelected, setIsRaceTrackSelected] = useState(true)
   const [isBGSelected, setIsBGSelected] = useState(true)
 
+  const [discountPrice, setDiscountPrice] = useState(0)
+  const [discountAmount, setDiscountAmount] = useState(0)
+  const [finalPrice, setFinalPrice] = useState(0)
+  const [expanded, setExpanded] = useState(true)
+
   const availabilityType = sessionStorage.getItem('availabilityType')
   const isToy = availabilityType === 'toy'
   const is3D = availabilityType === '3d'
-  const isFrame = availabilityType === 'frame'
 
-  const discount = is3D ? 0.48 : isToy ? 0.12 : 0.22
-  const price = finalCost + finalCost * discount
-  const formattedPrice = price.toFixed(2)
-
-  const deliveryFee = finalCost > 1299
+  const discount = is3D ? 0.32 : isToy ? 0.12 : 0.22
+  const isdeliveryFee = discountPrice > 1299
+  const deliveryFeeText = isdeliveryFee ? 'Free' : '₹59'
 
   useEffect(() => {
     if (!isToy) {
@@ -108,17 +119,24 @@ const OrderForm = () => {
       frameCost = parsedFrame?.price || 0
     }
 
-    const updateCost = () => {
-      const keyChainCost = isKeyChainSelected ? 49 : 0
-      const raceTrackCost = isRaceTrackSelected ? 149 : 0
-      const background = isBGSelected ? 29 : 0
-      const servicecharges = 99
-      setFinalCost(
-        toysCost + frameCost + keyChainCost + raceTrackCost + background + servicecharges,
-      )
-    }
+    const baseCost = toysCost + frameCost // This is the part that gets the discount
+    const discountPrice = baseCost * (1 - discount)
 
-    updateCost()
+    const keyChainCost = isKeyChainSelected ? 49 : 0
+    const raceTrackCost = isRaceTrackSelected ? 149 : 0
+    const background = isBGSelected ? 29 : 0
+    const addOnsCost = keyChainCost + raceTrackCost + background
+
+    const isDeliveryFree = discountPrice > 1299
+    const deliveryCost = isDeliveryFree ? 0 : 59
+
+    const totalFinalPrice = discountPrice + addOnsCost + deliveryCost
+
+    // Set costs in state
+    setFinalCost(baseCost)
+    setDiscountPrice(discountPrice)
+    setDiscountAmount(baseCost - discountPrice)
+    setFinalPrice(totalFinalPrice)
   }, [isKeyChainSelected, isRaceTrackSelected, isBGSelected])
 
   const handleCancelOrder = () => {
@@ -145,20 +163,20 @@ const OrderForm = () => {
         return !value.trim()
           ? 'Name is required'
           : !/^[a-zA-Z\s]+$/.test(value)
-            ? 'Only alphabets are allowed'
-            : ''
+          ? 'Only alphabets are allowed'
+          : ''
       case 'phone':
         return !value.trim()
           ? 'Phone number is required'
           : !/^\d{10}$/.test(value)
-            ? 'Phone must be a 10-digit number'
-            : ''
+          ? 'Phone must be a 10-digit number'
+          : ''
       case 'email':
         return !value.trim()
           ? 'Email is required'
           : !value.includes('@gmail.com')
-            ? 'Email must be a Gmail address'
-            : ''
+          ? 'Email must be a Gmail address'
+          : ''
       case 'state':
         return !value.trim() ? 'State is required' : ''
       case 'city':
@@ -167,8 +185,8 @@ const OrderForm = () => {
         return !value.trim()
           ? 'Pin code is required'
           : !/^\d{6}$/.test(value)
-            ? 'Pin code must be 6 digits'
-            : ''
+          ? 'Pin code must be 6 digits'
+          : ''
       case 'address':
         return !value.trim() ? 'Address is required' : ''
       default:
@@ -261,10 +279,12 @@ const OrderForm = () => {
           sx={{
             pt: 2,
             maxWidth: '600px',
+            width: '100%',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
+            px: { xs: 1, sm: 2 },
           }}
         >
           <Typography variant="body1" textAlign="center" fontWeight="bold">
@@ -279,13 +299,21 @@ const OrderForm = () => {
           </Typography>
         </Box>
       ) : isOrderCancelled ? (
-        <Box sx={{ p: 2, maxWidth: '600px', mx: 'auto' }}>
+        <Box sx={{ p: 2, maxWidth: '600px', width: '100%', mx: 'auto', px: { xs: 1, sm: 2 } }}>
           <Typography variant="h6" textAlign="center" mb={2}>
             We cannot process your order at this time. Please close the popup and try again.
           </Typography>
         </Box>
       ) : (
-        <Box sx={{ p: 1, maxWidth: '600px', mx: 'auto' }}>
+        <Box
+          sx={{
+            p: { xs: 0.5, sm: 1 },
+            maxWidth: '600px',
+            width: '100%',
+            mx: 'auto',
+            boxSizing: 'border-box',
+          }}
+        >
           <Box display="flex" flexDirection={{ xs: 'column', sm: 'row' }} gap={1} mb={1}>
             <TextField
               fullWidth
@@ -373,7 +401,7 @@ const OrderForm = () => {
               helperText={errors.address}
             />
           </Box>
-          <FormGroup row sx={{ m: 0 }}>
+          <FormGroup row sx={{ m: 0, flexWrap: { xs: 'wrap', sm: 'nowrap' } }}>
             <FormControlLabel
               control={
                 <Checkbox
@@ -442,100 +470,277 @@ const OrderForm = () => {
           </FormGroup>
 
           <Box
-            display="flex"
-            flexDirection={{ xs: 'column', sm: 'row' }}
-            justifyContent="space-between"
-            my={1}
-            gap={0.5}
-          >
-            {(is3D || isToy) && (
-              <Box>
-                <Typography variant="subtitle2" color="#3337">
-                  Selected Toys
-                </Typography>
-                <Link to={'/toyspage'}>
-                  <Button variant="contained" fullWidth sx={{ bgcolor: 'red' }}>
-                    {selectedToys.map(toy => `${toy.name} (${toy.scale})`).join(' & ') ||
-                      'No Toy Selected'}
-                  </Button>
-                </Link>
-              </Box>
-            )}
-            {(is3D || isFrame) && (
-              <Box>
-                <Typography variant="subtitle2" color="#3337">
-                  Selected Frame
-                </Typography>
-                <Link to={'framespage'}>
-                  <Button variant="contained" fullWidth sx={{ bgcolor: 'red' }}>
-                    {`${selectedFrame} - ${selectedFrameDimension}` || 'No Frame Selected'}
-                  </Button>
-                </Link>
-              </Box>
-            )}
-          </Box>
-
-          <Box display="flex" alignItems="center" gap={1} sx={{ color: '#3337' }}>
-            <Typography variant="subtitle2">
-              {`Delivery Fee - ${deliveryFee ? `₹0` : `₹59`}`}
-            </Typography>
-            {deliveryFee && (
-              <Typography variant="caption" color="#3335">
-                <s>₹59</s>
-              </Typography>
-            )}
-          </Box>
-
-          <Box
             sx={{
+              width: '100%',
               display: 'flex',
-              flexWrap: 'wrap',
+              flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'center',
               gap: 1,
-              bgcolor: 'black',
-              color: 'white',
               textAlign: 'center',
               py: { xs: 1, sm: 1.5 },
-              mb: { xs: 1, sm: 2 },
+              px: { xs: 0.5, sm: 0 },
+              mb: 2,
             }}
           >
-            <Typography
-              variant="body1"
-              fontWeight="bold"
-              sx={{
-                fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
-              }}
+            <Accordion
+              sx={{ width: '100%', maxWidth: 600, mx: 'auto' }}
+              disableGutters
+              expanded={expanded} // Bind expanded state
+              onChange={() => setExpanded(!expanded)}
             >
-              Final Cost : ₹{finalCost.toFixed(2)}
-            </Typography>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="price-details-content"
+                id="price-details-header"
+                sx={{
+                  px: 2,
+                  py: 1,
+                  backgroundColor: '#f5f5f5',
+                  borderRadius: 1,
+                }}
+              >
+                <Typography
+                  fontWeight="bold"
+                  sx={{ fontSize: { xs: '0.95rem', sm: '1.05rem', md: '1.4rem' } }}
+                >
+                  Final Cost: ₹{finalPrice.toFixed(2)}
+                </Typography>
+              </AccordionSummary>
 
-            <Typography
-              component="span"
-              fontWeight="bold"
-              color="#fff9"
-              sx={{
-                fontSize: { xs: '0.85rem', sm: '1rem', md: '1.05rem' },
-                textDecoration: 'line-through',
-              }}
-            >
-              ₹{formattedPrice}
-            </Typography>
+              <AccordionDetails sx={{ px: { xs: 0.5, sm: 2 }, pt: 1, pb: 2 }}>
+                <TableContainer>
+                  <Table
+                    sx={{
+                      width: '100%',
+                      maxWidth: 600,
+                      mx: 'auto',
+                      '& .MuiTableCell-root': { px: { xs: 0.5, sm: 2 }, py: { xs: 0.5, sm: 1 } },
+                    }}
+                  >
+                    <TableHead>
+                      <TableRow>
+                        <TableCell
+                          sx={{ fontSize: { xs: '0.9rem', sm: '1.1rem' }, fontWeight: 'bold' }}
+                        >
+                          Item's
+                        </TableCell>
+                        <TableCell
+                          align="right"
+                          sx={{ fontSize: { xs: '0.9rem', sm: '1.1rem' }, fontWeight: 'bold' }}
+                        >
+                          Price's
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {selectedToys.length > 0 && (
+                        <TableRow>
+                          <TableCell colSpan={2} sx={{ fontWeight: 'bold' }}>
+                            Toys:
+                          </TableCell>
+                        </TableRow>
+                      )}
+                      {selectedToys.map(toy => (
+                        <TableRow key={toy.id}>
+                          <TableCell sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}>
+                            {toy.name} ({toy.scale})
+                          </TableCell>
+                          <TableCell align="right" sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}>
+                            ₹{toy.price.toFixed(2)}
+                          </TableCell>
+                        </TableRow>
+                      ))}
 
-            <Typography
-              component="span"
-              fontWeight="bold"
-              sx={{
-                fontSize: { xs: '0.8rem', sm: '0.95rem', md: '1rem' },
-                background: 'linear-gradient(to right, green, black)',
-                color: '#008008',
-                px: { xs: 1, sm: 1.5 },
-                py: 0.3,
-                borderRadius: 1,
-              }}
-            >
-              {is3D ? '48%' : isToy ? '12%' : '22%'}
-            </Typography>
+                      {selectedFrame && selectedFrame !== 'No Frame Selected' && (
+                        <TableRow>
+                          <TableCell colSpan={2} sx={{ fontWeight: 'bold' }}>
+                            Frame:
+                          </TableCell>
+                        </TableRow>
+                      )}
+
+                      {selectedFrame && selectedFrame !== 'No Frame Selected' && (
+                        <TableRow>
+                          <TableCell sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}>
+                            {selectedFrame} ({selectedFrameDimension})
+                          </TableCell>
+                          <TableCell align="right" sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}>
+                            ₹
+                            {(
+                              JSON.parse(sessionStorage.getItem('selectedFrame') || '{}') as Frame
+                            )?.price.toFixed(2) || '0.00'}
+                          </TableCell>
+                        </TableRow>
+                      )}
+
+                      <TableRow>
+                        <TableCell sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}>
+                          <Typography
+                            fontWeight="bold"
+                            sx={{ fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' } }}
+                          >
+                            Total <Typography variant="caption">{`(Toys & Frames)`}</Typography>
+                          </Typography>
+                        </TableCell>
+                        <TableCell
+                          align="right"
+                          sx={{ fontSize: { xs: '0.85rem', sm: '1rem' }, fontWeight: 'bold' }}
+                        >
+                          ₹{finalCost.toFixed(2)}
+                        </TableCell>
+                      </TableRow>
+
+                      <TableRow>
+                        <TableCell sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}>
+                          <Typography
+                            fontWeight="bold"
+                            sx={{ fontSize: { xs: '0.85rem', sm: '1rem', md: '1.05rem' } }}
+                          >
+                            Discount On{' '}
+                            <Typography variant="caption">{`(Toys & Frames)`}</Typography>
+                          </Typography>
+                        </TableCell>
+                        <TableCell
+                          align="right"
+                          sx={{ fontSize: { xs: '0.85rem', sm: '1rem' }, fontWeight: 'bold' }}
+                        >
+                          (saved) ₹{discountAmount.toFixed(2)}
+                          <Box
+                            component="span"
+                            sx={{
+                              fontSize: { xs: '0.8rem', sm: '0.95rem', md: '1rem' },
+                              background: 'linear-gradient(to right, green, #fff)',
+                              color: '#fff',
+                              px: { xs: 1, sm: 1.5 },
+                              py: 0.2,
+                              borderRadius: 1,
+                              ml: 1,
+                              fontWeight: 'bold',
+                            }}
+                          >
+                            {is3D ? '32%' : isToy ? '12%' : '22%'}
+                          </Box>
+                        </TableCell>
+                      </TableRow>
+
+                      <TableRow>
+                        <TableCell sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}>
+                          <Typography
+                            fontWeight="bold"
+                            sx={{ fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' } }}
+                          >
+                            After Discount
+                          </Typography>
+                        </TableCell>
+                        <TableCell
+                          align="right"
+                          sx={{ fontSize: { xs: '0.85rem', sm: '1rem' }, fontWeight: 'bold' }}
+                        >
+                          ₹{discountPrice.toFixed(2)}{' '}
+                          <Typography variant="subtitle1" color="#3337">
+                            <s>₹{finalCost.toFixed(2)}</s>
+                          </Typography>
+                        </TableCell>
+                      </TableRow>
+
+                      <TableRow>
+                        <TableCell sx={{ fontSize: { xs: '0.8rem', sm: '1rem' } }}>
+                          <Typography
+                            variant="subtitle2"
+                            sx={{ fontSize: { xs: '0.8rem', sm: '1rem' } }}
+                          >
+                            Delivery Fee{' '}
+                            <Typography variant="caption">{`(Free on orders above ₹1299)`}</Typography>
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="right" sx={{ fontSize: { xs: '0.8rem', sm: '1rem' } }}>
+                          {deliveryFeeText}
+                          {isdeliveryFee && (
+                            <Typography
+                              variant="subtitle2"
+                              ml={1}
+                              sx={{ fontSize: { xs: '0.8rem', sm: '1rem' } }}
+                            >
+                              <s>₹59</s>
+                            </Typography>
+                          )}
+                        </TableCell>
+                      </TableRow>
+
+                      <TableRow>
+                        <TableCell colSpan={2} sx={{ fontWeight: 'bold' }}>
+                          Add On's:
+                        </TableCell>
+                      </TableRow>
+
+                      {isKeyChainSelected && (
+                        <TableRow>
+                          <TableCell sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}>
+                            Key Chain
+                          </TableCell>
+                          <TableCell align="right" sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}>
+                            ₹49.00
+                          </TableCell>
+                        </TableRow>
+                      )}
+                      {!isToy && isRaceTrackSelected && (
+                        <TableRow>
+                          <TableCell sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}>
+                            Race map Outline
+                          </TableCell>
+                          <TableCell align="right" sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}>
+                            ₹149.00
+                          </TableCell>
+                        </TableRow>
+                      )}
+                      {!isToy && isBGSelected && (
+                        <TableRow>
+                          <TableCell sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}>
+                            Background
+                          </TableCell>
+                          <TableCell align="right" sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}>
+                            ₹29.00
+                          </TableCell>
+                        </TableRow>
+                      )}
+                      <TableCell sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}>
+                        <Typography
+                          fontWeight="bold"
+                          sx={{ fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' } }}
+                        >
+                          Total <Typography variant="caption">{`(Add On's)`}</Typography>
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right" sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}>
+                        ₹
+                        {(isKeyChainSelected ? 49 : 0) +
+                          (isRaceTrackSelected ? 149 : 0) +
+                          (isBGSelected ? 29 : 0)}
+                      </TableCell>
+
+                      <TableRow sx={{ '& td': { borderBottom: 'none' } }}>
+                        <TableCell sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}>
+                          <Typography
+                            fontWeight="bold"
+                            sx={{ fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' } }}
+                          >
+                            You Pay{' '}
+                            <Typography variant="caption">{`(After Discount + Delivery fee + Add Ons)`}</Typography>
+                          </Typography>
+                        </TableCell>
+                        <TableCell
+                          align="right"
+                          sx={{ fontSize: { xs: '0.85rem', sm: '1rem' }, fontWeight: 'bold' }}
+                        >
+                          ₹{finalPrice.toFixed(2)}
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </AccordionDetails>
+            </Accordion>
           </Box>
 
           <Box display="flex" flexDirection={'row'} justifyContent="space-between" gap={1}>
@@ -544,7 +749,7 @@ const OrderForm = () => {
               fullWidth
               sx={{ bgcolor: 'red', color: 'white' }}
               onClick={handlePlaceOrder}
-              size={isSmallScreen ? 'small' : 'medium'}
+              size={isSmallScreen ? 'small' : 'large'}
             >
               Place Order
             </Button>
@@ -553,7 +758,7 @@ const OrderForm = () => {
               fullWidth
               color="error"
               onClick={handleCancelOrder}
-              size={isSmallScreen ? 'small' : 'medium'}
+              size={isSmallScreen ? 'small' : 'large'}
             >
               Cancel
             </Button>

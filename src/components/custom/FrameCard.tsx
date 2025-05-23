@@ -12,15 +12,16 @@ import {
 } from '@mui/material'
 import { Palette } from '../../theme'
 import PreviewIcon from '@mui/icons-material/Preview'
+import { DimensionPrice } from '../../data/FrameData'
+import { getFramePrice } from '../../utils/pricing'
 
 interface FrameDetails {
   type: string
   material: string
-  dimensions: string[]
+  dimensionPrices: DimensionPrice[]
   weight: number
   description: string
   image: string
-  price: number
 }
 
 interface FrameCardProps {
@@ -45,6 +46,12 @@ const FrameCard: React.FC<FrameCardProps> = ({
     onDimensionChange(newDimension)
   }
 
+  const getSelectedPrice = () => {
+    return getFramePrice(frameDetails.type, selectedDimension)
+  }
+
+  const sellingPrice: number = getSelectedPrice();
+  
   return (
     <Card
       sx={{
@@ -175,9 +182,9 @@ const FrameCard: React.FC<FrameCardProps> = ({
                 sx={{ height: 20, fontSize: 12 }}
                 variant="standard"
               >
-                {frameDetails.dimensions.map(dimension => (
-                  <MenuItem key={dimension} value={dimension} sx={{ fontSize: 12 }}>
-                    {dimension}
+                {frameDetails.dimensionPrices.map((dimension: DimensionPrice) => (
+                  <MenuItem key={dimension.size} value={dimension.size} sx={{ fontSize: 12 }}>
+                    {dimension.size}
                   </MenuItem>
                 ))}
               </Select>
@@ -242,7 +249,7 @@ const FrameCard: React.FC<FrameCardProps> = ({
               width: { xs: '100%', sm: 'auto' },
             }}
           >
-            ₹ {frameDetails.price}.00
+            ₹ {sellingPrice}
           </Box>
         </Box>
       </Box>

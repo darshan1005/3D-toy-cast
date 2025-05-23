@@ -18,7 +18,7 @@ export const ToyData: ToyDataProps[] = [
     name: 'Ferrari F40',
     description:
       'The legendary Italian supercar that dominated the 80s with its twin-turbo V8 engine and iconic design.',
-    price: 129.99,
+    price: 100,
     type: 'Car',
     scale: '1:18',
   },
@@ -28,7 +28,7 @@ export const ToyData: ToyDataProps[] = [
     name: 'Porsche 911',
     description:
       'The timeless German sports car that combines daily usability with track-ready performance.',
-    price: 119.99,
+    price: 150,
     type: 'Car',
     scale: '1:24',
   },
@@ -38,7 +38,7 @@ export const ToyData: ToyDataProps[] = [
     name: 'Lamborghini Countach',
     description:
       'The wedge-shaped Italian supercar that defined the 80s with its aggressive styling and powerful V12.',
-    price: 139.99,
+    price: 200,
     type: 'Car',
     scale: '1:18',
   },
@@ -48,7 +48,7 @@ export const ToyData: ToyDataProps[] = [
     name: 'Ford Mustang',
     description:
       "America's iconic muscle car that brings raw power and classic styling to the streets.",
-    price: 89.99,
+    price: 500,
     type: 'Car',
     scale: '1:32',
   },

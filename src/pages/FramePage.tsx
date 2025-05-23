@@ -4,26 +4,42 @@ import { frameData, FrameDetailsProps } from '../data/FrameData'
 import ConfirmComponent from '@components/custom/ConfirmComponent'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { getFramePrice } from '../utils/pricing'
+
+interface SelectedFrame {
+  id: number
+  type: string
+  price: number
+}
 
 const FramePage = () => {
   const navigate = useNavigate()
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
-  const [selectedFrame, setSelectedFrame] = useState<FrameDetailsProps | null>(null)
-  const [selectedDimensions, setSelectedDimensions] = useState<{ [key: number]: string }>({})
+  const [selectedFrame, setSelectedFrame] = useState<SelectedFrame | null>(null)
+  const [selectedDimensions, setSelectedDimensions] = useState<{ [key: string]: string }>({})
 
   // Load selected frame from sessionStorage on component mount
   useEffect(() => {
     const savedFrame = sessionStorage.getItem('selectedFrame')
     if (savedFrame && savedFrame !== 'null') {
       const parsedFrame = JSON.parse(savedFrame)
-      setSelectedFrame(parsedFrame)
+      const framePrice = getFramePrice(parsedFrame.type, parsedFrame.selectedDimension)
+      setSelectedFrame({
+        id: parsedFrame.id,
+        type: parsedFrame.type,
+        price: framePrice,
+      })
       // Initialize selected dimension for the frame
-      if (parsedFrame && !selectedDimensions[parsedFrame.id]) {
-        setSelectedDimensions(prev => ({
-          ...prev,
-          [parsedFrame.id]: parsedFrame.dimensions[0],
-        }))
+      if (parsedFrame && !selectedDimensions[parsedFrame.type]) {
+        const frameDetails = frameData.find(f => f.type === parsedFrame.type)
+        const defaultDimension = frameDetails?.dimensionPrices[0]?.size
+        if (defaultDimension) {
+          setSelectedDimensions(prev => ({
+            ...prev,
+            [parsedFrame.type]: defaultDimension,
+          }))
+        }
       }
     }
   }, [])
@@ -34,13 +50,22 @@ const FramePage = () => {
       const savedFrame = sessionStorage.getItem('selectedFrame')
       if (savedFrame && savedFrame !== 'null') {
         const parsedFrame = JSON.parse(savedFrame)
-        setSelectedFrame(parsedFrame)
+        const framePrice = getFramePrice(parsedFrame.type, parsedFrame.selectedDimension)
+        setSelectedFrame({
+          id: parsedFrame.id,
+          type: parsedFrame.type,
+          price: framePrice,
+        })
         // Initialize selected dimension for the frame
-        if (parsedFrame && !selectedDimensions[parsedFrame.id]) {
-          setSelectedDimensions(prev => ({
-            ...prev,
-            [parsedFrame.id]: parsedFrame.dimensions[0],
-          }))
+        if (parsedFrame && !selectedDimensions[parsedFrame.type]) {
+          const frameDetails = frameData.find(f => f.type === parsedFrame.type)
+          const defaultDimension = frameDetails?.dimensionPrices[0]?.size
+          if (defaultDimension) {
+            setSelectedDimensions(prev => ({
+              ...prev,
+              [parsedFrame.type]: defaultDimension,
+            }))
+          }
         }
       } else {
         setSelectedFrame(null)
@@ -53,38 +78,53 @@ const FramePage = () => {
     }
   }, [])
 
-  const handleDimensionChange = (frameId: number, dimension: string) => {
+  const handleDimensionChange = (frameType: string, dimension: string) => {
     setSelectedDimensions(prev => ({
       ...prev,
-      [frameId]: dimension,
+      [frameType]: dimension,
     }))
 
     // Update session storage if this frame is selected
-    if (selectedFrame?.id === frameId) {
+    if (selectedFrame?.type === frameType) {
+      const framePrice = getFramePrice(frameType, dimension)
       const updatedFrame = {
         ...selectedFrame,
         selectedDimension: dimension,
+        price: framePrice,
       }
       sessionStorage.setItem('selectedFrame', JSON.stringify(updatedFrame))
-      setSelectedFrame(updatedFrame)
+      setSelectedFrame({
+        id: selectedFrame.id,
+        type: frameType,
+        price: framePrice,
+      })
     }
   }
 
   const handleFrameSelect = (frame: FrameDetailsProps) => {
     setSelectedFrame(prevFrame => {
       // If the same frame is clicked again, unselect it
-      if (prevFrame?.id === frame.id) {
+      if (prevFrame?.type === frame.type) {
         sessionStorage.removeItem('selectedFrame')
         return null
       }
 
       // Select the new frame with the selected dimension
+      const defaultDimension = frame.dimensionPrices[0]?.size
+      const selectedDimension = selectedDimensions[frame.type] || defaultDimension
+      const framePrice = getFramePrice(frame.type, selectedDimension)
+
       const frameWithDimension = {
         ...frame,
-        selectedDimension: selectedDimensions[frame.id] || '20 X 30 cm',
+        selectedDimension,
+        price: framePrice,
       }
       sessionStorage.setItem('selectedFrame', JSON.stringify(frameWithDimension))
-      return frameWithDimension
+      return {
+        id: frame.id,
+        type: frame.type,
+        price: framePrice,
+      }
     })
   }
 
@@ -122,12 +162,12 @@ const FramePage = () => {
       >
         {frameData.map(frame => (
           <FrameCard
-            key={frame.id}
+            key={frame.type}
             frameDetails={frame}
             onSelect={() => handleFrameSelect(frame)}
-            isSelected={selectedFrame?.id === frame.id}
-            selectedDimension={selectedDimensions[frame.id] || frame.dimensions[0]}
-            onDimensionChange={(dimension: string) => handleDimensionChange(frame.id, dimension)}
+            isSelected={selectedFrame?.type === frame.type}
+            selectedDimension={selectedDimensions[frame.type] || frame.dimensionPrices[0]?.size}
+            onDimensionChange={(dimension: string) => handleDimensionChange(frame.type, dimension)}
           />
         ))}
       </Box>
