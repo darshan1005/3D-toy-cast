@@ -16,6 +16,7 @@ import ToyCard from '@components/custom/ToyCard'
 import { ToyData, ToyDataProps } from '../data/ToyData'
 import ConfirmComponent from '@components/custom/ConfirmComponent'
 import { useNavigate } from 'react-router-dom'
+import { calculateSellingPrice } from '@utils/pricing'
 
 const ToysPage = () => {
   const navigate = useNavigate()
@@ -138,6 +139,8 @@ const ToysPage = () => {
 
   const handleToySelect = (toy: ToyDataProps) => {
     const availabilityType = sessionStorage.getItem('availabilityType')
+    const toyCardPrice = calculateSellingPrice(toy.price)
+    const toyWithCardPrice = { ...toy, price: toyCardPrice }
 
     setSelectedToys(prevSelected => {
       let newSelected: ToyDataProps[]
@@ -147,12 +150,12 @@ const ToysPage = () => {
         newSelected = prevSelected.filter(t => t.id !== toy.id)
       } else {
         if (availabilityType === 'toy') {
-          newSelected = [...prevSelected, toy]
+          newSelected = [...prevSelected, toyWithCardPrice]
         } else {
           if (prevSelected.length < 2) {
-            newSelected = [...prevSelected, toy]
+            newSelected = [...prevSelected, toyWithCardPrice]
           } else {
-            newSelected = [prevSelected[1], toy]
+            newSelected = [prevSelected[1], toyWithCardPrice]
           }
         }
       }
