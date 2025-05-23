@@ -163,20 +163,20 @@ const OrderForm = () => {
         return !value.trim()
           ? 'Name is required'
           : !/^[a-zA-Z\s]+$/.test(value)
-          ? 'Only alphabets are allowed'
-          : ''
+            ? 'Only alphabets are allowed'
+            : ''
       case 'phone':
         return !value.trim()
           ? 'Phone number is required'
           : !/^\d{10}$/.test(value)
-          ? 'Phone must be a 10-digit number'
-          : ''
+            ? 'Phone must be a 10-digit number'
+            : ''
       case 'email':
         return !value.trim()
           ? 'Email is required'
           : !value.includes('@gmail.com')
-          ? 'Email must be a Gmail address'
-          : ''
+            ? 'Email must be a Gmail address'
+            : ''
       case 'state':
         return !value.trim() ? 'State is required' : ''
       case 'city':
@@ -185,8 +185,8 @@ const OrderForm = () => {
         return !value.trim()
           ? 'Pin code is required'
           : !/^\d{6}$/.test(value)
-          ? 'Pin code must be 6 digits'
-          : ''
+            ? 'Pin code must be 6 digits'
+            : ''
       case 'address':
         return !value.trim() ? 'Address is required' : ''
       default:
@@ -222,9 +222,17 @@ const OrderForm = () => {
   const keyChainSelected = isKeyChainSelected ? 'Yes' : 'No'
   const raceMapSelected = isRaceTrackSelected && !isToy ? 'Yes' : 'No'
   const backgroundSelected = isBGSelected && !isToy ? 'Yes' : 'No'
-  const selectedToyStr =
-    selectedToys.map(toy => `${toy.name} (${toy.scale})`).join(' & ') || 'No Toy Selected'
-  const selectedFrameStr = selectedFrame || 'No Frame Selected'
+  const allSelectedToys =
+    selectedToys
+      .map(toy => `${toy.name} (${toy.scale}) - ₹${toy.price.toFixed(2)}`)
+      .join('\n')
+  const selectedFrameName = selectedFrame || 'No Frame Selected'
+  const frameTotalCost =
+    selectedFrame && selectedFrame !== 'No Frame Selected'
+      ? (JSON.parse(sessionStorage.getItem('selectedFrame') || '{}') as Frame)?.price || 0
+      : 0
+
+  const toyTotalCosts = selectedToys.reduce((total, toy) => total + toy.price, 0)
 
   const handlePlaceOrder = () => {
     if (!validateAllFields()) {
@@ -245,12 +253,47 @@ const OrderForm = () => {
       address: formData.address,
       state: formData.state,
       pincode: formData.pincode,
-      toy: selectedToyStr,
-      frame: selectedFrameStr,
+
+      // Toy details
+      toysDetails: allSelectedToys,
+      toyCosts: toyTotalCosts.toFixed(2),
+
+      // Frame details
+      frame: selectedFrameName,
+      frameDimension: selectedFrameDimension,
+      frameCost: frameTotalCost.toFixed(2),
+
+      // Subtotal (Toys + Frames)
+      subtotal: finalCost.toFixed(2),
+
+      // Discount information
+      discountPercentage: is3D ? '32%' : isToy ? '12%' : '22%',
+      discountAmount: discountAmount.toFixed(2),
+      afterDiscountPrice: discountPrice.toFixed(2),
+
+      // Delivery information
+      deliveryFee: isdeliveryFee ? 'Free' : '₹59',
+      deliveryFeeAmount: isdeliveryFee ? '₹0.00' : '₹59.00',
+
+      // Add-ons details
       keyChain: keyChainSelected,
+      keyChainCost: isKeyChainSelected ? '49.00' : '0.00',
+
       raceMap: raceMapSelected,
+      raceMapCost: isRaceTrackSelected && !isToy ? '149.00' : '0.00',
+
       withBackground: backgroundSelected,
-      finalCost: finalCost,
+      backgroundCost: isBGSelected && !isToy ? '29.00' : '0.00',
+
+      // Add-ons total
+      addOnsTotalCost: (
+        (isKeyChainSelected ? 49 : 0) +
+        (isRaceTrackSelected && !isToy ? 149 : 0) +
+        (isBGSelected && !isToy ? 29 : 0)
+      ).toFixed(2),
+
+      // Final totals
+      finalCost: finalPrice.toFixed(2),
       orderDate: new Date(),
     }
 
@@ -597,7 +640,7 @@ const OrderForm = () => {
                             fontWeight="bold"
                             sx={{ fontSize: { xs: '0.85rem', sm: '1rem', md: '1.05rem' } }}
                           >
-                            Discount On{' '}
+                            Discount On
                             <Typography variant="caption">{`(Toys & Frames)`}</Typography>
                           </Typography>
                         </TableCell>
@@ -637,7 +680,7 @@ const OrderForm = () => {
                           align="right"
                           sx={{ fontSize: { xs: '0.85rem', sm: '1rem' }, fontWeight: 'bold' }}
                         >
-                          ₹{discountPrice.toFixed(2)}{' '}
+                          ₹{discountPrice.toFixed(2)}
                           <Typography variant="subtitle1" color="#3337">
                             <s>₹{finalCost.toFixed(2)}</s>
                           </Typography>
@@ -650,7 +693,7 @@ const OrderForm = () => {
                             variant="subtitle2"
                             sx={{ fontSize: { xs: '0.8rem', sm: '1rem' } }}
                           >
-                            Delivery Fee{' '}
+                            Delivery Fee
                             <Typography variant="caption">{`(Free on orders above ₹1299)`}</Typography>
                           </Typography>
                         </TableCell>
@@ -684,6 +727,7 @@ const OrderForm = () => {
                           </TableCell>
                         </TableRow>
                       )}
+
                       {!isToy && isRaceTrackSelected && (
                         <TableRow>
                           <TableCell sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}>
@@ -694,6 +738,7 @@ const OrderForm = () => {
                           </TableCell>
                         </TableRow>
                       )}
+
                       {!isToy && isBGSelected && (
                         <TableRow>
                           <TableCell sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}>
@@ -704,28 +749,30 @@ const OrderForm = () => {
                           </TableCell>
                         </TableRow>
                       )}
-                      <TableCell sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}>
-                        <Typography
-                          fontWeight="bold"
-                          sx={{ fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' } }}
-                        >
-                          Total <Typography variant="caption">{`(Add On's)`}</Typography>
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="right" sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}>
-                        ₹
-                        {(isKeyChainSelected ? 49 : 0) +
-                          (isRaceTrackSelected ? 149 : 0) +
-                          (isBGSelected ? 29 : 0)}
-                      </TableCell>
 
+                      <TableRow>
+                        <TableCell sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}>
+                          <Typography
+                            fontWeight="bold"
+                            sx={{ fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' } }}
+                          >
+                            Total <Typography variant="caption">{`(Add On's)`}</Typography>
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="right" sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}>
+                          ₹
+                          {(isKeyChainSelected ? 49 : 0) +
+                            (isRaceTrackSelected && !isToy ? 149 : 0) +
+                            (isBGSelected && !isToy ? 29 : 0)}
+                        </TableCell>
+                      </TableRow>
                       <TableRow sx={{ '& td': { borderBottom: 'none' } }}>
                         <TableCell sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}>
                           <Typography
                             fontWeight="bold"
                             sx={{ fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' } }}
                           >
-                            You Pay{' '}
+                            You Pay
                             <Typography variant="caption">{`(After Discount + Delivery fee + Add Ons)`}</Typography>
                           </Typography>
                         </TableCell>
