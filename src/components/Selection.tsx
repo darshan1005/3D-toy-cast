@@ -72,9 +72,9 @@ const Selection = () => {
       const toyData = sessionStorage.getItem('selectedToys')
       if (toyData) {
         try {
-          const parsed = JSON.parse(toyData)
-          if (Array.isArray(parsed) && parsed.length > 2) {
-            const trimmed = parsed.slice(0, 2)
+          const parsedToyData = JSON.parse(toyData)
+          if (Array.isArray(parsedToyData) && parsedToyData.length > 2) {
+            const trimmed = parsedToyData.slice(0, 2)
             sessionStorage.setItem('selectedToys', JSON.stringify(trimmed))
           }
         } catch {

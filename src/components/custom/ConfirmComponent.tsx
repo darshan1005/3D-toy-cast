@@ -32,7 +32,7 @@ const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
   selectedFrame,
 }) => {
   const [cartOpen, setCartOpen] = useState(false)
-  const [storgaCount, setStorageCount] = useState<number>(0)
+  const [storageCount, setStorageCount] = useState<number>(0)
   const navigate = useNavigate()
   const availabilityType = sessionStorage.getItem('availabilityType')
 
@@ -134,7 +134,7 @@ const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
           }}
           onClick={() => setCartOpen(true)}
         >
-          <Badge color="error" overlap="circular" variant="dot" invisible={storgaCount === 0}>
+          <Badge color="error" overlap="circular" variant="dot" invisible={storageCount === 0}>
             <ShoppingCartIcon />
           </Badge>
         </IconButton>

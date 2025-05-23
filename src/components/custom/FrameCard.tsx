@@ -46,11 +46,11 @@ const FrameCard: React.FC<FrameCardProps> = ({
     onDimensionChange(newDimension)
   }
 
-  const getSelectedPrice = () => {
+  const getSelectedFramePrice = () => {
     return getFramePrice(frameDetails.type, selectedDimension)
   }
 
-  const sellingPrice: number = getSelectedPrice();
+  const frameSellingPrice: number = getSelectedFramePrice();
   
   return (
     <Card
@@ -249,7 +249,7 @@ const FrameCard: React.FC<FrameCardProps> = ({
               width: { xs: '100%', sm: 'auto' },
             }}
           >
-            ₹ {sellingPrice}
+            ₹ {frameSellingPrice}
           </Box>
         </Box>
       </Box>

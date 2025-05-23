@@ -51,8 +51,8 @@ export function calculateProfitMargin(
   return ((discountedPrice - costPrice) / discountedPrice) * 100
 }
 
-// Generate product costs from FrameData
-export const FRAME_COSTS = frameData.reduce((acc, frame) => {
+// Get Frame costs from FrameData
+export const GET_FRAME_COSTS_from_DATA = frameData.reduce((acc, frame) => {
   acc[frame.type] = frame.dimensionPrices.reduce((dimAcc, dim) => {
     dimAcc[dim.size] = Math.round(dim.price)
     return dimAcc
@@ -61,7 +61,7 @@ export const FRAME_COSTS = frameData.reduce((acc, frame) => {
 }, {} as Record<string, Record<string, number>>)
 
 // Calculate selling prices for frames with dimensions
-export const FRAME_PRICES = Object.entries(FRAME_COSTS).reduce((acc, [frameType, dimensions]) => {
+export const CALCULATE_FRAME_PRICES = Object.entries(GET_FRAME_COSTS_from_DATA).reduce((acc, [frameType, dimensions]) => {
   acc[frameType] = Object.entries(dimensions).reduce((dimAcc, [size, cost]) => {
     dimAcc[size] = calculateSellingPrice(cost)
     return dimAcc
@@ -71,7 +71,7 @@ export const FRAME_PRICES = Object.entries(FRAME_COSTS).reduce((acc, [frameType,
 
 // Helper function to get frame price by type and dimension
 export function getFramePrice(frameType: string, dimension: string): number {
-  return FRAME_PRICES[frameType]?.[dimension] || 0
+  return CALCULATE_FRAME_PRICES[frameType]?.[dimension] || 0
 }
 
 // Helper function to get frame dimensions by type

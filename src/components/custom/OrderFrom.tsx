@@ -44,7 +44,7 @@ const OrderForm = () => {
   const [selectedToys, setSelectedToys] = useState<Toy[]>([])
   const [selectedFrame, setSelectedFrame] = useState<string>('')
   const [selectedFrameDimension, setSelectedFrameDimension] = useState<string>('')
-  const [finalCost, setFinalCost] = useState<number>(0)
+  const [actualCostBeforeDiscount, setActualCostBeforeDiscount] = useState<number>(0)
   const [openModal, setModalOpen] = useState<boolean>(false)
   const [isOrderCancelled, setIsOrderCancelled] = useState<boolean>(false)
   const [orderPlaced, setOrderPlaced] = useState<boolean>(false)
@@ -72,17 +72,17 @@ const OrderForm = () => {
   const [isRaceTrackSelected, setIsRaceTrackSelected] = useState(true)
   const [isBGSelected, setIsBGSelected] = useState(true)
 
-  const [discountPrice, setDiscountPrice] = useState(0)
+  const [actualPriceAfterDiscount, setActualPriceAfterDiscount] = useState(0)
   const [discountAmount, setDiscountAmount] = useState(0)
-  const [finalPrice, setFinalPrice] = useState(0)
+  const [finalCost, setFinalCost] = useState(0)
   const [expanded, setExpanded] = useState(true)
 
   const availabilityType = sessionStorage.getItem('availabilityType')
   const isToy = availabilityType === 'toy'
   const is3D = availabilityType === '3d'
 
-  const discount = is3D ? 0.32 : isToy ? 0.12 : 0.22
-  const isdeliveryFee = discountPrice > 1299
+  const discountPercentage = is3D ? 0.32 : isToy ? 0.12 : 0.22
+  const isdeliveryFee = actualPriceAfterDiscount > 1299
   const deliveryFeeText = isdeliveryFee ? 'Free' : '₹59'
 
   useEffect(() => {
@@ -119,24 +119,24 @@ const OrderForm = () => {
       frameCost = parsedFrame?.price || 0
     }
 
-    const baseCost = toysCost + frameCost // This is the part that gets the discount
-    const discountPrice = baseCost * (1 - discount)
+    const baseCost = toysCost + frameCost // This is the Basepart that gets applied for discountPercentage
+    const actualPriceAfterDiscount = baseCost * (1 - discountPercentage)
 
     const keyChainCost = isKeyChainSelected ? 49 : 0
     const raceTrackCost = isRaceTrackSelected ? 149 : 0
     const background = isBGSelected ? 29 : 0
     const addOnsCost = keyChainCost + raceTrackCost + background
 
-    const isDeliveryFree = discountPrice > 1299
+    const isDeliveryFree = actualPriceAfterDiscount > 1299
     const deliveryCost = isDeliveryFree ? 0 : 59
 
-    const totalFinalPrice = discountPrice + addOnsCost + deliveryCost
+    const totalFinalCost = actualPriceAfterDiscount + addOnsCost + deliveryCost
 
     // Set costs in state
-    setFinalCost(baseCost)
-    setDiscountPrice(discountPrice)
-    setDiscountAmount(baseCost - discountPrice)
-    setFinalPrice(totalFinalPrice)
+    setActualCostBeforeDiscount(baseCost)
+    setActualPriceAfterDiscount(actualPriceAfterDiscount)
+    setDiscountAmount(baseCost - actualPriceAfterDiscount)
+    setFinalCost(totalFinalCost)
   }, [isKeyChainSelected, isRaceTrackSelected, isBGSelected])
 
   const handleCancelOrder = () => {
@@ -150,7 +150,7 @@ const OrderForm = () => {
     sessionStorage.removeItem('selectedFrame')
     setSelectedToys([])
     setSelectedFrame('')
-    setFinalCost(0)
+    setActualCostBeforeDiscount(0)
   }
 
   const handleCloseModal = () => {
@@ -274,12 +274,12 @@ const OrderForm = () => {
       frameCost: frameTotalCost.toFixed(2),
 
       // Subtotal (Toys + Frames)
-      subtotal: finalCost.toFixed(2),
+      subtotal: actualCostBeforeDiscount.toFixed(2),
 
       // Discount information
       discountPercentage: is3D ? '32%' : isToy ? '12%' : '22%',
       discountAmount: discountAmount.toFixed(2),
-      afterDiscountPrice: discountPrice.toFixed(2),
+      afterDiscountPrice: actualPriceAfterDiscount.toFixed(2),
 
       // Delivery information
       deliveryFee: isdeliveryFee ? 'Free' : '₹59',
@@ -303,7 +303,7 @@ const OrderForm = () => {
       ).toFixed(2),
 
       // Final totals
-      finalCost: finalPrice.toFixed(2),
+      finalCost: finalCost.toFixed(2),
       orderDate: new Date(),
     }
 
@@ -317,7 +317,7 @@ const OrderForm = () => {
           sessionStorage.removeItem('selectedFrame')
           setSelectedToys([])
           setSelectedFrame('')
-          setFinalCost(0)
+          setActualCostBeforeDiscount(0)
         }
       })
       .catch(error => {
@@ -557,7 +557,7 @@ const OrderForm = () => {
                   fontWeight="bold"
                   sx={{ fontSize: { xs: '0.95rem', sm: '1.05rem', md: '1.4rem' } }}
                 >
-                  Final Cost: ₹{finalPrice.toFixed(2)}
+                  Final Cost: ₹{finalCost.toFixed(2)}
                 </Typography>
               </AccordionSummary>
 
@@ -640,7 +640,7 @@ const OrderForm = () => {
                           align="right"
                           sx={{ fontSize: { xs: '0.85rem', sm: '1rem' }, fontWeight: 'bold' }}
                         >
-                          ₹{finalCost.toFixed(2)}
+                          ₹{actualCostBeforeDiscount.toFixed(2)}
                         </TableCell>
                       </TableRow>
 
@@ -690,9 +690,9 @@ const OrderForm = () => {
                           align="right"
                           sx={{ fontSize: { xs: '0.85rem', sm: '1rem' }, fontWeight: 'bold' }}
                         >
-                          ₹{discountPrice.toFixed(2)}
+                          ₹{actualPriceAfterDiscount.toFixed(2)}
                           <Typography variant="subtitle1" color="#3337">
-                            <s>₹{finalCost.toFixed(2)}</s>
+                            <s >₹{actualCostBeforeDiscount.toFixed(2)}</s>
                           </Typography>
                         </TableCell>
                       </TableRow>
@@ -790,7 +790,7 @@ const OrderForm = () => {
                           align="right"
                           sx={{ fontSize: { xs: '0.85rem', sm: '1rem' }, fontWeight: 'bold' }}
                         >
-                          ₹{finalPrice.toFixed(2)}
+                          ₹{finalCost.toFixed(2)}
                         </TableCell>
                       </TableRow>
                     </TableBody>
