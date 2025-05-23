@@ -246,13 +246,23 @@ const OrderForm = () => {
     const templateParams = {
       orderId: generateUniqueId(formData.name, formData.phone),
       name: formData.name,
-      phoneNumber: formData.phone,
-      to: 'buzzmakers071@gmail.com', // temp mail for testing
-      from: formData.email,
+      phone: formData.phone,
       city: formData.city,
       address: formData.address,
       state: formData.state,
       pincode: formData.pincode,
+
+      //customer contact
+      serviceEmail: 'buzzmakers071@gmail.com', // temp mail for testing
+      serviceContact: '+91 89XX XXX XXX', // temp number for testing
+
+      // order placing
+      orderFrom: formData.email,
+      orderTo: 'buzzmakers071@gmail.com',
+
+      // Auto reply to
+      autoReplyTo: formData.email, // customer
+      autoReplyFrom: 'buzzmakers071@gmail.com', // Business
 
       // Toy details
       toysDetails: allSelectedToys,
