@@ -1,6 +1,7 @@
 import { Box, Typography, useMediaQuery, useTheme } from '@mui/material'
 import f1 from '../assets/f-1.svg'
 import superCar from '../assets/supercar.png'
+import CountUp from 'react-countup';
 
 const styles = {
   textGradient: {
@@ -150,21 +151,30 @@ const Bento = () => {
                 backgroundColor: 'black',
               }}
             >
-              {/* <Typography
-                variant={isSmallScreen ? 'h3' : 'h2'}
+              <Typography
+                variant={isSmallScreen ? 'h4' : 'h2'}
                 sx={{
                   fontWeight: 700,
                   ...styles.textGradient,
                 }}
               >
-                700+
-              </Typography> */}
+                <CountUp end={700} duration={10} suffix="+" useEasing enableScrollSpy scrollSpyDelay={300} />
+              </Typography>
               <Typography
-                variant={isSmallScreen ? 'h5' : 'h4'}
+                variant={isSmallScreen ? 'subtitle1' : 'h6'}
+                sx={{
+                  fontWeight: 700,
+                  ...styles.textGradient,
+                }}>
+                Order Completed
+              </Typography>
+
+              <Typography
+                variant={isSmallScreen ? 'h6' : 'h4'}
                 sx={{
                   ...styles.textGradient,
                   fontWeight: 600,
-                  width: '70%',
+                  width: { xs: '100%', md: '70%' },
                   textAlign: 'center',
                 }}
               >
@@ -231,7 +241,7 @@ const Bento = () => {
               <Typography
                 sx={{
                   color: 'rgb(255, 255, 255)',
-                  fontSize: isSmallScreen ? '1rem' : '1.5rem',
+                  fontSize: isSmallScreen ? '0.85rem' : '1.5rem',
                   fontWeight: 400,
                 }}
               >

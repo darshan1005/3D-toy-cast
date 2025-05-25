@@ -23,6 +23,7 @@ import CustomPopup from './CustomPopup'
 import emailjs from '@emailjs/browser'
 import { generateUniqueId } from '../../utils/uniqueId'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import CountUp from 'react-countup'
 
 interface Toy {
   id: number
@@ -557,7 +558,7 @@ const OrderForm = () => {
                   fontWeight="bold"
                   sx={{ fontSize: { xs: '0.95rem', sm: '1.05rem', md: '1.4rem' } }}
                 >
-                  Final Cost: ₹{finalPrice.toFixed(2)}
+                  Final Cost: <CountUp end={finalPrice} duration={1} decimals={2} prefix="₹" useEasing useIndianSeparators />
                 </Typography>
               </AccordionSummary>
 
@@ -576,13 +577,13 @@ const OrderForm = () => {
                         <TableCell
                           sx={{ fontSize: { xs: '0.9rem', sm: '1.1rem' }, fontWeight: 'bold' }}
                         >
-                          Item's
+                          Item
                         </TableCell>
                         <TableCell
                           align="right"
                           sx={{ fontSize: { xs: '0.9rem', sm: '1.1rem' }, fontWeight: 'bold' }}
                         >
-                          Price's
+                          Price
                         </TableCell>
                       </TableRow>
                     </TableHead>
@@ -788,7 +789,7 @@ const OrderForm = () => {
                         </TableCell>
                         <TableCell
                           align="right"
-                          sx={{ fontSize: { xs: '0.85rem', sm: '1rem' }, fontWeight: 'bold' }}
+                          sx={{ fontSize: { xs: '1rem', sm: '1.5rem' }, fontWeight: 'bold' }}
                         >
                           ₹{finalPrice.toFixed(2)}
                         </TableCell>

@@ -41,6 +41,24 @@ const Selection = () => {
   }
 
   useEffect(() => {
+    const toySelected = isItemSelected('Toy')
+    const frameSelected = isItemSelected('Frame')
+    const stored = sessionStorage.getItem('availabilityType')
+
+    if (!stored) {
+      if (toySelected && frameSelected) {
+        handleAvailability('3d')
+      } else if (toySelected) {
+        handleAvailability('toy')
+      } else if (frameSelected) {
+        handleAvailability('frame')
+      } else {
+        handleAvailability('3d') // fallback default
+      }
+    }
+  }, [])
+
+  useEffect(() => {
     const availabilityType = sessionStorage.getItem('availabilityType') as
       | '3d'
       | 'toy'
