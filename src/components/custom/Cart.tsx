@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Box, Typography, IconButton, Paper, Drawer, Divider } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ToyCard from './ToyCard'
-import { FrameDetailsProps } from 'src/data/FrameData'
+import { FrameDetailsProps, DimensionPrice } from 'src/data/FrameData'
 import { ToyDataProps } from 'src/data/ToyData'
 import CloseIcon from '@mui/icons-material/Close'
 
@@ -133,7 +133,10 @@ const Cart: React.FC<CartProps> = ({ open, onClose }) => {
                 <strong>Weight:</strong> {selectedFrame.weight} kg
               </Typography>
               <Typography variant="body2">
-                <strong>Price:</strong> ₹{selectedFrame.price}
+                <strong>Price:</strong> ₹
+                {selectedFrame.dimensionPrices.find(
+                  (d: DimensionPrice) => d.size === selectedFrame.selectedDimension,
+                )?.price || 0}
               </Typography>
             </Box>
           </Paper>

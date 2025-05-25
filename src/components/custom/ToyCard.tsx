@@ -34,7 +34,7 @@ const ToyCard: React.FC<ToyCardProps> = ({
 }) => {
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
-  const sellingPrice = calculateSellingPrice(price)
+  const toySellingPrice = calculateSellingPrice(price)
 
   return (
     <Card
@@ -100,7 +100,7 @@ const ToyCard: React.FC<ToyCardProps> = ({
             borderRadius: 1,
           }}
         >
-          ₹ {sellingPrice} /-
+          ₹ {toySellingPrice} /-
         </Box>
         <Button
           variant="contained"

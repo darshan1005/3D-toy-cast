@@ -23,8 +23,8 @@ const ToysPage = () => {
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
 
-  const [selectedType, setSelectedType] = useState('')
-  const [selectedScale, setSelecyedScale] = useState('')
+  const [selectedToyType, setSelectedToyType] = useState('')
+  const [selectedToyScale, setSelectedToyScale] = useState('')
   const [selectedBrands, setSelectedBrands] = useState<string[]>([])
   const [filteredData, setFilteredData] = useState(ToyData)
   const [selectedToys, setSelectedToys] = useState<ToyDataProps[]>([])
@@ -61,12 +61,12 @@ const ToysPage = () => {
   }, [])
 
   const handleTypeChange = (type: string) => {
-    setSelectedType(type)
+    setSelectedToyType(type)
     setSelectedBrands([])
   }
 
   const handleScaleChange = (scale: string) => {
-    setSelecyedScale(scale)
+    setSelectedToyScale(scale)
     setSelectedBrands([])
   }
 
@@ -79,8 +79,8 @@ const ToysPage = () => {
   }
 
   const getBrandOptions = () => {
-    if (!selectedType) return []
-    return [...new Set(ToyData.filter(toy => toy.type === selectedType).map(toy => toy.name))]
+    if (!selectedToyType) return []
+    return [...new Set(ToyData.filter(toy => toy.type === selectedToyType).map(toy => toy.name))]
   }
 
   const getDisplayedBrands = () => {
@@ -90,11 +90,11 @@ const ToysPage = () => {
 
   const currentFilters = useMemo(
     () => ({
-      type: selectedType,
-      scale: selectedScale,
+      type: selectedToyType,
+      scale: selectedToyScale,
       brands: [...selectedBrands].sort(), // sort to ensure consistent comparison
     }),
-    [selectedType, selectedScale, selectedBrands],
+    [selectedToyType, selectedToyScale, selectedBrands],
   )
 
   const filtersChanged = useMemo(() => {
@@ -112,12 +112,12 @@ const ToysPage = () => {
   const handleApplyFilters = useCallback(() => {
     let filtered = ToyData
 
-    if (selectedType) {
-      filtered = filtered.filter(toy => toy.type === selectedType)
+    if (selectedToyType) {
+      filtered = filtered.filter(toy => toy.type === selectedToyType)
     }
 
-    if (selectedScale) {
-      filtered = filtered.filter(toy => toy.scale === selectedScale)
+    if (selectedToyScale) {
+      filtered = filtered.filter(toy => toy.scale === selectedToyScale)
     }
 
     if (selectedBrands.length > 0) {
@@ -128,19 +128,19 @@ const ToysPage = () => {
 
     // Update the applied filters
     setAppliedFilters(currentFilters)
-  }, [selectedType, selectedScale, selectedBrands, currentFilters])
+  }, [selectedToyType, selectedToyScale, selectedBrands, currentFilters])
 
   const handleResetFilters = () => {
     setFilteredData(ToyData)
-    setSelectedType('')
-    setSelecyedScale('')
+    setSelectedToyType('')
+    setSelectedToyScale('')
     setSelectedBrands([])
   }
 
   const handleToySelect = (toy: ToyDataProps) => {
     const availabilityType = sessionStorage.getItem('availabilityType')
     const toyCardPrice = calculateSellingPrice(toy.price)
-    const toyWithCardPrice = { ...toy, price: toyCardPrice }
+    const priceOnToyCard = { ...toy, price: toyCardPrice }
 
     setSelectedToys(prevSelected => {
       let newSelected: ToyDataProps[]
@@ -150,12 +150,12 @@ const ToysPage = () => {
         newSelected = prevSelected.filter(t => t.id !== toy.id)
       } else {
         if (availabilityType === 'toy') {
-          newSelected = [...prevSelected, toyWithCardPrice]
+          newSelected = [...prevSelected, priceOnToyCard]
         } else {
           if (prevSelected.length < 2) {
-            newSelected = [...prevSelected, toyWithCardPrice]
+            newSelected = [...prevSelected, priceOnToyCard]
           } else {
-            newSelected = [prevSelected[1], toyWithCardPrice]
+            newSelected = [prevSelected[1], priceOnToyCard]
           }
         }
       }
@@ -213,7 +213,7 @@ const ToysPage = () => {
             alignItems={isSmallScreen ? 'flex-start' : 'center'}
           >
             <Select
-              value={selectedType}
+              value={selectedToyType}
               onChange={e => handleTypeChange(e.target.value)}
               displayEmpty
               sx={{
@@ -231,7 +231,7 @@ const ToysPage = () => {
             </Select>
 
             <Select
-              value={selectedScale}
+              value={selectedToyScale}
               onChange={e => handleScaleChange(e.target.value)}
               displayEmpty
               sx={{
@@ -269,7 +269,7 @@ const ToysPage = () => {
                 width: isSmallScreen ? '100%' : 'auto',
                 height: isSmallScreen ? '55px' : 'auto',
               }}
-              disabled={!selectedType}
+              disabled={!selectedToyType}
             />
             <Box
               display={'flex'}
@@ -281,7 +281,7 @@ const ToysPage = () => {
               <Button
                 variant={filtersChanged ? 'contained' : 'outlined'}
                 onClick={handleApplyFilters}
-                disabled={!selectedScale && !selectedType && selectedBrands.length === 0}
+                disabled={!selectedToyScale && !selectedToyType && selectedBrands.length === 0}
                 sx={{
                   fontWeight: 600,
                   bgcolor: filtersChanged ? 'black' : '#eee',

@@ -1,6 +1,7 @@
 import { Box, Stack, Typography, useMediaQuery, useTheme } from '@mui/material'
 import StarIcon from '@mui/icons-material/Star'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
+import { testimonials } from '../data/testimonials'
 
 interface TestimonialProps {
   username: string
@@ -46,33 +47,6 @@ const Testimonial = ({ username, stars, testimonial }: TestimonialProps) => {
 const Testimonies = () => {
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
-
-  const testimonials = [
-    {
-      username: 'David Chen',
-      stars: 5,
-      testimonial:
-        'Their 3D modeling precision is outstanding. Every detail in our custom toy designs was perfectly executed, maintaining both aesthetic appeal and manufacturing feasibility.',
-    },
-    {
-      username: 'Sarah Williams',
-      stars: 5,
-      testimonial:
-        'Exceptional engineering standards. Their technical documentation and material selection process shows deep understanding of toy manufacturing requirements.',
-    },
-    {
-      username: 'Mike Rodriguez',
-      stars: 4,
-      testimonial:
-        'Reliable delivery schedules and excellent packaging solutions. Their inventory management system seamlessly integrated with our supply chain.',
-    },
-    {
-      username: 'Lisa Zhang',
-      stars: 5,
-      testimonial:
-        'Top-notch production quality control. Their attention to manufacturing tolerances and material consistency is impressive. Zero defects in our last batch.',
-    },
-  ]
 
   return (
     <Box sx={{ backgroundColor: 'red', p: 2 }}>
