@@ -1,0 +1,94 @@
+{
+  "toys": [
+    {
+      "id": 1,
+      "name": "Ferrari F40",
+      "price": 100,
+      "type": "Car",
+      "scale": "1:18",
+      "image": "/uploads/supercar.png",
+      "description": "The legendary Italian supercar that dominated the 80s with its twin-turbo V8 engine and iconic design."
+    },
+    {
+      "id": 2,
+      "name": "Porsche 911",
+      "price": 148,
+      "type": "Car",
+      "scale": "1:24",
+      "image": "/uploads/supercar.png",
+      "description": "The timeless German sports car that combines daily usability with track-ready performance."
+    },
+    {
+      "id": 3,
+      "name": "Lamborghini Countach",
+      "price": 199,
+      "type": "Car",
+      "scale": "1:18",
+      "image": "/uploads/supercar.png",
+      "description": "The wedge-shaped Italian supercar that defined the 80s with its aggressive styling and powerful V12."
+    },
+    {
+      "id": 4,
+      "name": "Ford Mustang",
+      "price": 500,
+      "type": "Car",
+      "scale": "1:32",
+      "image": "/uploads/supercar.png",
+      "description": "America's iconic muscle car that brings raw power and classic styling to the streets."
+    },
+    {
+      "id": 5,
+      "name": "Bugatti Veyron",
+      "price": 149,
+      "type": "Car",
+      "scale": "1:24",
+      "image": "/uploads/supercar.png",
+      "description": "The engineering marvel that redefined speed limits with its quad-turbo W16 engine."
+    },
+    {
+      "name": "McLaren F1",
+      "id": 6,
+      "price": 160,
+      "type": "Car",
+      "scale": "1:43",
+      "image": "/uploads/supercar.png",
+      "description": "The revolutionary British supercar that held the production car speed record for over a decade."
+    },
+    {
+      "id": 7,
+      "name": "Audi R8",
+      "price": 130,
+      "type": "Car",
+      "scale": "1:18",
+      "image": "/uploads/supercar.png",
+      "description": "The German supercar that combines quattro all-wheel drive with stunning performance."
+    },
+    {
+      "id": 17,
+      "name": "Ducati Panigale V4",
+      "description": "The Italian superbike that combines cutting-edge technology with breathtaking performance.",
+      "price": 100,
+      "type": "Bike",
+      "scale": "1:18",
+      "image": "/uploads/bike.svg"
+    },
+    {
+      "id": 18,
+      "name": "Kawasaki Ninja H2R",
+      "description": "The track-only hyperbike with a supercharged engine and unmatched speed.",
+      "price": 130,
+      "type": "Bike",
+      "scale": "1:18",
+      "image": "/uploads/bike.svg"
+    },
+    {
+      "id": 19,
+      "name": "Harley-Davidson Fat Boy",
+      "description": "The iconic cruiser that defines the spirit of freedom and adventure.",
+      "price": 90,
+      "type": "Bike",
+      "scale": "1:64",
+      "image": "/uploads/bike.svg"
+    }
+  ]
+}
