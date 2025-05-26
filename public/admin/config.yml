@@ -2,58 +2,23 @@ backend:
   name: git-gateway
   branch: main
 
-media_folder: "public/uploads"
-public_folder: "/uploads"
+media_folder: 'public/uploads'
+public_folder: '/uploads'
 
-collections: 
-  - name: "toysData"
-    label: "ToysData"
-    files: 
-      - label: "AllToysData"
-        name: "AlltoysData"
-        file: "src/content/ToyData.json"
-        format: "json"
+collections:
+  - name: 'framesData'
+    label: 'FramesData'
+    files:
+      - label: 'AllFramesData'
+        name: 'AllFramesData'
+        file: 'src/content/FrameData.json'
+        format: 'json'
         fields:
-          - label: "Toys"
-            name: "toys"
-            widget: "list"  
-            label_singular: "Toy"
-            fields: 
-              - label: 'ID'
-                name: 'id'
-                widget: 'number'
-              - label: 'Name'
-                name: 'name'
-                widget: 'string'
-              - label: 'Description'
-                name: 'description'
-                widget: 'text'
-              - label: 'Price'
-                name: 'price'
-                widget: 'number'
-              - label: 'Type'
-                name: 'type'
-                widget: 'string'
-              - label: 'scale'
-                name: 'scale'
-                widget: 'string'
-              - label: 'Image'
-                name: 'image'
-                widget: 'image'
-            
-  - name: "framesData"
-    label: "FramesData"
-    files: 
-      - label: "AllFramesData"
-        name: "AllFramesData"
-        file: "src/content/FrameData.json"
-        format: "json"
-        fields:
-          - label: "Frames"
-            name: "frames"
-            widget: "list"  
-            label_singular: "Frame"
-            fields: 
+          - label: 'Frames'
+            name: 'frames'
+            widget: 'list'
+            label_singular: 'Frame'
+            fields:
               - label: 'ID'
                 name: 'id'
                 widget: 'number'
@@ -83,19 +48,19 @@ collections:
                     name: 'price'
                     widget: 'number'
 
-  - name: "TestimonialsData"
-    label: "TestimonialsData"
-    files: 
-      - label: "AllTestimonialsData"
-        name: "AllTestimonialsData"
-        file: "src/content/TestimonialsData.json"
-        format: "json"
+  - name: 'TestimonialsData'
+    label: 'TestimonialsData'
+    files:
+      - label: 'AllTestimonialsData'
+        name: 'AllTestimonialsData'
+        file: 'src/content/TestimonialsData.json'
+        format: 'json'
         fields:
-          - label: "Testimonials"
-            name: "testimonials"
-            widget: "list"  
-            label_singular: "Testimonial"
-            fields: 
+          - label: 'Testimonials'
+            name: 'testimonials'
+            widget: 'list'
+            label_singular: 'Testimonial'
+            fields:
               - label: 'Username'
                 name: 'username'
                 widget: 'string'
@@ -105,6 +70,3 @@ collections:
               - label: 'Testimonial'
                 name: 'testimonial'
                 widget: 'text'
-              
-
-   
