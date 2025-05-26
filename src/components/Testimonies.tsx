@@ -1,16 +1,26 @@
-import { Box, Stack, Typography, useMediaQuery, useTheme } from '@mui/material'
+import {
+  Box,
+  Stack,
+  SxProps,
+  Theme,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material'
 import StarIcon from '@mui/icons-material/Star'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
 import testimonialsJson from '../content/TestimonialsData.json'
 import { Testimonial as TestimonialType } from '../types/types'
 
-
 const Testimonial = ({ username, stars, testimonial }: TestimonialType) => {
+  const theme = useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
+
   const renderStars = () => {
     const totalStars = 5
     return [...Array(totalStars)].map((_, index) => (
       <Box key={index} sx={{ color: 'gold' }}>
-        {index < stars ? <StarIcon /> : <StarBorderIcon />}
+        {index < stars ? <StarIcon fontSize="small" /> : <StarBorderIcon fontSize="small" />}
       </Box>
     ))
   }
@@ -19,20 +29,29 @@ const Testimonial = ({ username, stars, testimonial }: TestimonialType) => {
     <Box
       sx={{
         bgcolor: 'white',
-        p: 3,
+        p: isSmallScreen ? 2 : 3,
         borderRadius: 2,
         boxShadow: '2px 2px 6px rgba(0, 0, 0, 0.1)',
-        height: 300
+        height: '100%',
+        minHeight: 250,
       }}
     >
-      <Stack spacing={2}>
-        <Typography variant="h6" fontWeight="bold">
+      <Stack spacing={1.5}>
+        <Typography
+          variant="h6"
+          fontWeight="bold"
+          fontSize={{ xs: '1rem', sm: '1.25rem' }}
+        >
           {username}
         </Typography>
         <Stack direction="row" spacing={0.5}>
           {renderStars()}
         </Stack>
-        <Typography variant="body1" color="text.secondary">
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          fontSize={{ xs: '0.9rem', sm: '1rem' }}
+        >
           {testimonial}
         </Typography>
       </Stack>
@@ -45,81 +64,57 @@ const Testimonies = () => {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
   const testimonials: TestimonialType[] = testimonialsJson.testimonials
 
+  const containerStyles = isSmallScreen
+    ? {
+      display: 'flex',
+      overflowX: 'auto',
+      scrollSnapType: 'x mandatory',
+      gap: 2,
+      paddingBottom: 2,
+      '&::-webkit-scrollbar': { display: 'none' },
+      scrollbarWidth: 'none',
+    }
+    : {
+      display: 'flex',
+      justifyContent: 'center',
+      gap: 3,
+    }
+
+  const cardStyles = isSmallScreen
+    ? {
+      flex: '0 0 80%',
+      scrollSnapAlign: 'start',
+    }
+    : {
+      width: '300px',
+    }
+
   return (
     <Box sx={{ backgroundColor: 'red', p: 2 }}>
-      <Box sx={{ backgroundColor: 'white', padding: 2, borderRadius: 3 }}>
-        <Stack spacing={3} sx={{ p: 4 }}>
+      <Box sx={{ backgroundColor: 'white', p: 2, borderRadius: 3 }}>
+        <Stack spacing={3} sx={{ p: { xs: 2, sm: 4 } }}>
           <Typography
-            sx={{ fontSize: { xs: '1.75rem', sm: '2.125rem' } }}
             fontWeight="bold"
             textAlign="center"
-            mb={{ xs: 2, sm: 3 }}
+            sx={{ fontSize: { xs: '1.5rem', sm: '2rem' }, mb: { xs: 1, sm: 2 } }}
           >
             What Our Customers Say
           </Typography>
 
-          <Box
-            sx={{
-              position: 'relative',
-              overflow: 'hidden',
-              p: 2,
-              '&::before': {
-                content: '""',
-                position: 'absolute',
-                left: 0,
-                top: 0,
-                bottom: 0,
-                width: isSmallScreen ? 10 : 50,
-                background: 'linear-gradient(to right, white 0%, transparent 100%)',
-                zIndex: 2,
-              },
-              '&::after': {
-                content: '""',
-                position: 'absolute',
-                right: 0,
-                top: 0,
-                bottom: 0,
-                width: isSmallScreen ? 10 : 50,
-                background: 'linear-gradient(to left, white 0%, transparent 100%)',
-                zIndex: 2,
-              },
-            }}
-          >
-            <Box
-              sx={{
-                display: 'flex',
-                gap: 3,
-                '@keyframes scroll': {
-                  '0%': {
-                    transform: 'translateX(0)',
-                  },
-                  '100%': {
-                    transform: 'translateX(-50%)',
-                  },
-                },
-                animation: 'scroll 30s linear infinite',
-                '&:hover': {
-                  animationPlayState: 'paused',
-                },
-                width: 'fit-content',
-              }}
-            >
-              {[...testimonials, ...testimonials].map((item, index) => (
-                <Box
-                  key={index}
-                  sx={{
-                    width: { xs: '300px', sm: '400px', md: '350px' },
-                    flex: 'none',
-                  }}
-                >
-                  <Testimonial
-                    username={item.username}
-                    stars={item.stars}
-                    testimonial={item.testimonial}
-                  />
-                </Box>
-              ))}
-            </Box>
+          <Box component="ul" sx={{ ...(containerStyles as SxProps<Theme>), listStyle: 'none', margin: 0, padding: 0 }}>
+            {testimonials.map((item, index) => (
+              <Box
+                component="li"
+                key={index}
+                sx={{ ...cardStyles, display: 'flex' }}
+              >
+                <Testimonial
+                  username={item.username}
+                  stars={item.stars}
+                  testimonial={item.testimonial}
+                />
+              </Box>
+            ))}
           </Box>
         </Stack>
       </Box>

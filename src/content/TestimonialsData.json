@@ -9,6 +9,16 @@
       "username": "Sarah Williams",
       "stars": 4,
       "testimonial": "Exceptional engineering standards. Their technical documentation and material selection process shows deep understanding of toy manufacturing requirements.\n"
+    },
+    {
+      "username": "Goutam Williams",
+      "stars": 4,
+      "testimonial": "Exceptional engineering standards. Their technical documentation and material selection process shows deep understanding of toy manufacturing requirements.\n"
+    },
+    {
+      "username": "Emily Johnson",
+      "stars": 5,
+      "testimonial": "The attention to detail in their 3D models is impressive. They captured the essence of our toy designs perfectly, making them ready for production."
     }
   ]
 }
