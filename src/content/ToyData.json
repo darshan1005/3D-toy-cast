@@ -1,0 +1,11 @@
+{
+  "toys": {
+    "id": 1,
+    "name": "Ferrari F40",
+    "description": "The legendary Italian supercar that dominated the 80s with its twin-turbo V8 engine and iconic design.",
+    "price": 100,
+    "type": "Car",
+    "scale": "1:18",
+    "image": "/uploads/supercar.png"
+  }
+}
