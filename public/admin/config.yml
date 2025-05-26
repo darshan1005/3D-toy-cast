@@ -16,7 +16,7 @@ collections:
         fields:
           - label: "Toys"
             name: "toys"
-            widget: "object"  
+            widget: "list"  
             label_singular: "Toy"
             fields: 
               - label: 'ID'
@@ -51,7 +51,7 @@ collections:
         fields:
           - label: "Frames"
             name: "frames"
-            widget: "object"  
+            widget: "list"  
             label_singular: "Frame"
             fields: 
               - label: 'ID'
@@ -74,7 +74,7 @@ collections:
                 widget: 'image'
               - label: 'Dimension Price'
                 name: 'dimensionPrice'
-                widget: 'object'
+                widget: 'list'
                 fields:
                   - label: 'Size'
                     name: 'size'
@@ -93,7 +93,7 @@ collections:
         fields:
           - label: "Testimonials"
             name: "testimonials"
-            widget: "object"  
+            widget: "list"  
             label_singular: "Testimonial"
             fields: 
               - label: 'Username'
