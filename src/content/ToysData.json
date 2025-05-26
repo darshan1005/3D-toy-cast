@@ -5,7 +5,7 @@
       "name": "Ferrari F40",
       "price": 100,
       "type": "Car",
-      "scale": "1:18",
+      "scale": "1:24 (16-20 cm)",
       "image": "/uploads/supercar.png",
       "description": "The legendary Italian supercar that dominated the 80s with its twin-turbo V8 engine and iconic design."
     },
@@ -14,7 +14,7 @@
       "name": "Porsche 911",
       "price": 148,
       "type": "Car",
-      "scale": "1:24",
+      "scale": "1:24 (16-20 cm)",
       "image": "/uploads/supercar.png",
       "description": "The timeless German sports car that combines daily usability with track-ready performance."
     },
@@ -23,7 +23,7 @@
       "name": "Lamborghini Countach",
       "price": 199,
       "type": "Car",
-      "scale": "1:18",
+      "scale": "1:32 (10-15 cm)",
       "image": "/uploads/supercar.png",
       "description": "The wedge-shaped Italian supercar that defined the 80s with its aggressive styling and powerful V12."
     },
@@ -32,7 +32,7 @@
       "name": "Ford Mustang",
       "price": 500,
       "type": "Car",
-      "scale": "1:32",
+      "scale": "1:32 (10-15 cm)",
       "image": "/uploads/supercar.png",
       "description": "America's iconic muscle car that brings raw power and classic styling to the streets."
     },
@@ -41,7 +41,7 @@
       "name": "Bugatti Veyron",
       "price": 149,
       "type": "Car",
-      "scale": "1:24",
+      "scale": "1:43 (8-12 cm)",
       "image": "/uploads/supercar.png",
       "description": "The engineering marvel that redefined speed limits with its quad-turbo W16 engine."
     },
@@ -50,7 +50,7 @@
       "id": 6,
       "price": 160,
       "type": "Car",
-      "scale": "1:43",
+      "scale": "1:43 (8-12 cm)",
       "image": "/uploads/supercar.png",
       "description": "The revolutionary British supercar that held the production car speed record for over a decade."
     },
@@ -59,7 +59,7 @@
       "name": "Audi R8",
       "price": 130,
       "type": "Car",
-      "scale": "1:18",
+      "scale": "1:64 (6-8 cm)",
       "image": "/uploads/supercar.png",
       "description": "The German supercar that combines quattro all-wheel drive with stunning performance."
     },
@@ -69,7 +69,7 @@
       "description": "The Italian superbike that combines cutting-edge technology with breathtaking performance.",
       "price": 100,
       "type": "Bike",
-      "scale": "1:18",
+      "scale": "1:24 (16-20 cm)",
       "image": "/uploads/bike.svg"
     },
     {
@@ -78,7 +78,7 @@
       "description": "The track-only hyperbike with a supercharged engine and unmatched speed.",
       "price": 130,
       "type": "Bike",
-      "scale": "1:18",
+      "scale": "1:32 (10-15 cm)",
       "image": "/uploads/bike.svg"
     },
     {
@@ -87,7 +87,7 @@
       "description": "The iconic cruiser that defines the spirit of freedom and adventure.",
       "price": 90,
       "type": "Bike",
-      "scale": "1:64",
+      "scale": "1:64 (6-8 cm)",
       "image": "/uploads/bike.svg"
     }
   ]

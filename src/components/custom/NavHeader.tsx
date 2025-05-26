@@ -5,8 +5,9 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import { useNavigate } from 'react-router-dom'
 import Cart from './Cart'
 import HomeIcon from '@mui/icons-material/Home'
+import { Frame, Toy } from 'src/types/types'
 
-interface ConfirmComponentProps {
+interface NavHeaderProps {
   onConfirm: () => void
   navigateTo?: string
   label?: string | JSX.Element
@@ -23,7 +24,7 @@ interface ConfirmComponentProps {
   } | null
 }
 
-const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
+const NavHeader: React.FC<NavHeaderProps> = ({
   onConfirm,
   navigateTo = '/',
   showHome = true,
@@ -32,13 +33,20 @@ const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
   selectedFrame,
 }) => {
   const [cartOpen, setCartOpen] = useState(false)
-  const [storageCount, setStorageCount] = useState<number>(0)
+  const [isStorage, setIsStorage] = useState<boolean>(false)
   const navigate = useNavigate()
   const availabilityType = sessionStorage.getItem('availabilityType')
 
   useEffect(() => {
-    setStorageCount(sessionStorage.length)
-  })
+    const toyData = sessionStorage.getItem('selectedToys')
+    const frameData = sessionStorage.getItem('selectedFrame')
+    const parsedToys: Toy[] = JSON.parse(toyData || '[]')
+    const hasSelectedToy = parsedToys && parsedToys.length > 0
+    const parsedFrame = JSON.parse(frameData || 'null')
+    const hasSelectedFrame = Array.isArray(parsedFrame) ? parsedFrame.length > 0 : !!parsedFrame
+    const isSelected = hasSelectedToy || hasSelectedFrame
+    setIsStorage(isSelected)
+  }, [selectedToy, selectedFrame])
 
   const handleConfirm = () => {
     onConfirm()
@@ -134,7 +142,7 @@ const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
           }}
           onClick={() => setCartOpen(true)}
         >
-          <Badge color="error" overlap="circular" variant="dot" invisible={storageCount === 0}>
+          <Badge color="error" overlap="circular" variant="dot" invisible={!isStorage}>
             <ShoppingCartIcon />
           </Badge>
         </IconButton>
@@ -146,4 +154,4 @@ const ConfirmComponent: React.FC<ConfirmComponentProps> = ({
   )
 }
 
-export default ConfirmComponent
+export default NavHeader

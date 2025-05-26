@@ -1,6 +1,6 @@
 import { Box, useMediaQuery, useTheme } from '@mui/material'
 import FrameCard from '@components/custom/FrameCard'
-import ConfirmComponent from '@components/custom/ConfirmComponent'
+import ConfirmComponent from '@components/custom/NavHeader'
 import { useState, useEffect, useMemo, use } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getFramePrice } from '../utils/pricing'
@@ -18,7 +18,9 @@ const FramePage = () => {
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
   const [selectedFrame, setSelectedFrame] = useState<SelectedFrame | null>(null)
-  const [selectedFrameDimensions, setSelectedFrameDimensions] = useState<{ [key: string]: string }>({})
+  const [selectedFrameDimensions, setSelectedFrameDimensions] = useState<{ [key: string]: string }>(
+    {},
+  )
 
   const frameDataJSON = useMemo(() => {
     return frameJsonData.frames.map((frame: FrameDetailsProps) => ({
@@ -178,7 +180,9 @@ const FramePage = () => {
             onSelect={() => handleFrameSelect(frame)}
             isSelected={selectedFrame?.type === frame.type}
             selectedDimension={selectedFrameDimensions[frame.type] || frame.dimensionPrice[0]?.size}
-            onDimensionChange={(dimension: string) => handleFrameDimensionChange(frame.type, dimension)}
+            onDimensionChange={(dimension: string) =>
+              handleFrameDimensionChange(frame.type, dimension)
+            }
           />
         ))}
       </Box>

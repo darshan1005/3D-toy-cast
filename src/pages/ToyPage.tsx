@@ -13,7 +13,7 @@ import {
 } from '@mui/material'
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import ToyCard from '@components/custom/ToyCard'
-import ConfirmComponent from '@components/custom/ConfirmComponent'
+import ConfirmComponent from '@components/custom/NavHeader'
 import { useNavigate } from 'react-router-dom'
 import { calculateSellingPrice } from '@utils/pricing'
 import toysJsonData from '../content/ToysData.json'
