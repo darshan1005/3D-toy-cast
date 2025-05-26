@@ -1,0 +1,216 @@
+{
+  "frames": [
+    {
+      "id": 1,
+      "type": "Basic Box (Regular)",
+      "material": "Hard Plastic",
+      "weight": 1,
+      "description": "A versatile box frame with maximum depth, perfect for displaying 3D objects and creating depth in your displays. Ideal for showcasing small sculptures or layered artwork.",
+      "image": "/uploads/frame.jpeg",
+      "dimensionPrice": [
+        {
+          "size": "20 X 30 cm",
+          "price": 496
+        },
+        {
+          "size": "18 X 27 cm",
+          "price": 450
+        },
+        {
+          "size": "16 X 24 cm",
+          "price": 402
+        },
+        {
+          "size": "14 X 21 cm",
+          "price": 349
+        },
+        {
+          "size": "12 X 18 cm",
+          "price": 302
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "Free Fall",
+      "material": "Hard Plastic",
+      "weight": 2,
+      "description": "Medium-depth frame designed for objects that need to appear suspended in space. Great for creating dynamic displays with falling or floating elements.",
+      "image": "/uploads/frame.jpeg",
+      "dimensionPrice": [
+        {
+          "size": "20 X 30 cm",
+          "price": 650
+        },
+        {
+          "size": "18 X 27 cm",
+          "price": 600
+        },
+        {
+          "size": "16 X 24 cm",
+          "price": 500
+        },
+        {
+          "size": "14 X 21 cm",
+          "price": 452
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "material": "Hard Plastic",
+      "type": "Free Fall Board",
+      "weight": 2,
+      "description": "Slim profile frame perfect for wall mounting. Features a secure hanging mechanism and minimal depth for a clean, modern look on any wall.",
+      "image": "/uploads/frame.jpeg",
+      "dimensionPrice": [
+        {
+          "size": "20 X 30 cm",
+          "price": 700
+        },
+        {
+          "size": "18 X 27 cm",
+          "price": 650
+        },
+        {
+          "size": "16 X 24 cm",
+          "price": 600
+        },
+        {
+          "size": "14 X 21 cm",
+          "price": 552
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "Edge Square",
+      "material": "Hard Plastic",
+      "weight": -1,
+      "description": "Specially designed frame for displaying toys in a falling or dynamic pose. Features adjustable depth for various toy sizes and secure mounting points.",
+      "image": "/uploads/frame.jpeg",
+      "dimensionPrice": [
+        {
+          "size": "20 X 30 cm",
+          "price": 450
+        },
+        {
+          "size": "18 X 27 cm",
+          "price": 400
+        },
+        {
+          "size": "16 X 24 cm",
+          "price": 352
+        },
+        {
+          "size": "14 X 21 cm",
+          "price": 302
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "material": "Hard Plastic",
+      "type": "Gravity Hold",
+      "weight": 1,
+      "description": "Ultra-slim frame optimized for displaying images with a falling or cascading effect. Perfect for creating visual depth in photographs and artwork.",
+      "image": "/uploads/frame.jpeg",
+      "dimensionPrice": [
+        {
+          "size": "20 X 30 cm",
+          "price": 700
+        },
+        {
+          "size": "18 X 27 cm",
+          "price": 650
+        },
+        {
+          "size": "16 X 24 cm",
+          "price": 600
+        },
+        {
+          "size": "14 X 21 cm",
+          "price": 551
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "material": "Hard Plastic",
+      "type": "Edge Cut",
+      "weight": 1,
+      "image": "/uploads/frame.jpeg",
+      "dimensionPrice": [
+        {
+          "size": "20 X 30 cm",
+          "price": 550
+        },
+        {
+          "size": "18 X 27 cm",
+          "price": 499
+        },
+        {
+          "size": "16 X 24 cm",
+          "price": 450
+        },
+        {
+          "size": "14 X 21 cm",
+          "price": 402
+        }
+      ],
+      "description": "Versatile hanging box frame with medium depth, ideal for displaying small objects while maintaining a clean, boxed presentation. Features secure hanging mechanism."
+    },
+    {
+      "id": 7,
+      "material": "Hard Plastic",
+      "type": "Edge Cut Board",
+      "weight": 2,
+      "description": "Deep frame specifically designed for hanging toys and collectibles. Includes multiple mounting points and adjustable depth for various toy sizes.",
+      "image": "/uploads/frame.jpeg",
+      "dimensionPrice": [
+        {
+          "size": "20 X 30 cm",
+          "price": 500
+        },
+        {
+          "size": "18 X 27 cm",
+          "price": 450
+        },
+        {
+          "size": "16 X 24 cm",
+          "price": 400
+        },
+        {
+          "size": "14 X 21 cm",
+          "price": 350
+        },
+        {
+          "size": "12 X 18 cm",
+          "price": 300
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "material": "Hard Plastic",
+      "type": "Open box",
+      "weight": 1,
+      "description": "Contemporary open-frame design with moderate depth, perfect for displaying objects that need to be easily accessible or viewed from multiple angles.",
+      "image": "/uploads/frame.jpeg",
+      "dimensionPrice": [
+        {
+          "size": "12 X 18 cm",
+          "price": 250
+        },
+        {
+          "size": "10 X 15 cm",
+          "price": 200
+        },
+        {
+          "size": "8 X 12 cm",
+          "price": 150
+        }
+      ]
+    }
+  ]
+}
