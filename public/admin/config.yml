@@ -1,0 +1,110 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+collections: 
+  - name: "toysData"
+    label: "ToysData"
+    files: 
+      - label: "AllToysData"
+        name: "AlltoysData"
+        file: "src/content/ToyData.json"
+        format: "json"
+        fields:
+          - label: "Toys"
+            name: "toys"
+            widget: "object"  
+            label_singular: "Toy"
+            fields: 
+              - label: 'ID'
+                name: 'id'
+                widget: 'number'
+              - label: 'Name'
+                name: 'name'
+                widget: 'string'
+              - label: 'Description'
+                name: 'description'
+                widget: 'text'
+              - label: 'Price'
+                name: 'price'
+                widget: 'number'
+              - label: 'Type'
+                name: 'type'
+                widget: 'string'
+              - label: 'scale'
+                name: 'scale'
+                widget: 'string'
+              - label: 'Image'
+                name: 'image'
+                widget: 'image'
+            
+  - name: "framesData"
+    label: "FramesData"
+    files: 
+      - label: "AllFramesData"
+        name: "AllFramesData"
+        file: "src/content/FrameData.json"
+        format: "json"
+        fields:
+          - label: "Frames"
+            name: "frames"
+            widget: "object"  
+            label_singular: "Frame"
+            fields: 
+              - label: 'ID'
+                name: 'id'
+                widget: 'number'
+              - label: 'Type'
+                name: 'type'
+                widget: 'string'
+              - label: 'Material'
+                name: 'material'
+                widget: 'string'
+              - label: 'Weight'
+                name: 'weight'
+                widget: 'number'
+              - label: 'Description'
+                name: 'description'
+                widget: 'text'
+              - label: 'Image'
+                name: 'image'
+                widget: 'image'
+              - label: 'Dimension Price'
+                name: 'dimensionPrice'
+                widget: 'object'
+                fields:
+                  - label: 'Size'
+                    name: 'size'
+                    widget: 'string'
+                  - label: 'Price'
+                    name: 'price'
+                    widget: 'number'
+
+  - name: "TestimonialsData"
+    label: "TestimonialsData"
+    files: 
+      - label: "AllTestimonialsData"
+        name: "AllTestimonialsData"
+        file: "src/content/TestimonialsData.json"
+        format: "json"
+        fields:
+          - label: "Testimonials"
+            name: "testimonials"
+            widget: "object"  
+            label_singular: "Testimonial"
+            fields: 
+              - label: 'Username'
+                name: 'username'
+                widget: 'number'
+              - label: 'Stars'
+                name: 'stars'
+                widget: 'number'
+              - label: 'Testimonial'
+                name: 'testimonial'
+                widget: 'text'
+              
+
+   
