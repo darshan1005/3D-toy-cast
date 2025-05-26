@@ -11,12 +11,13 @@ import {
   Chip,
   Typography,
 } from '@mui/material'
-import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import ToyCard from '@components/custom/ToyCard'
-import { ToyData, ToyDataProps } from '../data/ToyData'
 import ConfirmComponent from '@components/custom/ConfirmComponent'
 import { useNavigate } from 'react-router-dom'
 import { calculateSellingPrice } from '@utils/pricing'
+import toysJsonData from '../content/ToysData.json'
+import { ToyDataProps } from 'src/types/types'
 
 const ToysPage = () => {
   const navigate = useNavigate()
@@ -26,8 +27,10 @@ const ToysPage = () => {
   const [selectedToyType, setSelectedToyType] = useState('')
   const [selectedToyScale, setSelectedToyScale] = useState('')
   const [selectedBrands, setSelectedBrands] = useState<string[]>([])
-  const [filteredData, setFilteredData] = useState(ToyData)
+  const [filteredData, setFilteredData] = useState(toysJsonData.toys)
   const [selectedToys, setSelectedToys] = useState<ToyDataProps[]>([])
+  const [toysData, setToysData] = useState(toysJsonData.toys);
+
 
   const [appliedFilters, setAppliedFilters] = useState({
     type: '',
@@ -70,17 +73,18 @@ const ToysPage = () => {
     setSelectedBrands([])
   }
 
+  // Use toysData (from JSON) for all filtering and display logic
   const getTypeOptions = () => {
-    return [...new Set(ToyData.map(toy => toy.type))]
+    return [...new Set(toysData.map(toy => toy.type))]
   }
 
   const getScaleOptions = () => {
-    return [...new Set(ToyData.map(toy => toy.scale))]
+    return [...new Set(toysData.map(toy => toy.scale))]
   }
 
   const getBrandOptions = () => {
     if (!selectedToyType) return []
-    return [...new Set(ToyData.filter(toy => toy.type === selectedToyType).map(toy => toy.name))]
+    return [...new Set(toysData.filter(toy => toy.type === selectedToyType).map(toy => toy.name))]
   }
 
   const getDisplayedBrands = () => {
@@ -109,8 +113,9 @@ const ToysPage = () => {
     )
   }, [appliedFilters, currentFilters])
 
+  // Filtering logic should use toysData
   const handleApplyFilters = useCallback(() => {
-    let filtered = ToyData
+    let filtered = toysData
 
     if (selectedToyType) {
       filtered = filtered.filter(toy => toy.type === selectedToyType)
@@ -125,13 +130,11 @@ const ToysPage = () => {
     }
 
     setFilteredData(filtered)
-
-    // Update the applied filters
     setAppliedFilters(currentFilters)
-  }, [selectedToyType, selectedToyScale, selectedBrands, currentFilters])
+  }, [selectedToyType, selectedToyScale, selectedBrands, currentFilters, toysData])
 
   const handleResetFilters = () => {
-    setFilteredData(ToyData)
+    setFilteredData(toysData)
     setSelectedToyType('')
     setSelectedToyScale('')
     setSelectedBrands([])
@@ -356,8 +359,8 @@ const ToysPage = () => {
               }}
             >
               {filteredData.map(toy => (
-                <React.Fragment key={toy.id}>
                   <ToyCard
+                    key={toy.id}
                     image={toy.image}
                     name={toy.name}
                     description={toy.description}
@@ -367,7 +370,6 @@ const ToysPage = () => {
                     onSelect={() => handleToySelect(toy)}
                     isSelected={selectedToys.some(t => t.id === toy.id)}
                   />
-                </React.Fragment>
               ))}
             </Box>
           ) : (

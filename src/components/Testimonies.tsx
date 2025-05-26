@@ -1,15 +1,11 @@
 import { Box, Stack, Typography, useMediaQuery, useTheme } from '@mui/material'
 import StarIcon from '@mui/icons-material/Star'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
-import { testimonials } from '../data/testimonials'
+import testimonialsJson from '../content/TestimonialsData.json'
+import { Testimonial as TestimonialType } from '../types/types'
 
-interface TestimonialProps {
-  username: string
-  stars: number
-  testimonial: string
-}
 
-const Testimonial = ({ username, stars, testimonial }: TestimonialProps) => {
+const Testimonial = ({ username, stars, testimonial }: TestimonialType) => {
   const renderStars = () => {
     const totalStars = 5
     return [...Array(totalStars)].map((_, index) => (
@@ -47,6 +43,7 @@ const Testimonial = ({ username, stars, testimonial }: TestimonialProps) => {
 const Testimonies = () => {
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
+  const testimonials: TestimonialType[] = testimonialsJson.testimonials
 
   return (
     <Box sx={{ backgroundColor: 'red', p: 2 }}>

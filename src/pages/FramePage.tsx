@@ -1,10 +1,11 @@
 import { Box, useMediaQuery, useTheme } from '@mui/material'
 import FrameCard from '@components/custom/FrameCard'
-import { frameData, FrameDetailsProps } from '../data/FrameData'
 import ConfirmComponent from '@components/custom/ConfirmComponent'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getFramePrice } from '../utils/pricing'
+import frameJsonData from '../content/FrameData.json'
+import { FrameDetailsProps } from 'src/types/types'
 
 interface SelectedFrame {
   id: number
@@ -18,6 +19,7 @@ const FramePage = () => {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
   const [selectedFrame, setSelectedFrame] = useState<SelectedFrame | null>(null)
   const [selectedFrameDimensions, setSelectedFrameDimensions] = useState<{ [key: string]: string }>({})
+  const [frameData, setFrameData] = useState(frameJsonData.frames)
 
   // Load selected frame from sessionStorage on component mount
   useEffect(() => {
@@ -33,7 +35,7 @@ const FramePage = () => {
       // Initialize selected dimension for the frame
       if (parsedFrame && !selectedFrameDimensions[parsedFrame.type]) {
         const frameDetails = frameData.find(f => f.type === parsedFrame.type)
-        const defaultDimension = frameDetails?.dimensionPrices[0]?.size
+        const defaultDimension = frameDetails?.dimensionPrice[0]?.size
         if (defaultDimension) {
           setSelectedFrameDimensions(prev => ({
             ...prev,
@@ -59,7 +61,7 @@ const FramePage = () => {
         // Initialize selected dimension for the frame
         if (parsedFrame && !selectedFrameDimensions[parsedFrame.type]) {
           const frameDetails = frameData.find(f => f.type === parsedFrame.type)
-          const defaultDimension = frameDetails?.dimensionPrices[0]?.size
+          const defaultDimension = frameDetails?.dimensionPrice[0]?.size
           if (defaultDimension) {
             setSelectedFrameDimensions(prev => ({
               ...prev,
@@ -110,8 +112,9 @@ const FramePage = () => {
       }
 
       // Select the new frame with the selected dimension
-      const defaultDimension = frame.dimensionPrices[0]?.size
+      const defaultDimension = frame.dimensionPrice[0]?.size
       const selectedDimension = selectedFrameDimensions[frame.type] || defaultDimension
+      // Always use getFramePrice for the selling price
       const framePrice = getFramePrice(frame.type, selectedDimension)
 
       const frameWithDimension = {
@@ -163,10 +166,13 @@ const FramePage = () => {
         {frameData.map(frame => (
           <FrameCard
             key={frame.type}
-            frameDetails={frame}
+            frameDetails={{
+              ...frame,
+              dimensionPrices: frame.dimensionPrice, 
+            }}
             onSelect={() => handleFrameSelect(frame)}
             isSelected={selectedFrame?.type === frame.type}
-            selectedDimension={selectedFrameDimensions[frame.type] || frame.dimensionPrices[0]?.size}
+            selectedDimension={selectedFrameDimensions[frame.type] || frame.dimensionPrice[0]?.size}
             onDimensionChange={(dimension: string) => handleFrameDimensionChange(frame.type, dimension)}
           />
         ))}

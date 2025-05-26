@@ -1,4 +1,3 @@
-import { frameData, DimensionPrice } from '../data/FrameData'
 
 // Constants for pricing strategy
 export const DISCOUNTS = {
@@ -52,8 +51,8 @@ export function calculateProfitMargin(
 }
 
 // Get Frame costs from FrameData
-export const GET_FRAME_COSTS_from_DATA = frameData.reduce((acc, frame) => {
-  acc[frame.type] = frame.dimensionPrices.reduce((dimAcc, dim) => {
+export const GET_FRAME_COSTS_from_DATA = frameJsonData.frames.reduce((acc, frame) => {
+  acc[frame.type] = frame.dimensionPrice.reduce((dimAcc, dim) => {
     dimAcc[dim.size] = Math.round(dim.price)
     return dimAcc
   }, {} as Record<string, number>)
@@ -74,8 +73,3 @@ export function getFramePrice(frameType: string, dimension: string): number {
   return CALCULATE_FRAME_PRICES[frameType]?.[dimension] || 0
 }
 
-// Helper function to get frame dimensions by type
-export function getFrameDimensions(frameType: string): DimensionPrice[] {
-  const frame = frameData.find(f => f.type === frameType)
-  return frame?.dimensionPrices || []
-}
