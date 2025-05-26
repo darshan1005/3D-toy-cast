@@ -98,7 +98,7 @@ collections:
             fields: 
               - label: 'Username'
                 name: 'username'
-                widget: 'number'
+                widget: 'string'
               - label: 'Stars'
                 name: 'stars'
                 widget: 'number'
