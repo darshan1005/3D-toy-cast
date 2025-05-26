@@ -29,8 +29,12 @@ const ToysPage = () => {
   const [selectedBrands, setSelectedBrands] = useState<string[]>([])
   const [filteredData, setFilteredData] = useState(toysJsonData.toys)
   const [selectedToys, setSelectedToys] = useState<ToyDataProps[]>([])
-  const [toysData, setToysData] = useState(toysJsonData.toys);
 
+  const toysDataJSON = useMemo(() => {
+    return toysJsonData.toys.map((toy: ToyDataProps) => ({
+      ...toy,
+    }))
+  }, [toysJsonData.toys])
 
   const [appliedFilters, setAppliedFilters] = useState({
     type: '',
@@ -73,18 +77,20 @@ const ToysPage = () => {
     setSelectedBrands([])
   }
 
-  // Use toysData (from JSON) for all filtering and display logic
+  // Use toysDataJSON (from JSON) for all filtering and display logic
   const getTypeOptions = () => {
-    return [...new Set(toysData.map(toy => toy.type))]
+    return [...new Set(toysDataJSON.map(toy => toy.type))]
   }
 
   const getScaleOptions = () => {
-    return [...new Set(toysData.map(toy => toy.scale))]
+    return [...new Set(toysDataJSON.map(toy => toy.scale))]
   }
 
   const getBrandOptions = () => {
     if (!selectedToyType) return []
-    return [...new Set(toysData.filter(toy => toy.type === selectedToyType).map(toy => toy.name))]
+    return [
+      ...new Set(toysDataJSON.filter(toy => toy.type === selectedToyType).map(toy => toy.name)),
+    ]
   }
 
   const getDisplayedBrands = () => {
@@ -113,9 +119,9 @@ const ToysPage = () => {
     )
   }, [appliedFilters, currentFilters])
 
-  // Filtering logic should use toysData
+  // Filtering logic should use toysDataJSON
   const handleApplyFilters = useCallback(() => {
-    let filtered = toysData
+    let filtered = toysDataJSON
 
     if (selectedToyType) {
       filtered = filtered.filter(toy => toy.type === selectedToyType)
@@ -131,10 +137,10 @@ const ToysPage = () => {
 
     setFilteredData(filtered)
     setAppliedFilters(currentFilters)
-  }, [selectedToyType, selectedToyScale, selectedBrands, currentFilters, toysData])
+  }, [selectedToyType, selectedToyScale, selectedBrands, currentFilters, toysDataJSON])
 
   const handleResetFilters = () => {
-    setFilteredData(toysData)
+    setFilteredData(toysDataJSON)
     setSelectedToyType('')
     setSelectedToyScale('')
     setSelectedBrands([])
@@ -359,17 +365,17 @@ const ToysPage = () => {
               }}
             >
               {filteredData.map(toy => (
-                  <ToyCard
-                    key={toy.id}
-                    image={toy.image}
-                    name={toy.name}
-                    description={toy.description}
-                    price={toy.price}
-                    moterType={toy.type}
-                    scale={toy.scale}
-                    onSelect={() => handleToySelect(toy)}
-                    isSelected={selectedToys.some(t => t.id === toy.id)}
-                  />
+                <ToyCard
+                  key={toy.id}
+                  image={toy.image}
+                  name={toy.name}
+                  description={toy.description}
+                  price={calculateSellingPrice(toy.price)}
+                  moterType={toy.type}
+                  scale={toy.scale}
+                  onSelect={() => handleToySelect(toy)}
+                  isSelected={selectedToys.some(t => t.id === toy.id)}
+                />
               ))}
             </Box>
           ) : (

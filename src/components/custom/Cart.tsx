@@ -2,10 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Box, Typography, IconButton, Paper, Drawer, Divider } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ToyCard from './ToyCard'
-import { ToyDataProps } from 'src/data/ToyData'
 import CloseIcon from '@mui/icons-material/Close'
-import { DimensionPrice, FrameDetailsProps } from 'src/types/types'
-import frameJsonData from '../../content/FrameData.json'
+import { Frame, FrameDetailsProps, ToyDataProps } from 'src/types/types'
 
 interface CartProps {
   open: boolean
@@ -33,6 +31,10 @@ const Cart: React.FC<CartProps> = ({ open, onClose }) => {
 
     window.dispatchEvent(new Event('storageUpdate'))
   }
+
+  const frameTotalCost = selectedFrame
+    ? (JSON.parse(sessionStorage.getItem('selectedFrame') || '{}') as Frame)?.price || 0
+    : 0
 
   const handleRemoveFrame = () => {
     setSelectedFrame(null)
@@ -134,16 +136,7 @@ const Cart: React.FC<CartProps> = ({ open, onClose }) => {
                 <strong>Weight:</strong> {selectedFrame.weight} kg
               </Typography>
               <Typography variant="body2">
-                <strong>Price:</strong> ₹
-                {(() => {
-                  const frame = frameJsonData.frames.find(
-                    (f: any) => f.type === selectedFrame.type
-                  );
-                  const dimension = frame?.dimensionPrice.find(
-                    (d: DimensionPrice) => d.size === selectedFrame.selectedDimension
-                  );
-                  return dimension?.price || 0;
-                })()}
+                <strong>Price:</strong> ₹{frameTotalCost.toFixed(2)}
               </Typography>
             </Box>
           </Paper>

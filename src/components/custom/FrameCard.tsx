@@ -12,8 +12,8 @@ import {
 } from '@mui/material'
 import { Palette } from '../../theme'
 import PreviewIcon from '@mui/icons-material/Preview'
-import { DimensionPrice } from '../../data/FrameData'
 import { getFramePrice } from '../../utils/pricing'
+import { DimensionPrice } from 'src/types/types'
 
 interface FrameDetails {
   type: string

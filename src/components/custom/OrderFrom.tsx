@@ -24,19 +24,7 @@ import emailjs from '@emailjs/browser'
 import { generateUniqueId } from '../../utils/uniqueId'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import CountUp from 'react-countup'
-
-interface Toy {
-  id: number
-  name: string
-  price: number
-  scale: string
-}
-
-interface Frame {
-  type: string
-  price: number
-  selectedDimension: string
-}
+import { Frame, Toy } from 'src/types/types'
 
 const OrderForm = () => {
   const theme = useTheme()

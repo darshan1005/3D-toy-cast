@@ -29,3 +29,16 @@ export interface Testimonial {
     stars: number
     testimonial: string
 }
+
+export interface Toy {
+  id: number
+  name: string
+  price: number
+  scale: string
+}
+
+export interface Frame {
+  type: string
+  price: number
+  selectedDimension: string
+}
