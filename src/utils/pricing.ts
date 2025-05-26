@@ -1,4 +1,4 @@
-import { frameData } from '../data/FrameData'
+import frameData from '../content/FrameData.json'
 
 // Constants for pricing strategy
 export const DISCOUNTS = {
@@ -52,8 +52,8 @@ export function calculateProfitMargin(
 }
 
 // Get Frame costs from FrameData
-export const GET_FRAME_COSTS_from_DATA = frameData.reduce((acc, frame) => {
-  acc[frame.type] = frame.dimensionPrices.reduce((dimAcc, dim) => {
+export const GET_FRAME_COSTS_from_DATA = frameData.frames.reduce((acc, frame) => {
+  acc[frame.type] = frame.dimensionPrice.reduce((dimAcc, dim) => {
     dimAcc[dim.size] = Math.round(dim.price)
     return dimAcc
   }, {} as Record<string, number>)

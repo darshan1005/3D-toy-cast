@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { Box, Typography, IconButton, Paper, Drawer, Divider } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ToyCard from './ToyCard'
-import { FrameDetailsProps, DimensionPrice } from 'src/data/FrameData'
 import { ToyDataProps } from 'src/data/ToyData'
 import CloseIcon from '@mui/icons-material/Close'
+import { DimensionPrice, FrameDetailsProps } from 'src/types/types'
+import frameJsonData from '../../content/FrameData.json'
 
 interface CartProps {
   open: boolean
@@ -134,9 +135,15 @@ const Cart: React.FC<CartProps> = ({ open, onClose }) => {
               </Typography>
               <Typography variant="body2">
                 <strong>Price:</strong> ₹
-                {selectedFrame.dimensionPrices.find(
-                  (d: DimensionPrice) => d.size === selectedFrame.selectedDimension,
-                )?.price || 0}
+                {(() => {
+                  const frame = frameJsonData.frames.find(
+                    (f: any) => f.type === selectedFrame.type
+                  );
+                  const dimension = frame?.dimensionPrice.find(
+                    (d: DimensionPrice) => d.size === selectedFrame.selectedDimension
+                  );
+                  return dimension?.price || 0;
+                })()}
               </Typography>
             </Box>
           </Paper>

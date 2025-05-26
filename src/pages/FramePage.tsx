@@ -1,7 +1,7 @@
 import { Box, useMediaQuery, useTheme } from '@mui/material'
 import FrameCard from '@components/custom/FrameCard'
 import ConfirmComponent from '@components/custom/ConfirmComponent'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, use } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getFramePrice } from '../utils/pricing'
 import frameJsonData from '../content/FrameData.json'
@@ -19,7 +19,12 @@ const FramePage = () => {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
   const [selectedFrame, setSelectedFrame] = useState<SelectedFrame | null>(null)
   const [selectedFrameDimensions, setSelectedFrameDimensions] = useState<{ [key: string]: string }>({})
-  const [frameData, setFrameData] = useState(frameJsonData.frames)
+
+  const frameDataJSON = useMemo(() => {
+    return frameJsonData.frames.map((frame: FrameDetailsProps) => ({
+      ...frame,
+    }))
+  }, [frameJsonData.frames])
 
   // Load selected frame from sessionStorage on component mount
   useEffect(() => {
@@ -34,7 +39,7 @@ const FramePage = () => {
       })
       // Initialize selected dimension for the frame
       if (parsedFrame && !selectedFrameDimensions[parsedFrame.type]) {
-        const frameDetails = frameData.find(f => f.type === parsedFrame.type)
+        const frameDetails = frameDataJSON.find(f => f.type === parsedFrame.type)
         const defaultDimension = frameDetails?.dimensionPrice[0]?.size
         if (defaultDimension) {
           setSelectedFrameDimensions(prev => ({
@@ -60,7 +65,7 @@ const FramePage = () => {
         })
         // Initialize selected dimension for the frame
         if (parsedFrame && !selectedFrameDimensions[parsedFrame.type]) {
-          const frameDetails = frameData.find(f => f.type === parsedFrame.type)
+          const frameDetails = frameDataJSON.find(f => f.type === parsedFrame.type)
           const defaultDimension = frameDetails?.dimensionPrice[0]?.size
           if (defaultDimension) {
             setSelectedFrameDimensions(prev => ({
@@ -163,12 +168,12 @@ const FramePage = () => {
           borderRadius: 3,
         }}
       >
-        {frameData.map(frame => (
+        {frameDataJSON.map(frame => (
           <FrameCard
             key={frame.type}
             frameDetails={{
               ...frame,
-              dimensionPrices: frame.dimensionPrice, 
+              dimensionPrices: frame.dimensionPrice,
             }}
             onSelect={() => handleFrameSelect(frame)}
             isSelected={selectedFrame?.type === frame.type}

@@ -470,7 +470,7 @@ const OrderForm = () => {
               }
               label={
                 <Box display="flex" alignItems="baseline" gap={0.5}>
-                  Key Chain -
+                  Key Chain -{' '}
                   <Typography component={'span'} variant="caption">
                     {!isKeyChainSelected ? '₹0' : '₹49'}
                   </Typography>
@@ -491,7 +491,7 @@ const OrderForm = () => {
               }
               label={
                 <Box display="flex" alignItems="baseline" gap={0.5}>
-                  Background -
+                  Background -{' '}
                   <Typography component={'span'} variant="caption">
                     {isToy || !isBGSelected ? '₹0' : '₹29'}
                   </Typography>
@@ -513,7 +513,7 @@ const OrderForm = () => {
               }
               label={
                 <Box display="flex" alignItems="baseline" gap={0.5}>
-                  Race map Outline -
+                  Race map Outline -{' '}
                   <Typography component={'span'} variant="caption">
                     {isToy || !isRaceTrackSelected ? '₹0' : '₹149'}
                   </Typography>
@@ -634,7 +634,7 @@ const OrderForm = () => {
                             fontWeight="bold"
                             sx={{ fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' } }}
                           >
-                            Total <Typography variant="caption">{`(Toys & Frames)`}</Typography>
+                            Total{' '}<Typography variant="caption">{`(Toys & Frames)`}</Typography>
                           </Typography>
                         </TableCell>
                         <TableCell
@@ -651,7 +651,7 @@ const OrderForm = () => {
                             fontWeight="bold"
                             sx={{ fontSize: { xs: '0.85rem', sm: '1rem', md: '1.05rem' } }}
                           >
-                            Discount On
+                            Discount On{' '}
                             <Typography variant="caption">{`(Toys & Frames)`}</Typography>
                           </Typography>
                         </TableCell>
@@ -704,7 +704,7 @@ const OrderForm = () => {
                             variant="subtitle2"
                             sx={{ fontSize: { xs: '0.8rem', sm: '1rem' } }}
                           >
-                            Delivery Fee
+                            Delivery Fee{' '}
                             <Typography variant="caption">{`(Free on orders above ₹1299)`}</Typography>
                           </Typography>
                         </TableCell>
@@ -767,7 +767,7 @@ const OrderForm = () => {
                             fontWeight="bold"
                             sx={{ fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' } }}
                           >
-                            Total <Typography variant="caption">{`(Add On's)`}</Typography>
+                            Total{' '}<Typography variant="caption">{`(Add On's)`}</Typography>
                           </Typography>
                         </TableCell>
                         <TableCell align="right" sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}>
@@ -783,7 +783,7 @@ const OrderForm = () => {
                             fontWeight="bold"
                             sx={{ fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' } }}
                           >
-                            You Pay
+                            You Pay{' '}
                             <Typography variant="caption">{`(After Discount + Delivery fee + Add Ons)`}</Typography>
                           </Typography>
                         </TableCell>
