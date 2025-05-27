@@ -18,7 +18,7 @@ import {
   TableContainer,
   TableHead,
 } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import emailjs from '@emailjs/browser'
 import { generateUniqueId } from '../../utils/uniqueId'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
@@ -26,6 +26,7 @@ import CountUp from 'react-countup'
 import { Frame, Toy } from 'src/types/types'
 import PopupHOC from './PopupHOC'
 import PreviewIcon from '@mui/icons-material/Preview'
+import CloseIcon from '@mui/icons-material/Close';
 
 const OrderForm = () => {
   const theme = useTheme()
@@ -72,6 +73,9 @@ const OrderForm = () => {
   const [discountAmount, setDiscountAmount] = useState(0)
   const [finalCost, setFinalCost] = useState(0)
   const [expanded, setExpanded] = useState(true)
+
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [fileName, setFileName] = useState('');
 
   const availabilityType = sessionStorage.getItem('availabilityType')
   const isToy = availabilityType === 'toy'
@@ -159,20 +163,20 @@ const OrderForm = () => {
         return !value.trim()
           ? 'Name is required'
           : !/^[a-zA-Z\s]+$/.test(value)
-          ? 'Only alphabets are allowed'
-          : ''
+            ? 'Only alphabets are allowed'
+            : ''
       case 'phone':
         return !value.trim()
           ? 'Phone number is required'
           : !/^\d{10}$/.test(value)
-          ? 'Phone must be a 10-digit number'
-          : ''
+            ? 'Phone must be a 10-digit number'
+            : ''
       case 'email':
         return !value.trim()
           ? 'Email is required'
           : !value.includes('@gmail.com')
-          ? 'Email must be a Gmail address'
-          : ''
+            ? 'Email must be a Gmail address'
+            : ''
       case 'state':
         return !value.trim() ? 'State is required' : ''
       case 'city':
@@ -181,8 +185,8 @@ const OrderForm = () => {
         return !value.trim()
           ? 'Pin code is required'
           : !/^\d{6}$/.test(value)
-          ? 'Pin code must be 6 digits'
-          : ''
+            ? 'Pin code must be 6 digits'
+            : ''
       case 'address':
         return !value.trim() ? 'Address is required' : ''
       default:
@@ -325,6 +329,8 @@ const OrderForm = () => {
   const handleUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
+      const fileName = file.name.toLowerCase()
+      setFileName(fileName);
       const reader = new FileReader()
       reader.onload = ev => {
         setFormData(prev => ({ ...prev, uploadedImage: ev.target?.result as string }))
@@ -334,10 +340,23 @@ const OrderForm = () => {
     }
   }
 
-  const handleImageClear = () => {
+  const handleClearImage = () => {
     setFormData(prev => ({ ...prev, uploadedImage: '' as string }))
     sessionStorage.removeItem('uploadedImage')
+    setFileName('')
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }
+
+  const handleOnImageClear = () => {
+    handleClearImage()
     setPreviewOpen(false)
+  }
+
+  const handleImageClearFromName = () => {
+    handleClearImage()
   }
 
   // Ensure uploadedImage is loaded from sessionStorage on mount
@@ -514,7 +533,7 @@ const OrderForm = () => {
               }}
             >
               Upload Image
-              <input type="file" accept="image/*" hidden onChange={e => handleUploadImage(e)} />
+              <input ref={fileInputRef} type="file" accept="image/*" hidden onChange={e => handleUploadImage(e)} />
             </Button>
             <PreviewIcon
               onClick={() => setPreviewOpen(true)}
@@ -525,6 +544,15 @@ const OrderForm = () => {
               }}
               titleAccess="preview"
             />
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography variant='body1' color='#0007'>{fileName}</Typography>
+              {formData.uploadedImage
+                &&
+                <Typography component={'span'} sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                  <CloseIcon fontSize='small' onClick={() => handleImageClearFromName()} sx={{ cursor: 'pointer' }} />
+                </Typography>}
+            </Box>
+
             <PopupHOC
               open={previewOpen}
               onClose={() => setPreviewOpen(false)}
@@ -548,7 +576,7 @@ const OrderForm = () => {
                         objectFit: 'contain',
                       }}
                     />
-                    <Button variant="outlined" onClick={handleImageClear} sx={{ mt: 2 }}>
+                    <Button variant="outlined" onClick={handleOnImageClear} sx={{ mt: 2 }}>
                       Remove
                     </Button>
                   </>
