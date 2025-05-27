@@ -42,3 +42,10 @@ export interface Frame {
   price: number
   selectedDimension: string
 }
+
+export interface Image {
+  name: string
+  size: number
+  type: string
+  data: string
+}

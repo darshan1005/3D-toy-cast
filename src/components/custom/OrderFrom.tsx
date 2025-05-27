@@ -24,7 +24,7 @@ import emailjs from '@emailjs/browser'
 import { generateUniqueId } from '../../utils/uniqueId'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import CountUp from 'react-countup'
-import { Frame, Toy } from 'src/types/types'
+import { Frame, Image, Toy } from 'src/types/types'
 import PopupHOC from './PopupHOC'
 import PreviewIcon from '@mui/icons-material/Preview'
 import CloseIcon from '@mui/icons-material/Close'
@@ -331,6 +331,12 @@ const OrderForm = () => {
   }
 
   const handleUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let ImageObj : Image= {
+      name: '',
+      size: 0,
+      type: '',
+      data: '',
+    };
     const file = e.target.files?.[0]
     if (file) {
       if (file.size > 50 * 1024) {
@@ -343,9 +349,16 @@ const OrderForm = () => {
       const fileName = file.name.toLowerCase()
       setFileName(fileName)
       const reader = new FileReader()
+
       reader.onload = ev => {
         setFormData(prev => ({ ...prev, uploadedImage: ev.target?.result as string }))
-        sessionStorage.setItem('uploadedImage', ev.target?.result as string)
+        ImageObj = {
+          name: fileName,
+          size: file.size,
+          type: file.type,
+          data: ev.target?.result as string,
+        }
+        sessionStorage.setItem('uploadedImage',JSON.stringify(ImageObj))
       }
       reader.readAsDataURL(file)
     }
@@ -374,7 +387,9 @@ const OrderForm = () => {
   useEffect(() => {
     const storedImage = sessionStorage.getItem('uploadedImage')
     if (storedImage) {
-      setFormData(prev => ({ ...prev, uploadedImage: storedImage }))
+      const parsedImage: Image = JSON.parse(storedImage)
+      setFileName(parsedImage.name)
+      setFormData(prev => ({ ...prev, uploadedImage: parsedImage.data }))
     }
   }, [])
 
@@ -528,65 +543,112 @@ const OrderForm = () => {
             mb={1}
             alignItems="center"
           >
-            <Button
-              variant="outlined"
-              component="label"
-              sx={{
-                mb: 1,
-                width: 'max-content',
-                color: 'white',
-                bgcolor: formData.uploadedImage ? 'green' : 'red',
-                borderColor: formData.uploadedImage ? 'green' : 'red',
-                textTransform: 'none',
-                fontSize: { xs: '0.8rem', sm: '1rem' },
-              }}
+            <Box
+              display="flex"
+              flexDirection="row"
+              flexWrap="wrap"
+              gap={1}
+              mb={1}
+              alignItems="center"
             >
-              Upload Image
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                hidden
-                onChange={e => handleUploadImage(e)}
-              />
-            </Button>
-            <PreviewIcon
-              onClick={() => setPreviewOpen(true)}
-              sx={{
-                color: formData.uploadedImage ? '#000' : '#3335',
-                cursor: formData.uploadedImage ? 'pointer' : 'not-allowed',
-                pointerEvents: formData.uploadedImage ? 'auto' : 'none',
-              }}
-              titleAccess="preview"
-            />
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography variant="body1" color="#0007">
-                {fileName}
-              </Typography>
-              {formData.uploadedImage && (
-                <Typography
-                  component={'span'}
-                  sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}
+              <Box
+                display="flex"
+                flexDirection="row"
+                alignItems="center"
+                gap={1}
+                sx={{
+                  flexShrink: 0,
+                  minWidth: 0,
+                }}
+              >
+                <Button
+                  variant="outlined"
+                  component="label"
+                  sx={{
+                    mb: 1,
+                    width: 'max-content',
+                    color: 'white',
+                    bgcolor: formData.uploadedImage ? 'green' : 'red',
+                    borderColor: formData.uploadedImage ? 'green' : 'red',
+                    textTransform: 'none',
+                    fontSize: { xs: '0.8rem', sm: '1rem' },
+                    flexShrink: 0,
+                  }}
                 >
-                  <CloseIcon
-                    fontSize="small"
-                    onClick={() => handleImageClearFromName()}
-                    sx={{ cursor: 'pointer' }}
+                  Upload Image
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    hidden
+                    onChange={e => handleUploadImage(e)}
                   />
-                </Typography>
-              )}
-              {imageSizeWarning && (
-                <Alert severity="warning" sx={{ width: '360px' }}>
-                  Please upload image less than 50KB.
-                </Alert>
-              )}
+                </Button>
+                <PreviewIcon
+                  onClick={() => setPreviewOpen(true)}
+                  sx={{
+                    color: formData.uploadedImage ? '#000' : '#3335',
+                    cursor: formData.uploadedImage ? 'pointer' : 'not-allowed',
+                    pointerEvents: formData.uploadedImage ? 'auto' : 'none',
+                    flexShrink: 0,
+                  }}
+                  titleAccess="preview"
+                />
+              </Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 0.5,
+                  minWidth: 0,
+                  flex: 1,
+                  flexBasis: { xs: '100%', sm: 'auto' },
+                  flexWrap: 'wrap',
+                  wordBreak: 'break-all',
+                }}
+              >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    minWidth: 0,
+                    overflow: 'hidden',
+                  }}
+                >
+                  <Typography
+                    variant="body1"
+                    color="#0007"
+                    sx={{
+                      flexShrink: 1,
+                      minWidth: 0,
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: { xs: 'normal', sm: 'nowrap' },
+                    }}
+                  >
+                    {fileName}
+                  </Typography>
+                  {formData.uploadedImage && fileName && (
+                    <CloseIcon
+                      fontSize="small"
+                      onClick={() => handleImageClearFromName()}
+                      sx={{ color: 'black', cursor: 'pointer', ml: 0.5 }}
+                    />
+                  )}
+                </Box>
+                {imageSizeWarning && (
+                  <Alert severity="warning" sx={{ width: { xs: '100%', sm: '360px' }, mt: 1 }}>
+                    Please upload image less than 50KB.
+                  </Alert>
+                )}
+              </Box>
             </Box>
             <PopupHOC
               open={previewOpen}
               onClose={() => setPreviewOpen(false)}
               title="Image Preview"
               centerTitle
-              width="40%"
+              width={isSmallScreen ? '100%' : '40%'}
               height={'auto'}
             >
               <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
