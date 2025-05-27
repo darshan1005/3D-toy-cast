@@ -17,6 +17,7 @@ import {
   AccordionSummary,
   TableContainer,
   TableHead,
+  Alert,
 } from '@mui/material'
 import { useEffect, useRef, useState } from 'react'
 import emailjs from '@emailjs/browser'
@@ -26,7 +27,7 @@ import CountUp from 'react-countup'
 import { Frame, Toy } from 'src/types/types'
 import PopupHOC from './PopupHOC'
 import PreviewIcon from '@mui/icons-material/Preview'
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from '@mui/icons-material/Close'
 
 const OrderForm = () => {
   const theme = useTheme()
@@ -40,6 +41,7 @@ const OrderForm = () => {
   const [isOrderCancelled, setIsOrderCancelled] = useState<boolean>(false)
   const [orderPlaced, setOrderPlaced] = useState<boolean>(false)
   const [previewOpen, setPreviewOpen] = useState(false)
+  const [imageSizeWarning, setImageSizeWarning] = useState(false)
 
   const [formData, setFormData] = useState({
     name: '',
@@ -61,8 +63,6 @@ const OrderForm = () => {
     city: '',
     pincode: '',
     address: '',
-    customBackground: '',
-    uploadedImage: '',
   })
 
   const [isKeyChainSelected, setIsKeyChainSelected] = useState(true)
@@ -75,7 +75,7 @@ const OrderForm = () => {
   const [expanded, setExpanded] = useState(true)
 
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const [fileName, setFileName] = useState('');
+  const [fileName, setFileName] = useState('')
 
   const availabilityType = sessionStorage.getItem('availabilityType')
   const isToy = availabilityType === 'toy'
@@ -163,20 +163,20 @@ const OrderForm = () => {
         return !value.trim()
           ? 'Name is required'
           : !/^[a-zA-Z\s]+$/.test(value)
-            ? 'Only alphabets are allowed'
-            : ''
+          ? 'Only alphabets are allowed'
+          : ''
       case 'phone':
         return !value.trim()
           ? 'Phone number is required'
           : !/^\d{10}$/.test(value)
-            ? 'Phone must be a 10-digit number'
-            : ''
+          ? 'Phone must be a 10-digit number'
+          : ''
       case 'email':
         return !value.trim()
           ? 'Email is required'
           : !value.includes('@gmail.com')
-            ? 'Email must be a Gmail address'
-            : ''
+          ? 'Email must be a Gmail address'
+          : ''
       case 'state':
         return !value.trim() ? 'State is required' : ''
       case 'city':
@@ -185,8 +185,8 @@ const OrderForm = () => {
         return !value.trim()
           ? 'Pin code is required'
           : !/^\d{6}$/.test(value)
-            ? 'Pin code must be 6 digits'
-            : ''
+          ? 'Pin code must be 6 digits'
+          : ''
       case 'address':
         return !value.trim() ? 'Address is required' : ''
       default:
@@ -306,6 +306,10 @@ const OrderForm = () => {
       // Final totals
       finalCost: finalCost.toFixed(2),
       orderDate: new Date(),
+
+      // Custom background instructions and Upload Image
+      customBackground: formData.customBackground,
+      uploadedImage: formData.uploadedImage || 'No image uploaded',
     }
 
     emailjs
@@ -329,8 +333,15 @@ const OrderForm = () => {
   const handleUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
+      if (file.size > 50 * 1024) {
+        // 50KB limit
+        setImageSizeWarning(true)
+        if (fileInputRef.current) fileInputRef.current.value = ''
+        return
+      }
+      setImageSizeWarning(false)
       const fileName = file.name.toLowerCase()
-      setFileName(fileName);
+      setFileName(fileName)
       const reader = new FileReader()
       reader.onload = ev => {
         setFormData(prev => ({ ...prev, uploadedImage: ev.target?.result as string }))
@@ -500,15 +511,13 @@ const OrderForm = () => {
           <Box mb={1}>
             <TextField
               fullWidth
-              name="CustomBackground"
+              name="customBackground"
               label="Instruction to create custom background"
               size="small"
               multiline
               rows={2}
-              value={formData.address}
+              value={formData.customBackground}
               onChange={handleChange}
-              error={Boolean(errors.customBackground)}
-              helperText={errors.customBackground}
               sx={{ mb: { xs: 1, sm: 0 } }}
             />
           </Box>
@@ -533,7 +542,13 @@ const OrderForm = () => {
               }}
             >
               Upload Image
-              <input ref={fileInputRef} type="file" accept="image/*" hidden onChange={e => handleUploadImage(e)} />
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                hidden
+                onChange={e => handleUploadImage(e)}
+              />
             </Button>
             <PreviewIcon
               onClick={() => setPreviewOpen(true)}
@@ -545,14 +560,22 @@ const OrderForm = () => {
               titleAccess="preview"
             />
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography variant='body1' color='#0007'>{fileName}</Typography>
-              {formData.uploadedImage
-                &&
-                <Typography component={'span'} sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                  <CloseIcon fontSize='small' onClick={() => handleImageClearFromName()} sx={{ cursor: 'pointer' }} />
-                </Typography>}
+              <Typography variant="body1" color="#0007">
+                {fileName}
+              </Typography>
+              {formData.uploadedImage && (
+                <Typography
+                  component={'span'}
+                  sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}
+                >
+                  <CloseIcon
+                    fontSize="small"
+                    onClick={() => handleImageClearFromName()}
+                    sx={{ cursor: 'pointer' }}
+                  />
+                </Typography>
+              )}
             </Box>
-
             <PopupHOC
               open={previewOpen}
               onClose={() => setPreviewOpen(false)}
@@ -588,6 +611,11 @@ const OrderForm = () => {
               </Box>
             </PopupHOC>
           </Box>
+          {imageSizeWarning && (
+            <Alert severity="warning" sx={{ width: '350px' }}>
+              Please upload image less than 50KB.
+            </Alert>
+          )}
 
           <FormGroup row sx={{ m: 0, flexWrap: { xs: 'wrap', sm: 'nowrap' } }}>
             <FormControlLabel
