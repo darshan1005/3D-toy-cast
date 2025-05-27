@@ -575,6 +575,11 @@ const OrderForm = () => {
                   />
                 </Typography>
               )}
+              {imageSizeWarning && (
+                <Alert severity="warning" sx={{ width: '360px' }}>
+                  Please upload image less than 50KB.
+                </Alert>
+              )}
             </Box>
             <PopupHOC
               open={previewOpen}
@@ -611,11 +616,6 @@ const OrderForm = () => {
               </Box>
             </PopupHOC>
           </Box>
-          {imageSizeWarning && (
-            <Alert severity="warning" sx={{ width: '350px' }}>
-              Please upload image less than 50KB.
-            </Alert>
-          )}
 
           <FormGroup row sx={{ m: 0, flexWrap: { xs: 'wrap', sm: 'nowrap' } }}>
             <FormControlLabel
