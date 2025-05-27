@@ -11,6 +11,7 @@ import StarIcon from '@mui/icons-material/Star'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
 import testimonialsJson from '../content/TestimonialsData.json'
 import { Testimonial as TestimonialType } from '../types/types'
+import CarouselHOC from './custom/HOC/CarouselHOC'
 
 const Testimonial = ({ username, stars, testimonial }: TestimonialType) => {
   const theme = useTheme()
@@ -101,21 +102,15 @@ const Testimonies = () => {
             What Our Customers Say
           </Typography>
 
-          <Box component="ul" sx={{ ...(containerStyles as SxProps<Theme>), listStyle: 'none', margin: 0, padding: 0 }}>
-            {testimonials.map((item, index) => (
-              <Box
-                component="li"
-                key={index}
-                sx={{ ...cardStyles, display: 'flex' }}
-              >
-                <Testimonial
-                  username={item.username}
-                  stars={item.stars}
-                  testimonial={item.testimonial}
-                />
-              </Box>
-            ))}
-          </Box>
+          <CarouselHOC data={testimonials}>
+            {(item) => (
+              <Testimonial
+                username={item.username}
+                stars={item.stars}
+                testimonial={item.testimonial}
+              />
+            )}
+          </CarouselHOC>
         </Stack>
       </Box>
     </Box>

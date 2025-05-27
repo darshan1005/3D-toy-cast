@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Button, Typography } from '@mui/material'
-import PopupHOC from './PopupHOC'
+import PopupHOC from './HOC/PopupHOC'
 
 const Guide = () => {
   const [open, setOpen] = useState(false)

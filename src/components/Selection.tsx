@@ -14,7 +14,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import OrderForm from './custom/OrderFrom'
 import { Palette } from '../theme'
-import PopupHOC from './custom/PopupHOC'
+import PopupHOC from './custom/HOC/PopupHOC'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
@@ -282,7 +282,7 @@ const Selection = () => {
 
             <Stack width={isSmallScreen ? '100%' : '50%'} gap={isSmallScreen ? 2 : 3}>
               <Stack
-                direction={'row'}
+                direction={isSmallScreen ? 'column' : 'row'}
                 spacing={isSmallScreen ? 2 : 3}
                 width="100%"
                 justifyContent="center"
@@ -330,8 +330,8 @@ const Selection = () => {
                           '&:hover': {
                             borderColor: isSelected
                               ? Palette.secondary.dark
-                              : Palette.warning.light,
-                            color: isSelected ? Palette.text.white : Palette.warning.light,
+                              : Palette.text.primary,
+                            color: isSelected ? Palette.text.white : Palette.text.primary,
                             bgcolor: isSelected ? Palette.secondary.dark : 'transparent',
                           },
                         }}

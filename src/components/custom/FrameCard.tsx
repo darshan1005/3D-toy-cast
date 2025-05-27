@@ -14,7 +14,7 @@ import { Palette } from '../../theme'
 import PreviewIcon from '@mui/icons-material/Preview'
 import { getFramePrice } from '../../utils/pricing'
 import { DimensionPrice } from 'src/types/types'
-import PopupHOC from './PopupHOC'
+import PopupHOC from './HOC/PopupHOC'
 
 interface FrameDetails {
   type: string
@@ -109,24 +109,24 @@ const FrameCard: React.FC<FrameCardProps> = ({
           centerTitle={true}
           height={'auto'}
         >
-            <Box
-              sx={{
-                p: 2,
-                bgcolor: Palette.background.paper,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}
-            >
-              <img
-                src={frameDetails.image}
-                alt={frameDetails.type}
-                style={{ maxWidth: '90vw', maxHeight: '80vh', borderRadius: 8 }}
-              />
-              <Button onClick={() => setPreviewOpen(false)} sx={{ mt: 2 }} variant="outlined">
-                Close
-              </Button>
-            </Box>
+          <Box
+            sx={{
+              p: 2,
+              bgcolor: Palette.background.paper,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <img
+              src={frameDetails.image}
+              alt={frameDetails.type}
+              style={{ maxWidth: '90vw', maxHeight: '80vh', borderRadius: 8 }}
+            />
+            <Button onClick={() => setPreviewOpen(false)} sx={{ mt: 2 }} variant="outlined">
+              Close
+            </Button>
+          </Box>
         </PopupHOC>
       </Box>
 
