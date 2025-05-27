@@ -12,9 +12,9 @@ import {
 import orangeCar from '../assets/orangeCar.png'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import CustomPopupHOC from './custom/CustomPopup'
 import OrderForm from './custom/OrderFrom'
 import { Palette } from '../theme'
+import PopupHOC from './custom/PopupHOC'
 
 const selectionButtonObj = [
   { label: 'Frame', link: '/framespage' },
@@ -267,13 +267,13 @@ const Selection = () => {
                               ? Palette.secondary.light
                               : Palette.text.secondary
                             : isSelected
-                              ? Palette.secondary.light
-                              : 'transparent',
+                            ? Palette.secondary.light
+                            : 'transparent',
                           color: isSmallScreen
                             ? Palette.text.white
                             : isSelected
-                              ? Palette.text.white
-                              : Palette.text.secondary,
+                            ? Palette.text.white
+                            : Palette.text.secondary,
                           '&:hover': {
                             borderColor: isSelected
                               ? Palette.secondary.dark
@@ -314,7 +314,7 @@ const Selection = () => {
         </Stack>
       </Box>
       {openModal && (
-        <CustomPopupHOC
+        <PopupHOC
           open={openModal}
           onClose={function (): void {
             setModalOpen(false)
@@ -324,7 +324,7 @@ const Selection = () => {
           title="Order Summary"
         >
           <OrderForm />
-        </CustomPopupHOC>
+        </PopupHOC>
       )}
     </>
   )

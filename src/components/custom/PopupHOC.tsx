@@ -12,7 +12,7 @@ interface CustomPopupProps {
   centerTitle?: boolean
 }
 
-const CustomPopup: React.FC<CustomPopupProps> = ({
+const PopupHOC: React.FC<CustomPopupProps> = ({
   open,
   onClose,
   children,
@@ -78,4 +78,4 @@ const CustomPopup: React.FC<CustomPopupProps> = ({
   )
 }
 
-export default CustomPopup
+export default PopupHOC

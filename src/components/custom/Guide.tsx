@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Button, Typography } from '@mui/material'
-import CustomPopup from './CustomPopup'
+import PopupHOC from './PopupHOC'
 
 const Guide = () => {
   const [open, setOpen] = useState(false)
@@ -30,9 +30,9 @@ const Guide = () => {
       >
         Quick Guide
       </Button>
-      <CustomPopup open={open} onClose={handleClose} title="Quick Guide" centerTitle>
+      <PopupHOC open={open} onClose={handleClose} title="Quick Guide" centerTitle>
         <Typography variant="h5">Guide</Typography>
-      </CustomPopup>
+      </PopupHOC>
     </>
   )
 }

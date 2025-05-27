@@ -19,12 +19,13 @@ import {
   TableHead,
 } from '@mui/material'
 import { useEffect, useState } from 'react'
-import CustomPopup from './CustomPopup'
 import emailjs from '@emailjs/browser'
 import { generateUniqueId } from '../../utils/uniqueId'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import CountUp from 'react-countup'
 import { Frame, Toy } from 'src/types/types'
+import PopupHOC from './PopupHOC'
+import PreviewIcon from '@mui/icons-material/Preview'
 
 const OrderForm = () => {
   const theme = useTheme()
@@ -37,6 +38,8 @@ const OrderForm = () => {
   const [openModal, setModalOpen] = useState<boolean>(false)
   const [isOrderCancelled, setIsOrderCancelled] = useState<boolean>(false)
   const [orderPlaced, setOrderPlaced] = useState<boolean>(false)
+  const [previewOpen, setPreviewOpen] = useState(false)
+
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -45,6 +48,8 @@ const OrderForm = () => {
     city: '',
     pincode: '',
     address: '',
+    customBackground: '',
+    uploadedImage: '',
   })
 
   const [errors, setErrors] = useState({
@@ -55,6 +60,8 @@ const OrderForm = () => {
     city: '',
     pincode: '',
     address: '',
+    customBackground: '',
+    uploadedImage: '',
   })
 
   const [isKeyChainSelected, setIsKeyChainSelected] = useState(true)
@@ -152,20 +159,20 @@ const OrderForm = () => {
         return !value.trim()
           ? 'Name is required'
           : !/^[a-zA-Z\s]+$/.test(value)
-            ? 'Only alphabets are allowed'
-            : ''
+          ? 'Only alphabets are allowed'
+          : ''
       case 'phone':
         return !value.trim()
           ? 'Phone number is required'
           : !/^\d{10}$/.test(value)
-            ? 'Phone must be a 10-digit number'
-            : ''
+          ? 'Phone must be a 10-digit number'
+          : ''
       case 'email':
         return !value.trim()
           ? 'Email is required'
           : !value.includes('@gmail.com')
-            ? 'Email must be a Gmail address'
-            : ''
+          ? 'Email must be a Gmail address'
+          : ''
       case 'state':
         return !value.trim() ? 'State is required' : ''
       case 'city':
@@ -174,8 +181,8 @@ const OrderForm = () => {
         return !value.trim()
           ? 'Pin code is required'
           : !/^\d{6}$/.test(value)
-            ? 'Pin code must be 6 digits'
-            : ''
+          ? 'Pin code must be 6 digits'
+          : ''
       case 'address':
         return !value.trim() ? 'Address is required' : ''
       default:
@@ -192,6 +199,8 @@ const OrderForm = () => {
       city: validate('city', formData.city),
       pincode: validate('pincode', formData.pincode),
       address: validate('address', formData.address),
+      customBackground: validate('customBackground', formData.customBackground),
+      uploadedImage: formData.uploadedImage ? '' : 'Image upload is required',
     }
     setErrors(newErrors)
     return !Object.values(newErrors).some(error => error !== '')
@@ -211,10 +220,9 @@ const OrderForm = () => {
   const keyChainSelected = isKeyChainSelected ? 'Yes' : 'No'
   const raceMapSelected = isRaceTrackSelected && !isToy ? 'Yes' : 'No'
   const backgroundSelected = isBGSelected && !isToy ? 'Yes' : 'No'
-  const allSelectedToys =
-    selectedToys
-      .map(toy => `${toy.name} (${toy.scale}) - ₹${toy.price.toFixed(2)}`)
-      .join('\n')
+  const allSelectedToys = selectedToys
+    .map(toy => `${toy.name} (${toy.scale}) - ₹${toy.price.toFixed(2)}`)
+    .join('\n')
   const selectedFrameName = selectedFrame || 'No Frame Selected'
   const frameTotalCost =
     selectedFrame && selectedFrame !== 'No Frame Selected'
@@ -313,6 +321,32 @@ const OrderForm = () => {
         console.error('error sending email:', error)
       })
   }
+
+  const handleUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onload = ev => {
+        setFormData(prev => ({ ...prev, uploadedImage: ev.target?.result as string }))
+        sessionStorage.setItem('uploadedImage', ev.target?.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const handleImageClear = () => {
+    setFormData(prev => ({ ...prev, uploadedImage: '' as string }))
+    sessionStorage.removeItem('uploadedImage')
+    setPreviewOpen(false)
+  }
+
+  // Ensure uploadedImage is loaded from sessionStorage on mount
+  useEffect(() => {
+    const storedImage = sessionStorage.getItem('uploadedImage')
+    if (storedImage) {
+      setFormData(prev => ({ ...prev, uploadedImage: storedImage }))
+    }
+  }, [])
 
   return (
     <>
@@ -428,7 +462,7 @@ const OrderForm = () => {
               helperText={errors.pincode}
             />
           </Box>
-          <Box>
+          <Box mb={1}>
             <TextField
               fullWidth
               name="address"
@@ -441,8 +475,92 @@ const OrderForm = () => {
               onChange={handleChange}
               error={Boolean(errors.address)}
               helperText={errors.address}
+              sx={{ mb: { xs: 1, sm: 0 } }}
             />
           </Box>
+          <Box mb={1}>
+            <TextField
+              fullWidth
+              name="CustomBackground"
+              label="Instruction to create custom background"
+              size="small"
+              multiline
+              rows={2}
+              value={formData.address}
+              onChange={handleChange}
+              error={Boolean(errors.customBackground)}
+              helperText={errors.customBackground}
+              sx={{ mb: { xs: 1, sm: 0 } }}
+            />
+          </Box>
+          <Box
+            display="flex"
+            flexDirection={{ xs: 'column', sm: 'row' }}
+            gap={1}
+            mb={1}
+            alignItems="center"
+          >
+            <Button
+              variant="outlined"
+              component="label"
+              sx={{
+                mb: 1,
+                width: 'max-content',
+                color: 'white',
+                bgcolor: formData.uploadedImage ? 'green' : 'red',
+                borderColor: formData.uploadedImage ? 'green' : 'red',
+                textTransform: 'none',
+                fontSize: { xs: '0.8rem', sm: '1rem' },
+              }}
+            >
+              Upload Image
+              <input type="file" accept="image/*" hidden onChange={e => handleUploadImage(e)} />
+            </Button>
+            <PreviewIcon
+              onClick={() => setPreviewOpen(true)}
+              sx={{
+                color: formData.uploadedImage ? '#000' : '#3335',
+                cursor: formData.uploadedImage ? 'pointer' : 'not-allowed',
+                pointerEvents: formData.uploadedImage ? 'auto' : 'none',
+              }}
+              titleAccess="preview"
+            />
+            <PopupHOC
+              open={previewOpen}
+              onClose={() => setPreviewOpen(false)}
+              title="Image Preview"
+              centerTitle
+              width="40%"
+              height={'auto'}
+            >
+              <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                {formData.uploadedImage ? (
+                  <>
+                    <Box
+                      component="img"
+                      src={formData.uploadedImage}
+                      alt="Uploaded Preview"
+                      sx={{
+                        mt: 1,
+                        width: '100%',
+                        maxWidth: '400px',
+                        borderRadius: 2,
+                        objectFit: 'contain',
+                      }}
+                    />
+                    <Button variant="outlined" onClick={handleImageClear} sx={{ mt: 2 }}>
+                      Remove
+                    </Button>
+                  </>
+                ) : (
+                  <Typography variant="body2" color="text.secondary">
+                    No image uploaded.
+                  </Typography>
+                )}
+              </Box>
+            </PopupHOC>
+          </Box>
+
           <FormGroup row sx={{ m: 0, flexWrap: { xs: 'wrap', sm: 'nowrap' } }}>
             <FormControlLabel
               control={
@@ -546,7 +664,15 @@ const OrderForm = () => {
                   fontWeight="bold"
                   sx={{ fontSize: { xs: '0.95rem', sm: '1.05rem', md: '1.4rem' } }}
                 >
-                  Final Cost: <CountUp end={finalCost} duration={1} decimals={2} prefix="₹" useEasing useIndianSeparators />
+                  Final Cost:{' '}
+                  <CountUp
+                    end={finalCost}
+                    duration={1}
+                    decimals={2}
+                    prefix="₹"
+                    useEasing
+                    useIndianSeparators
+                  />
                 </Typography>
               </AccordionSummary>
 
@@ -622,7 +748,7 @@ const OrderForm = () => {
                             fontWeight="bold"
                             sx={{ fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' } }}
                           >
-                            Total{' '}<Typography variant="caption">{`(Toys & Frames)`}</Typography>
+                            Total <Typography variant="caption">{`(Toys & Frames)`}</Typography>
                           </Typography>
                         </TableCell>
                         <TableCell
@@ -681,7 +807,7 @@ const OrderForm = () => {
                         >
                           ₹{actualPriceAfterDiscount.toFixed(2)}
                           <Typography variant="subtitle1" color="#3337">
-                            <s >₹{actualCostBeforeDiscount.toFixed(2)}</s>
+                            <s>₹{actualCostBeforeDiscount.toFixed(2)}</s>
                           </Typography>
                         </TableCell>
                       </TableRow>
@@ -755,7 +881,7 @@ const OrderForm = () => {
                             fontWeight="bold"
                             sx={{ fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' } }}
                           >
-                            Total{' '}<Typography variant="caption">{`(Add On's)`}</Typography>
+                            Total <Typography variant="caption">{`(Add On's)`}</Typography>
                           </Typography>
                         </TableCell>
                         <TableCell align="right" sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}>
@@ -809,7 +935,7 @@ const OrderForm = () => {
               Cancel
             </Button>
           </Box>
-          <CustomPopup
+          <PopupHOC
             open={openModal}
             onClose={handleCloseModal}
             title={'Are you sure to cancel the order?'}
@@ -822,7 +948,7 @@ const OrderForm = () => {
               </Button>
               <Button onClick={handleCloseModal}>Order</Button>
             </Box>
-          </CustomPopup>
+          </PopupHOC>
         </Box>
       )}
     </>
