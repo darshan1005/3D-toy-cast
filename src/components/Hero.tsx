@@ -14,6 +14,7 @@ import LocalPhoneIcon from '@mui/icons-material/LocalPhone'
 import { Palette } from '../theme'
 import { Link } from 'react-router-dom'
 import CollectionsIcon from '@mui/icons-material/Collections'
+import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 
 const Hero = () => {
   const theme = useTheme()
@@ -209,6 +210,7 @@ const Hero = () => {
             </Box>
             <Button
               size="small"
+              startIcon={<ShoppingBagIcon />}
               onClick={() => {
                 document.getElementById('selection')?.scrollIntoView({
                   behavior: 'smooth',

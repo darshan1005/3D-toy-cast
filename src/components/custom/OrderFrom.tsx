@@ -28,6 +28,8 @@ import { Frame, Image, Toy } from 'src/types/types'
 import PopupHOC from './PopupHOC'
 import PreviewIcon from '@mui/icons-material/Preview'
 import CloseIcon from '@mui/icons-material/Close'
+import TruncatedTextWithTooltip from './TruncatedText'
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 
 const OrderForm = () => {
   const theme = useTheme()
@@ -163,20 +165,20 @@ const OrderForm = () => {
         return !value.trim()
           ? 'Name is required'
           : !/^[a-zA-Z\s]+$/.test(value)
-          ? 'Only alphabets are allowed'
-          : ''
+            ? 'Only alphabets are allowed'
+            : ''
       case 'phone':
         return !value.trim()
           ? 'Phone number is required'
           : !/^\d{10}$/.test(value)
-          ? 'Phone must be a 10-digit number'
-          : ''
+            ? 'Phone must be a 10-digit number'
+            : ''
       case 'email':
         return !value.trim()
           ? 'Email is required'
           : !value.includes('@gmail.com')
-          ? 'Email must be a Gmail address'
-          : ''
+            ? 'Email must be a Gmail address'
+            : ''
       case 'state':
         return !value.trim() ? 'State is required' : ''
       case 'city':
@@ -185,8 +187,8 @@ const OrderForm = () => {
         return !value.trim()
           ? 'Pin code is required'
           : !/^\d{6}$/.test(value)
-          ? 'Pin code must be 6 digits'
-          : ''
+            ? 'Pin code must be 6 digits'
+            : ''
       case 'address':
         return !value.trim() ? 'Address is required' : ''
       default:
@@ -331,7 +333,7 @@ const OrderForm = () => {
   }
 
   const handleUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let ImageObj : Image= {
+    let ImageObj: Image = {
       name: '',
       size: 0,
       type: '',
@@ -342,6 +344,7 @@ const OrderForm = () => {
       if (file.size > 50 * 1024) {
         // 50KB limit
         setImageSizeWarning(true)
+        handleClearImage()
         if (fileInputRef.current) fileInputRef.current.value = ''
         return
       }
@@ -358,7 +361,7 @@ const OrderForm = () => {
           type: file.type,
           data: ev.target?.result as string,
         }
-        sessionStorage.setItem('uploadedImage',JSON.stringify(ImageObj))
+        sessionStorage.setItem('uploadedImage', JSON.stringify(ImageObj))
       }
       reader.readAsDataURL(file)
     }
@@ -538,11 +541,8 @@ const OrderForm = () => {
           </Box>
           <Box
             display="flex"
-            flexDirection={{ xs: 'column', sm: 'row' }}
-            gap={1}
-            mb={1}
-            alignItems="center"
-          >
+            flexDirection={'row'}
+            alignItems="center">
             <Box
               display="flex"
               flexDirection="row"
@@ -551,97 +551,72 @@ const OrderForm = () => {
               mb={1}
               alignItems="center"
             >
-              <Box
-                display="flex"
-                flexDirection="row"
-                alignItems="center"
-                gap={1}
+              <Button
+                variant="outlined"
+                component="label"
+                startIcon={<FileUploadIcon />}
                 sx={{
+                  mb: 1,
+                  width: 'max-content',
+                  color: 'white',
+                  bgcolor: formData.uploadedImage ? 'green' : 'red',
+                  borderColor: formData.uploadedImage ? 'green' : 'red',
+                  textTransform: 'none',
+                  fontSize: { xs: '0.8rem', sm: '1rem' },
                   flexShrink: 0,
-                  minWidth: 0,
                 }}
               >
-                <Button
-                  variant="outlined"
-                  component="label"
-                  sx={{
-                    mb: 1,
-                    width: 'max-content',
-                    color: 'white',
-                    bgcolor: formData.uploadedImage ? 'green' : 'red',
-                    borderColor: formData.uploadedImage ? 'green' : 'red',
-                    textTransform: 'none',
-                    fontSize: { xs: '0.8rem', sm: '1rem' },
-                    flexShrink: 0,
-                  }}
-                >
-                  Upload Image
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    hidden
-                    onChange={e => handleUploadImage(e)}
-                  />
-                </Button>
+                Upload Image
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  hidden
+                  onChange={e => handleUploadImage(e)}
+                />
+              </Button>
+              {formData.uploadedImage &&
                 <PreviewIcon
                   onClick={() => setPreviewOpen(true)}
                   sx={{
-                    color: formData.uploadedImage ? '#000' : '#3335',
                     cursor: formData.uploadedImage ? 'pointer' : 'not-allowed',
                     pointerEvents: formData.uploadedImage ? 'auto' : 'none',
                     flexShrink: 0,
                   }}
                   titleAccess="preview"
+                />}
+              {<TruncatedTextWithTooltip text={fileName} maxLength={10} />}
+              {formData.uploadedImage && fileName && (
+                <CloseIcon
+                  fontSize="small"
+                  onClick={() => handleImageClearFromName()}
+                  sx={{ color: 'black', cursor: 'pointer' }}
                 />
-              </Box>
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 0.5,
-                  minWidth: 0,
-                  flex: 1,
-                  flexBasis: { xs: '100%', sm: 'auto' },
-                  flexWrap: 'wrap',
-                  wordBreak: 'break-all',
-                }}
-              >
-                <Box
+              )}
+              {imageSizeWarning && (
+                <Alert
+                  severity="warning"
                   sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    minWidth: 0,
-                    overflow: 'hidden',
+                    fontSize: { xs: '0.7rem', sm: '1rem' },
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    textAlign: "left",
+                    ".MuiAlert-message": {
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "center",
+                    },
+                    ".MuiAlert-action": {
+                      paddingTop: 0,
+                      marginRight: 0,
+                    }
                   }}
-                >
-                  <Typography
-                    variant="body1"
-                    color="#0007"
-                    sx={{
-                      flexShrink: 1,
-                      minWidth: 0,
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: { xs: 'normal', sm: 'nowrap' },
-                    }}
-                  >
-                    {fileName}
-                  </Typography>
-                  {formData.uploadedImage && fileName && (
-                    <CloseIcon
-                      fontSize="small"
-                      onClick={() => handleImageClearFromName()}
-                      sx={{ color: 'black', cursor: 'pointer', ml: 0.5 }}
-                    />
-                  )}
-                </Box>
-                {imageSizeWarning && (
-                  <Alert severity="warning" sx={{ width: { xs: '100%', sm: '360px' }, mt: 1 }}>
-                    Please upload image less than 50KB.
-                  </Alert>
-                )}
-              </Box>
+                  onClose={() => setImageSizeWarning(false)}>
+                  Please upload image less than 50KB.
+                </Alert>
+              )}
+
             </Box>
             <PopupHOC
               open={previewOpen}

@@ -15,6 +15,10 @@ import { useEffect, useState } from 'react'
 import OrderForm from './custom/OrderFrom'
 import { Palette } from '../theme'
 import PopupHOC from './custom/PopupHOC'
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
+import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
 const selectionButtonObj = [
   { label: 'Frame', link: '/framespage' },
@@ -33,6 +37,9 @@ const Selection = () => {
 
   const [openModal, setModalOpen] = useState(false)
 
+  const [toySelected, setToySelected] = useState(false)
+  const [frameSelected, setFrameSelected] = useState(false)
+
   // Function to check if an item is selected
   const isItemSelected = (item: string) => {
     const storageKey = item === 'Toy' ? 'selectedToys' : 'selectedFrame'
@@ -40,7 +47,16 @@ const Selection = () => {
     return storedData !== null && storedData !== '[]' && storedData !== 'null'
   }
 
+  const updateSelectionStates = () => {
+    const toySelected = isItemSelected('Toy')
+    const frameSelected = isItemSelected('Frame')
+    setToySelected(toySelected)
+    setFrameSelected(frameSelected)
+  }
+
   useEffect(() => {
+    updateSelectionStates()
+
     const toySelected = isItemSelected('Toy')
     const frameSelected = isItemSelected('Frame')
     const stored = sessionStorage.getItem('availabilityType')
@@ -72,6 +88,22 @@ const Selection = () => {
     }
   }, [location, navigate])
 
+  useEffect(() => {
+    const handleStorageUpdate = () => {
+      updateSelectionStates()
+    }
+
+    window.addEventListener('storageUpdate', handleStorageUpdate)
+
+    // Also listen for focus events to catch changes from other tabs
+    window.addEventListener('focus', handleStorageUpdate)
+
+    return () => {
+      window.removeEventListener('storageUpdate', handleStorageUpdate)
+      window.removeEventListener('focus', handleStorageUpdate)
+    }
+  }, [])
+
   const updateAvailabilityState = (type: '3d' | 'toy' | 'frame') => {
     setIs3DToyFrame(type === '3d')
     setIsOnlyToys(type === 'toy')
@@ -100,19 +132,33 @@ const Selection = () => {
         }
       }
     }
+
+    // Update selection states after availability change
+    updateSelectionStates()
   }
 
   const handleOrder = () => {
     setModalOpen(true)
   }
 
+  const handleClearOrder = () => {
+    sessionStorage.removeItem('selectedToys')
+    sessionStorage.removeItem('selectedFrame')
+
+    // Update local state immediately
+    setToySelected(false)
+    setFrameSelected(false)
+
+    window.dispatchEvent(new Event('storageUpdate'))
+  }
+
   const isOrderButtonDisabled = () => {
     if (is3DToyFrame) {
-      return !(isItemSelected('Toy') && isItemSelected('Frame'))
+      return !(toySelected && frameSelected)
     } else if (isOnlyToys) {
-      return !isItemSelected('Toy')
+      return !toySelected
     } else if (isOnlyFrames) {
-      return !isItemSelected('Frame')
+      return !frameSelected
     }
     return true
   }
@@ -242,7 +288,7 @@ const Selection = () => {
                 justifyContent="center"
               >
                 {selectionButtonObj.map(item => {
-                  const isSelected = isItemSelected(item.label)
+                  const isSelected = item.label === 'Toy' ? toySelected : frameSelected
                   const isToyDisabled = isOnlyFrames && item.label === 'Toy'
                   const isFrameDisabled = isOnlyToys && item.label === 'Frame'
 
@@ -257,6 +303,13 @@ const Selection = () => {
                       <Button
                         variant={isSmallScreen ? 'contained' : 'outlined'}
                         disabled={isDisabled}
+                        startIcon={
+                          isSelected ? (
+                            <ShoppingCartIcon />
+                          ) : (
+                            <AddShoppingCartIcon />
+                          )
+                        }
                         sx={{
                           width: '100%',
                           fontSize: isSmallScreen ? '1rem' : '1.4rem',
@@ -267,13 +320,13 @@ const Selection = () => {
                               ? Palette.secondary.light
                               : Palette.text.secondary
                             : isSelected
-                            ? Palette.secondary.light
-                            : 'transparent',
+                              ? Palette.secondary.light
+                              : 'transparent',
                           color: isSmallScreen
                             ? Palette.text.white
                             : isSelected
-                            ? Palette.text.white
-                            : Palette.text.secondary,
+                              ? Palette.text.white
+                              : Palette.text.secondary,
                           '&:hover': {
                             borderColor: isSelected
                               ? Palette.secondary.dark
@@ -289,26 +342,54 @@ const Selection = () => {
                   )
                 })}
               </Stack>
-
-              <Button
-                variant="contained"
-                onClick={handleOrder}
-                disabled={isOrderButtonDisabled()}
-                sx={{
-                  width: isSmallScreen ? '100%' : '30%',
-                  alignSelf: 'center',
-                  bgcolor: 'transparent',
-                  color: Palette.success.dark,
-                  border:
-                    !isItemSelected('Toy') || !isItemSelected('Frame')
-                      ? undefined
-                      : `2px solid ${Palette.secondary.main}`,
-                  fontWeight: 600,
-                  fontSize: isSmallScreen ? '1rem' : '1.2rem',
-                }}
-              >
-                Order
-              </Button>
+              <Stack direction={'row'} gap={2} justifyContent="center">
+                <Button
+                  variant="contained"
+                  onClick={handleOrder}
+                  disabled={isOrderButtonDisabled()}
+                  startIcon={
+                    isOrderButtonDisabled() ? (
+                      <ShoppingCartIcon />
+                    ) : (
+                      <ShoppingCartCheckoutIcon />
+                    )
+                  }
+                  sx={{
+                    width: isSmallScreen ? '100%' : '30%',
+                    alignSelf: 'center',
+                    bgcolor: 'transparent',
+                    color: Palette.success.dark,
+                    border:
+                      !toySelected || !frameSelected
+                        ? undefined
+                        : `2px solid ${Palette.secondary.main}`,
+                    fontWeight: 600,
+                    fontSize: isSmallScreen ? '1rem' : '1.2rem',
+                  }}
+                >
+                  Order
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={handleClearOrder}
+                  disabled={isOrderButtonDisabled()}
+                  startIcon={<RemoveShoppingCartIcon />}
+                  sx={{
+                    width: isSmallScreen ? '100%' : '30%',
+                    alignSelf: 'center',
+                    bgcolor: 'transparent',
+                    color: Palette.success.dark,
+                    border:
+                      !toySelected || !frameSelected
+                        ? undefined
+                        : `2px solid ${Palette.secondary.main}`,
+                    fontWeight: 600,
+                    fontSize: isSmallScreen ? '1rem' : '1.2rem',
+                  }}
+                >
+                  Reset
+                </Button>
+              </Stack>
             </Stack>
           </Stack>
         </Stack>

@@ -25,9 +25,9 @@ export interface ToyDataProps {
 }
 
 export interface Testimonial {
-    username: string
-    stars: number
-    testimonial: string
+  username: string
+  stars: number
+  testimonial: string
 }
 
 export interface Toy {
@@ -48,4 +48,9 @@ export interface Image {
   size: number
   type: string
   data: string
+}
+
+export interface TruncatedTextWithTooltipProps {
+  text: string
+  maxLength: number
 }
