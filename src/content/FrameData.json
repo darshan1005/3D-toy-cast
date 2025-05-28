@@ -10,7 +10,21 @@
       "dimensionPrice": [
         {
           "size": "20 X 30 cm",
-          "price": 496
+          "price": 496,
+          "preview": [
+            {
+              "id": 1,
+              "image": "/uploads/bike.svg"
+            },
+            {
+              "id": 1,
+              "image": "/uploads/supercar.png"
+            },
+            {
+              "id": 1,
+              "image": "/uploads/frame.jpeg"
+            }
+          ]
         },
         {
           "size": "18 X 27 cm",
