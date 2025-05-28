@@ -15,6 +15,7 @@ import PreviewIcon from '@mui/icons-material/Preview'
 import { getFramePrice } from '../../utils/pricing'
 import { DimensionPrice } from 'src/types/types'
 import PopupHOC from './HOC/PopupHOC'
+import CarouselHOC from './HOC/CarouselHOC'
 
 interface FrameDetails {
   type: string
@@ -52,6 +53,25 @@ const FrameCard: React.FC<FrameCardProps> = ({
   }
 
   const frameSellingPrice: number = getSelectedFramePrice()
+
+  // Helper to render the preview carousel for the selected dimension
+  const renderPreviewCarousel = () => {
+    const selectedDimensionObj = frameDetails.dimensionPrices.find(
+      d => d.size === selectedDimension,
+    )
+    const previewImages = selectedDimensionObj?.preview || []
+    return (
+      <CarouselHOC data={previewImages}>
+        {(item: { id: number; image: any }, index: number) => (
+          <img
+            src={item.image}
+            alt={`Preview ${index + 1}`}
+            style={{ maxWidth: '90vw', maxHeight: '80vh', borderRadius: 8 }}
+          />
+        )}
+      </CarouselHOC>
+    )
+  }
 
   return (
     <Card
@@ -118,11 +138,7 @@ const FrameCard: React.FC<FrameCardProps> = ({
               alignItems: 'center',
             }}
           >
-            <img
-              src={frameDetails.image}
-              alt={frameDetails.type}
-              style={{ maxWidth: '90vw', maxHeight: '80vh', borderRadius: 8 }}
-            />
+            {renderPreviewCarousel()}
             <Button onClick={() => setPreviewOpen(false)} sx={{ mt: 2 }} variant="outlined">
               Close
             </Button>

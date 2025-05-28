@@ -47,6 +47,16 @@ collections:
                   - label: 'Price'
                     name: 'price'
                     widget: 'number'
+                  - label: 'Preview'
+                    name: 'preview'
+                    widget: 'list'
+                    fields:
+                      - label: 'ID'
+                        name: 'id'
+                        widget: 'number'
+                      - label: 'Image'
+                        name: 'image'
+                        widget: 'image'
 
   - name: 'ToysData'
     label: 'ToysData'

@@ -1,6 +1,7 @@
 export interface DimensionPrice {
   size: string
   price: number
+  preview: { id: number; image: any }[]
 }
 
 export interface FrameDetailsProps {

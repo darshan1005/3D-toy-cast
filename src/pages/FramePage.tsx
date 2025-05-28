@@ -5,7 +5,7 @@ import { useState, useEffect, useMemo, use } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getFramePrice } from '../utils/pricing'
 import frameJsonData from '../content/FrameData.json'
-import { FrameDetailsProps } from 'src/types/types'
+import { FrameDetailsProps, DimensionPrice } from 'src/types/types'
 
 interface SelectedFrame {
   id: number
@@ -22,10 +22,14 @@ const FramePage = () => {
     {},
   )
 
-  const frameDataJSON = useMemo(() => {
-    return frameJsonData.frames.map((frame: FrameDetailsProps) => ({
+  const frameDataJSON: FrameDetailsProps[] = useMemo(() => {
+    return frameJsonData.frames.map((frame: any) => ({
       ...frame,
-    }))
+      dimensionPrice: frame.dimensionPrice.map((d: any) => ({
+        ...d,
+        preview: Array.isArray(d.preview) ? d.preview : [],
+      })) as DimensionPrice[],
+    })) as FrameDetailsProps[]
   }, [frameJsonData.frames])
 
   // Load selected frame from sessionStorage on component mount
