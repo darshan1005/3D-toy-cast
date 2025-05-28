@@ -187,6 +187,7 @@ const FramePage = () => {
             onDimensionChange={(dimension: string) =>
               handleFrameDimensionChange(frame.type, dimension)
             }
+            previewTitle={`Preview for ${frame.type} ${frame.dimensionPrice[0]?.size}`}
           />
         ))}
       </Box>

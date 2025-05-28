@@ -175,11 +175,11 @@ const Selection = () => {
             overflow: 'hidden',
           }}
         >
-          <Box
-            component="img"
+          <img
             src={orangeCar}
+            loading='lazy'
             alt="Orange Car"
-            sx={{
+            style={{
               position: 'absolute',
               left: isSmallScreen ? '50%' : 0,
               top: isSmallScreen ? '10%' : '30%',
@@ -364,7 +364,7 @@ const Selection = () => {
                         ? undefined
                         : `2px solid ${Palette.secondary.main}`,
                     fontWeight: 600,
-                    fontSize: isSmallScreen ? '1rem' : '1.2rem',
+                    fontSize: isSmallScreen ? '.9rem' : '1.2rem',
                   }}
                 >
                   Order
@@ -384,10 +384,10 @@ const Selection = () => {
                         ? undefined
                         : `2px solid ${Palette.secondary.main}`,
                     fontWeight: 600,
-                    fontSize: isSmallScreen ? '1rem' : '1.2rem',
+                    fontSize: isSmallScreen ? '.9rem' : '1.2rem',
                   }}
                 >
-                  Reset
+                  Clear Cart
                 </Button>
               </Stack>
             </Stack>

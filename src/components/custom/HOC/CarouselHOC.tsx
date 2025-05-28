@@ -41,45 +41,50 @@ const CarouselHOC = <T,>({ children, data, itemsPerView }: CarouselProps<T>) => 
     <Box
       sx={{
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        width: '100%',
-        position: 'relative',
-        minHeight: 200,
+        gap: 2,
       }}
     >
-      {showNav && (
-        <IconButton onClick={handlePrev} sx={{ position: 'absolute', left: '-24px', zIndex: 2 }}>
-          <ArrowBackIosNewIcon />
-        </IconButton>
-      )}
       <Box
         sx={{
-          width: isSmallScreen ? '90vw' : '100%',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center',
-          overflow: 'hidden',
-          gap: 2,
+          justifyContent: 'space-between',
+          gap: isSmallScreen ? 2 : 10,
         }}
       >
-        {visibleItems.map((item, idx) => children(item, current + idx))}
+        {showNav && (
+          <IconButton onClick={handlePrev} disabled={current === 0}>
+            <ArrowBackIosNewIcon sx={{ fontSize: isSmallScreen ? '1rem' : '1.5rem' }} />
+          </IconButton>
+        )}
+        <Box
+          sx={{
+            width: isSmallScreen ? '70%' : '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            overflow: 'hidden',
+            gap: 2,
+          }}
+        >
+          {visibleItems.map((item, idx) => children(item, current + idx))}
+        </Box>
+        {showNav && (
+          <IconButton onClick={handleNext} disabled={current >= maxStart}>
+            <ArrowForwardIosIcon sx={{ fontSize: isSmallScreen ? '1rem' : '1.5rem' }} />
+          </IconButton>
+        )}
       </Box>
-      {showNav && (
-        <IconButton onClick={handleNext} sx={{ position: 'absolute', right: '-24px', zIndex: 2 }}>
-          <ArrowForwardIosIcon />
-        </IconButton>
-      )}
+
       {/* Dots indicator */}
       {showDots && (
         <Box
           sx={{
             display: 'flex',
             justifyContent: 'center',
-            mt: 2,
-            width: '100%',
-            position: 'absolute',
-            bottom: 8,
           }}
         >
           {Array.from({ length: Math.ceil(data.length / perView) }).map((_, idx) => {
@@ -89,15 +94,13 @@ const CarouselHOC = <T,>({ children, data, itemsPerView }: CarouselProps<T>) => 
               <Box
                 key={idx}
                 sx={{
-                  width: 10,
-                  height: 10,
+                  width: isSmallScreen ? 7 : 10,
+                  height: isSmallScreen ? 7 : 10,
                   borderRadius: '50%',
-                  bgcolor: isActive ? 'primary.main' : 'grey.400',
+                  bgcolor: isActive ? theme.palette.error.main : theme.palette.grey[400],
                   mx: 0.5,
                   transition: 'background 0.2s',
                   cursor: 'pointer',
-                  border: isActive ? '2px solid' : '1px solid',
-                  borderColor: isActive ? 'primary.dark' : 'grey.300',
                 }}
                 onClick={() => setCurrent(idx * perView)}
               />

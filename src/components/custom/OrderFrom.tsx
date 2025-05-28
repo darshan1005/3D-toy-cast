@@ -629,12 +629,12 @@ const OrderForm = () => {
               <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 {formData.uploadedImage ? (
                   <>
-                    <Box
-                      component="img"
+                    <img
                       src={formData.uploadedImage}
+                      loading='lazy'
                       alt="Uploaded Preview"
-                      sx={{
-                        mt: 1,
+                      style={{
+                        marginTop: 1,
                         width: '100%',
                         maxWidth: '400px',
                         borderRadius: 2,

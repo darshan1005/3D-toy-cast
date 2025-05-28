@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, IconButton, Modal, Paper, Typography, useTheme } from '@mui/material'
+import { Box, IconButton, Modal, Paper, Typography, useMediaQuery, useTheme } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 
 interface CustomPopupProps {
@@ -21,6 +21,9 @@ const PopupHOC: React.FC<CustomPopupProps> = ({
   height = 'auto',
   centerTitle = false,
 }) => {
+  const theme = useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
+
   return (
     <Modal open={open} onClose={onClose}>
       <Box
@@ -50,22 +53,22 @@ const PopupHOC: React.FC<CustomPopupProps> = ({
             sx={{
               position: 'absolute',
               top: 8,
-              left: 8,
+              right: 8,
               bgcolor: 'grey.200',
             }}
             onClick={onClose}
             aria-label="Close"
             size="small"
           >
-            <CloseIcon />
+            <CloseIcon fontSize="small" />
           </IconButton>
 
           {title && (
             <Typography
-              variant="h6"
+              variant={isSmallScreen ? 'subtitle2' : 'h6'}
               fontWeight="bold"
               textAlign={centerTitle ? 'center' : 'left'}
-              sx={{ mb: 2 }}
+              sx={{ m: 1 }}
             >
               {title}
             </Typography>

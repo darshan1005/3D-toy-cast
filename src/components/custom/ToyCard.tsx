@@ -57,6 +57,7 @@ const ToyCard: React.FC<ToyCardProps> = ({
       {/* Image section */}
       <CardMedia
         component="img"
+        loading="lazy"
         image={image}
         alt={name}
         sx={{

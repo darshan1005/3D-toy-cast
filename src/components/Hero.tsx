@@ -61,15 +61,15 @@ const Hero = () => {
               gap: 1,
             }}
           >
-            <Box
-              sx={{
+            <img
+              style={{
                 width: isSmallScreen ? '30px' : '40px',
                 height: isSmallScreen ? '30px' : '40px',
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
               }}
-              component={'img'}
+              loading='lazy'
               src={Logo}
             />
             <Typography
@@ -158,11 +158,11 @@ const Hero = () => {
               mb: isSmallScreen ? 2 : 0,
             }}
           >
-            <Box
-              component={'img'}
+            <img
+              loading="lazy"
               src={BikeImage}
               alt="bike image"
-              sx={{
+              style={{
                 position: 'absolute',
                 bottom: isSmallScreen ? '-40px' : '-20px',
                 right: isSmallScreen ? '10px' : '-50px',
@@ -245,11 +245,11 @@ const Hero = () => {
               overflow: 'visible',
             }}
           >
-            <Box
-              component={'img'}
+            <img
               src={CarImage}
+              loading="lazy"
               alt="car image"
-              sx={{
+              style={{
                 position: 'absolute',
                 bottom: isSmallScreen ? '5px' : '0px',
                 top: isSmallScreen ? 'auto' : '40%',

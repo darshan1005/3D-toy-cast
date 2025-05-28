@@ -292,16 +292,16 @@ const Bento = () => {
               position: 'absolute',
               zIndex: 1,
               opacity: 0.8,
-              fontSize: isSmallScreen ? '2.5rem' : '4rem',
+              fontSize: isSmallScreen ? '2rem' : '4rem',
             }}
           >
             3D TOY CAST
           </Typography>
-          <Box
-            component="img"
+          <img
             src={f1}
+            loading='lazy'
             alt="f-1"
-            sx={{
+            style={{
               display: isSmallScreen ? 'none' : 'block',
               position: 'absolute',
               zIndex: 2,

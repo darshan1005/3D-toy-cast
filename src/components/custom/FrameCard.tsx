@@ -4,11 +4,12 @@ import {
   Button,
   Typography,
   Card,
-  Dialog,
   FormControl,
   MenuItem,
   Select,
   SelectChangeEvent,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material'
 import { Palette } from '../../theme'
 import PreviewIcon from '@mui/icons-material/Preview'
@@ -32,6 +33,7 @@ interface FrameCardProps {
   isSelected?: boolean
   selectedDimension: string
   onDimensionChange: (dimension: string) => void
+  previewTitle?: string
 }
 
 const FrameCard: React.FC<FrameCardProps> = ({
@@ -40,8 +42,11 @@ const FrameCard: React.FC<FrameCardProps> = ({
   isSelected = false,
   selectedDimension,
   onDimensionChange,
+  previewTitle
 }) => {
   const [previewOpen, setPreviewOpen] = useState(false)
+    const theme = useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
 
   const handleDimensionChange = (event: SelectChangeEvent) => {
     const newDimension = event.target.value
@@ -61,14 +66,14 @@ const FrameCard: React.FC<FrameCardProps> = ({
     )
     const previewImages = selectedDimensionObj?.preview || []
     return (
-      <CarouselHOC data={previewImages} itemsPerView={1}>
+      <CarouselHOC data={previewImages} itemsPerView={1}> 
         {(item: { id: number; image: any }, index: number) => (
-          <Box width={250} key={index} sx={{ display: 'flex', justifyContent: 'center' }}>
-            <Box
-              component={'img'}
+          <Box key={index} sx={{ display: 'flex', justifyContent: 'center', width:isSmallScreen ? 150 : 250, height:isSmallScreen ? 150 : 250 }}>
+            <img
               src={item.image}
+              loading="lazy"
               alt={`Preview ${index + 1}`}
-              style={{ width: '100%', borderRadius: 8, height: 310 }}
+              style={{ width: '100%', objectFit: 'contain' }}
             />
           </Box>
         )}
@@ -105,14 +110,13 @@ const FrameCard: React.FC<FrameCardProps> = ({
         }}
       >
         {/* Frame Preview */}
-        <Box
-          component={'img'}
+        <img
           src={frameDetails.image}
+          loading="lazy"
           alt={frameDetails.type}
-          sx={{
+          style={{
             width: 200,
-            height: { xs: 170, sm: 270 },
-            bgcolor: '#222',
+            height: isSmallScreen ? '170px' : '270px',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
@@ -127,9 +131,8 @@ const FrameCard: React.FC<FrameCardProps> = ({
           onClose={function (): void {
             setPreviewOpen(false)
           }}
-          title="Frame Preview"
-          width={800}
-          height={'auto'}
+          title={previewTitle || 'Frame Preview'}
+          width={600}
           centerTitle={true}
         >
           <Box
@@ -142,9 +145,6 @@ const FrameCard: React.FC<FrameCardProps> = ({
             }}
           >
             {renderPreviewCarousel()}
-            <Button onClick={() => setPreviewOpen(false)} sx={{ mt: 2 }} variant="outlined">
-              Close
-            </Button>
           </Box>
         </PopupHOC>
       </Box>
@@ -181,7 +181,7 @@ const FrameCard: React.FC<FrameCardProps> = ({
               gap: 1,
             }}
           >
-            <Typography variant="h6" fontWeight="bold">
+            <Typography variant= {isSmallScreen? 'body1' : "h6"} fontWeight="bold">
               {frameDetails.type}
             </Typography>
             <PreviewIcon
@@ -233,7 +233,7 @@ const FrameCard: React.FC<FrameCardProps> = ({
             <Typography variant="body2" sx={{ minWidth: 100 }} fontWeight={'bold'}>
               Description:
             </Typography>
-            <Typography variant="subtitle1" lineHeight={1.4}>
+            <Typography variant="subtitle2" lineHeight={1.4}>
               {frameDetails.description}
             </Typography>
           </Box>
