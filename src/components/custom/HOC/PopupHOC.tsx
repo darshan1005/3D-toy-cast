@@ -65,7 +65,7 @@ const PopupHOC: React.FC<CustomPopupProps> = ({
 
           {title && (
             <Typography
-              variant={isSmallScreen ? 'subtitle2' : 'h6'}
+              variant={isSmallScreen ? 'body1' : 'h6'}
               fontWeight="bold"
               textAlign={centerTitle ? 'center' : 'left'}
               sx={{ m: 1 }}
