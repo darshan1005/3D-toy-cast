@@ -1,4 +1,5 @@
-import { Box, Stack, SxProps, Theme, Typography, useMediaQuery, useTheme } from '@mui/material'
+import React from 'react'
+import { Box, Stack, Typography, useMediaQuery, useTheme } from '@mui/material'
 import StarIcon from '@mui/icons-material/Star'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
 import testimonialsJson from '../content/TestimonialsData.json'
@@ -22,11 +23,11 @@ const Testimonial = ({ username, stars, testimonial }: TestimonialType) => {
     <Box
       sx={{
         bgcolor: 'white',
-        p: isSmallScreen ? 2 : 3,
+        p: isSmallScreen ? 1 : 3,
         borderRadius: 2,
-        boxShadow: '2px 2px 6px rgba(0, 0, 0, 0.1)',
         height: '100%',
         minHeight: 250,
+        border: '2px solid #000'
       }}
     >
       <Stack spacing={1.5}>
@@ -49,8 +50,8 @@ const Testimonies = () => {
 
   return (
     <Box sx={{ backgroundColor: 'red', p: 2 }}>
-      <Box sx={{ backgroundColor: 'white', p: 2, borderRadius: 3 }}>
-        <Stack spacing={3} sx={{ p: { xs: 2, sm: 4 } }}>
+      <Box sx={{ backgroundColor: 'white', borderRadius: 3 }}>
+        <Stack spacing={3} sx={{ p: { xs: 1, sm: 4 } }}>
           <Typography
             fontWeight="bold"
             textAlign="center"
@@ -61,11 +62,13 @@ const Testimonies = () => {
 
           <CarouselHOC data={testimonials} itemsPerView={4}>
             {item => (
-              <Testimonial
-                username={item.username}
-                stars={item.stars}
-                testimonial={item.testimonial}
-              />
+              <React.Fragment key={item.username}>
+                <Testimonial
+                  username={item.username}
+                  stars={item.stars}
+                  testimonial={item.testimonial}
+                />
+              </React.Fragment>
             )}
           </CarouselHOC>
         </Stack>

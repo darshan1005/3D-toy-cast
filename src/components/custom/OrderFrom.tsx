@@ -30,6 +30,7 @@ import PreviewIcon from '@mui/icons-material/Preview'
 import CloseIcon from '@mui/icons-material/Close'
 import TruncatedTextWithTooltip from './TruncatedText'
 import FileUploadIcon from '@mui/icons-material/FileUpload';
+import LazyImage from './LazyImage'
 
 const OrderForm = () => {
   const theme = useTheme()
@@ -629,11 +630,10 @@ const OrderForm = () => {
               <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 {formData.uploadedImage ? (
                   <>
-                    <img
+                    <LazyImage
                       src={formData.uploadedImage}
-                      loading='lazy'
-                      alt="Uploaded Preview"
-                      style={{
+                      alt='Uploaded Preview'
+                      sx={{
                         marginTop: 1,
                         width: '100%',
                         maxWidth: '400px',

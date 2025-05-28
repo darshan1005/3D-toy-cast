@@ -15,6 +15,7 @@ import { Palette } from '../theme'
 import { Link } from 'react-router-dom'
 import CollectionsIcon from '@mui/icons-material/Collections'
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
+import LazyImage from './custom/LazyImage'
 
 const Hero = () => {
   const theme = useTheme()
@@ -61,17 +62,16 @@ const Hero = () => {
               gap: 1,
             }}
           >
-            <img
-              style={{
+            <LazyImage
+              src={Logo}
+              alt='logo-3dtoycast'
+              sx={{
                 width: isSmallScreen ? '30px' : '40px',
                 height: isSmallScreen ? '30px' : '40px',
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-              }}
-              loading='lazy'
-              src={Logo}
-            />
+              }} />
             <Typography
               variant="h4"
               sx={{
@@ -158,18 +158,16 @@ const Hero = () => {
               mb: isSmallScreen ? 2 : 0,
             }}
           >
-            <img
-              loading="lazy"
+            <LazyImage
               src={BikeImage}
-              alt="bike image"
-              style={{
+              alt='bike image'
+              sx={{
                 position: 'absolute',
                 bottom: isSmallScreen ? '-40px' : '-20px',
                 right: isSmallScreen ? '10px' : '-50px',
                 zIndex: 1,
                 width: isSmallScreen ? '40%' : 'auto',
-              }}
-            />
+              }} />
           </Box>
           <Box
             display="flex"
@@ -245,18 +243,16 @@ const Hero = () => {
               overflow: 'visible',
             }}
           >
-            <img
+            <LazyImage
               src={CarImage}
-              loading="lazy"
-              alt="car image"
-              style={{
+              alt='car image'
+              sx={{
                 position: 'absolute',
                 bottom: isSmallScreen ? '5px' : '0px',
                 top: isSmallScreen ? 'auto' : '40%',
                 left: isSmallScreen ? '35px' : '-100px',
                 width: isSmallScreen ? '80%' : 'auto',
-              }}
-            />
+              }} />
           </Box>
         </Box>
       </Box>

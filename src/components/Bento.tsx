@@ -2,6 +2,7 @@ import { Box, Typography, useMediaQuery, useTheme } from '@mui/material'
 import f1 from '../assets/f-1.svg'
 import superCar from '../assets/supercar.png'
 import CountUp from 'react-countup';
+import LazyImage from './custom/LazyImage';
 
 const styles = {
   textGradient: {
@@ -297,11 +298,10 @@ const Bento = () => {
           >
             3D TOY CAST
           </Typography>
-          <img
+          <LazyImage
             src={f1}
-            loading='lazy'
-            alt="f-1"
-            style={{
+            alt='f-1'
+            sx={{
               display: isSmallScreen ? 'none' : 'block',
               position: 'absolute',
               zIndex: 2,
@@ -309,8 +309,7 @@ const Bento = () => {
               top: '50%',
               transform: 'translate(-50%, -50%)',
               width: isSmallScreen ? '50%' : 'auto',
-            }}
-          />
+            }} />
         </Box>
       </Box>
     </Box>

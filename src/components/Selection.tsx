@@ -19,6 +19,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import LazyImage from './custom/LazyImage'
 
 const selectionButtonObj = [
   { label: 'Frame', link: '/framespage' },
@@ -175,11 +176,10 @@ const Selection = () => {
             overflow: 'hidden',
           }}
         >
-          <img
+          <LazyImage
             src={orangeCar}
-            loading='lazy'
-            alt="Orange Car"
-            style={{
+            alt='Orange Car'
+            sx={{
               position: 'absolute',
               left: isSmallScreen ? '50%' : 0,
               top: isSmallScreen ? '10%' : '30%',
@@ -188,8 +188,7 @@ const Selection = () => {
                 : 'translateY(-50%) rotate(-50deg)',
               filter: 'blur(3px)',
               display: isSmallScreen ? 'none' : 'block',
-            }}
-          />
+            }} />
           <Stack
             alignItems={isSmallScreen ? 'center' : 'flex-end'}
             justifyContent="center"

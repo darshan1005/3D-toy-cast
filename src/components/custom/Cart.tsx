@@ -4,6 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import ToyCard from './ToyCard'
 import CloseIcon from '@mui/icons-material/Close'
 import { Frame, FrameDetailsProps, ToyDataProps } from 'src/types/types'
+import LazyImage from './LazyImage'
 
 interface CartProps {
   open: boolean
@@ -115,10 +116,10 @@ const Cart: React.FC<CartProps> = ({ open, onClose }) => {
               <DeleteIcon color="error" />
             </IconButton>
             <Box>
-              <img
+              <LazyImage
                 src={selectedFrame.image}
                 alt={selectedFrame.type}
-                style={{ width: '100%', borderRadius: 8 }}
+                sx={{ width: '100%', borderRadius: 8 }}
               />
               <Typography variant="subtitle1" fontWeight="bold" mt={1}>
                 {selectedFrame.type}

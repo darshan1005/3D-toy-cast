@@ -17,6 +17,7 @@ import { getFramePrice } from '../../utils/pricing'
 import { DimensionPrice } from 'src/types/types'
 import PopupHOC from './HOC/PopupHOC'
 import CarouselHOC from './HOC/CarouselHOC'
+import LazyImage from './LazyImage'
 
 interface FrameDetails {
   type: string
@@ -45,7 +46,7 @@ const FrameCard: React.FC<FrameCardProps> = ({
   previewTitle
 }) => {
   const [previewOpen, setPreviewOpen] = useState(false)
-    const theme = useTheme()
+  const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
 
   const handleDimensionChange = (event: SelectChangeEvent) => {
@@ -66,14 +67,20 @@ const FrameCard: React.FC<FrameCardProps> = ({
     )
     const previewImages = selectedDimensionObj?.preview || []
     return (
-      <CarouselHOC data={previewImages} itemsPerView={1}> 
+      <CarouselHOC data={previewImages} itemsPerView={1}>
         {(item: { id: number; image: any }, index: number) => (
-          <Box key={index} sx={{ display: 'flex', justifyContent: 'center', width:isSmallScreen ? 150 : 250, height:isSmallScreen ? 150 : 250 }}>
-            <img
+          <Box
+            key={index}
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              width: isSmallScreen ? 150 : 250,
+              height: isSmallScreen ? 150 : 250
+            }}>
+            <LazyImage
               src={item.image}
-              loading="lazy"
               alt={`Preview ${index + 1}`}
-              style={{ width: '100%', objectFit: 'contain' }}
+              sx={{ width: '100%', objectFit: 'contain' }}
             />
           </Box>
         )}
@@ -110,11 +117,10 @@ const FrameCard: React.FC<FrameCardProps> = ({
         }}
       >
         {/* Frame Preview */}
-        <img
+        <LazyImage
           src={frameDetails.image}
-          loading="lazy"
           alt={frameDetails.type}
-          style={{
+          sx={{
             width: 200,
             height: isSmallScreen ? '170px' : '270px',
             display: 'flex',
@@ -181,7 +187,7 @@ const FrameCard: React.FC<FrameCardProps> = ({
               gap: 1,
             }}
           >
-            <Typography variant= {isSmallScreen? 'body1' : "h6"} fontWeight="bold">
+            <Typography variant={isSmallScreen ? 'body1' : "h6"} fontWeight="bold">
               {frameDetails.type}
             </Typography>
             <PreviewIcon
