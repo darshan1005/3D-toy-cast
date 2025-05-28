@@ -61,13 +61,16 @@ const FrameCard: React.FC<FrameCardProps> = ({
     )
     const previewImages = selectedDimensionObj?.preview || []
     return (
-      <CarouselHOC data={previewImages}>
+      <CarouselHOC data={previewImages} itemsPerView={1}>
         {(item: { id: number; image: any }, index: number) => (
-          <img
-            src={item.image}
-            alt={`Preview ${index + 1}`}
-            style={{ maxWidth: '90vw', maxHeight: '80vh', borderRadius: 8 }}
-          />
+          <Box width={250} key={index} sx={{ display: 'flex', justifyContent: 'center' }}>
+            <Box
+              component={'img'}
+              src={item.image}
+              alt={`Preview ${index + 1}`}
+              style={{ width: '100%', borderRadius: 8, height: 310 }}
+            />
+          </Box>
         )}
       </CarouselHOC>
     )
@@ -125,9 +128,9 @@ const FrameCard: React.FC<FrameCardProps> = ({
             setPreviewOpen(false)
           }}
           title="Frame Preview"
-          width={'60%'}
-          centerTitle={true}
+          width={800}
           height={'auto'}
+          centerTitle={true}
         >
           <Box
             sx={{

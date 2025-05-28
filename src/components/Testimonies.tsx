@@ -1,12 +1,4 @@
-import {
-  Box,
-  Stack,
-  SxProps,
-  Theme,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material'
+import { Box, Stack, SxProps, Theme, Typography, useMediaQuery, useTheme } from '@mui/material'
 import StarIcon from '@mui/icons-material/Star'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
 import testimonialsJson from '../content/TestimonialsData.json'
@@ -38,21 +30,13 @@ const Testimonial = ({ username, stars, testimonial }: TestimonialType) => {
       }}
     >
       <Stack spacing={1.5}>
-        <Typography
-          variant="h6"
-          fontWeight="bold"
-          fontSize={{ xs: '1rem', sm: '1.25rem' }}
-        >
+        <Typography variant="h6" fontWeight="bold" fontSize={{ xs: '1rem', sm: '1.25rem' }}>
           {username}
         </Typography>
         <Stack direction="row" spacing={0.5}>
           {renderStars()}
         </Stack>
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          fontSize={{ xs: '0.9rem', sm: '1rem' }}
-        >
+        <Typography variant="body2" color="text.secondary" fontSize={{ xs: '0.9rem', sm: '1rem' }}>
           {testimonial}
         </Typography>
       </Stack>
@@ -61,34 +45,7 @@ const Testimonial = ({ username, stars, testimonial }: TestimonialType) => {
 }
 
 const Testimonies = () => {
-  const theme = useTheme()
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
   const testimonials: TestimonialType[] = testimonialsJson.testimonials
-
-  const containerStyles = isSmallScreen
-    ? {
-      display: 'flex',
-      overflowX: 'auto',
-      scrollSnapType: 'x mandatory',
-      gap: 2,
-      paddingBottom: 2,
-      '&::-webkit-scrollbar': { display: 'none' },
-      scrollbarWidth: 'none',
-    }
-    : {
-      display: 'flex',
-      justifyContent: 'center',
-      gap: 3,
-    }
-
-  const cardStyles = isSmallScreen
-    ? {
-      flex: '0 0 80%',
-      scrollSnapAlign: 'start',
-    }
-    : {
-      width: '300px',
-    }
 
   return (
     <Box sx={{ backgroundColor: 'red', p: 2 }}>
@@ -102,8 +59,8 @@ const Testimonies = () => {
             What Our Customers Say
           </Typography>
 
-          <CarouselHOC data={testimonials}>
-            {(item) => (
+          <CarouselHOC data={testimonials} itemsPerView={4}>
+            {item => (
               <Testimonial
                 username={item.username}
                 stars={item.stars}
