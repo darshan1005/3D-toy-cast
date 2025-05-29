@@ -56,23 +56,15 @@ const Selection = () => {
   }
 
   useEffect(() => {
-    updateSelectionStates()
-
-    const toySelected = isItemSelected('Toy')
-    const frameSelected = isItemSelected('Frame')
-    const stored = sessionStorage.getItem('availabilityType')
-
-    if (!stored) {
-      if (toySelected && frameSelected) {
-        handleAvailability('3d')
-      } else if (toySelected) {
-        handleAvailability('toy')
-      } else if (frameSelected) {
-        handleAvailability('frame')
-      } else {
-        handleAvailability('3d') // fallback default
-      }
-    }
+    // Initialize availability type to '3d' on first load
+   const stored = sessionStorage.getItem('availabilityType')
+  if (!stored) {
+    sessionStorage.setItem('availabilityType', '3d')
+    updateAvailabilityState('3d')
+  } else {
+    updateAvailabilityState(stored as '3d' | 'toy' | 'frame')
+  }
+  updateSelectionStates()
   }, [])
 
   useEffect(() => {
@@ -238,7 +230,15 @@ const Selection = () => {
             >
               Build your perfect gift! Start by selecting your favorite toy and a matching frame to
               make it truly yours. Only when both are chosen, the magic happens -
-              <Typography component="span" sx={{ color: 'white',fontSize: isSmallScreen ? '.8rem' : '1.2rem', fontWeight: 700, pl: 1 }}>
+              <Typography
+                component="span"
+                sx={{
+                  color: 'white',
+                  fontSize: isSmallScreen ? '.8rem' : '1.2rem',
+                  fontWeight: 700,
+                  pl: 1,
+                }}
+              >
                 3D Toy Cast
               </Typography>
             </Typography>
@@ -315,13 +315,18 @@ const Selection = () => {
                   const isSelected = item.label === 'Toy' ? toySelected : frameSelected
                   const isToyHidden = isOnlyFrames && item.label === 'Toy'
                   const isFrameHidden = isOnlyToys && item.label === 'Frame'
+                  const isToyDisabled = is3DToyFrame && item.label === 'Toy' && !frameSelected
                   if (isToyHidden || isFrameHidden) return null
 
                   return (
                     <Link
                       to={item.link}
                       key={item.label}
-                      style={{ textDecoration: 'none', flex: 1 }}
+                      style={{
+                        textDecoration: 'none',
+                        flex: 1,
+                        pointerEvents: isToyDisabled ? 'none' : 'auto',
+                      }}
                     >
                       <Button
                         variant={isSmallScreen ? 'contained' : 'outlined'}
@@ -337,6 +342,7 @@ const Selection = () => {
                             />
                           )
                         }
+                        disabled={isToyDisabled}
                         sx={{
                           width: '100%',
                           fontSize: isSmallScreen ? '.8rem' : '1.4rem',
@@ -376,9 +382,7 @@ const Selection = () => {
                 variant="contained"
                 onClick={handleOrder}
                 disabled={isButtonDisabled()}
-                startIcon={
-                  isButtonDisabled() ? <ShoppingCartIcon /> : <ShoppingCartCheckoutIcon />
-                }
+                startIcon={isButtonDisabled() ? <ShoppingCartIcon /> : <ShoppingCartCheckoutIcon />}
                 sx={{
                   alignSelf: 'center',
                   bgcolor: 'transparent',

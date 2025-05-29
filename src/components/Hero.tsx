@@ -43,7 +43,7 @@ const Hero = () => {
           backgroundColor: Palette.background.paper,
           padding: 2,
           borderRadius: 3,
-          height: isSmallScreen ? 'auto' : '100vh',
+          height: isSmallScreen ? 'auto' : 670,
         }}
       >
         <Box
