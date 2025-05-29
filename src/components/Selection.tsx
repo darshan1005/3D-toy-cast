@@ -153,7 +153,7 @@ const Selection = () => {
     window.dispatchEvent(new Event('storageUpdate'))
   }
 
-  const isOrderButtonDisabled = () => {
+  const isButtonDisabled = () => {
     if (is3DToyFrame) {
       return !(toySelected && frameSelected)
     } else if (isOnlyToys) {
@@ -215,7 +215,7 @@ const Selection = () => {
             mr={isSmallScreen ? 0 : 2}
           >
             <Typography
-              variant={isSmallScreen ? 'h4' : 'h3'}
+              variant={isSmallScreen ? 'h5' : 'h3'}
               fontWeight="bold"
               textAlign={isSmallScreen ? 'center' : 'left'}
               zIndex={4}
@@ -228,7 +228,7 @@ const Selection = () => {
               sx={{
                 width: '100%',
                 textAlign: isSmallScreen ? 'center' : 'left',
-                fontSize: isSmallScreen ? '1rem' : '1.2rem',
+                fontSize: isSmallScreen ? '.8rem' : '1.2rem',
                 color: isSmallScreen ? Palette.text.white : Palette.text.secondary,
                 fontWeight: 600,
                 zIndex: 2,
@@ -238,7 +238,7 @@ const Selection = () => {
             >
               Build your perfect gift! Start by selecting your favorite toy and a matching frame to
               make it truly yours. Only when both are chosen, the magic happens -
-              <Typography component="span" sx={{ color: 'red', fontWeight: 700, pl: 1 }}>
+              <Typography component="span" sx={{ color: 'white',fontSize: isSmallScreen ? '.8rem' : '1.2rem', fontWeight: 700, pl: 1 }}>
                 3D Toy Cast
               </Typography>
             </Typography>
@@ -247,7 +247,6 @@ const Selection = () => {
             <Stack direction="row" spacing={2} width="100%">
               <Button
                 fullWidth
-                size={isSmallScreen ? 'small' : 'medium'}
                 variant={is3DToyFrame ? 'contained' : 'outlined'}
                 color={is3DToyFrame ? 'primary' : 'inherit'}
                 onClick={() => handleAvailability('3d')}
@@ -267,13 +266,12 @@ const Selection = () => {
               </Button>
               <Button
                 fullWidth
-                size={isSmallScreen ? 'small' : 'medium'}
                 variant={isOnlyToys ? 'contained' : 'outlined'}
                 color={isOnlyToys ? 'primary' : 'inherit'}
                 onClick={() => handleAvailability('toy')}
                 sx={{
                   fontWeight: 600,
-                  fontSize: isSmallScreen ? '.6rem' : '1rem',
+                  fontSize: isSmallScreen ? '.7rem' : '1rem',
                   bgcolor: isOnlyToys ? 'red' : undefined,
                   color: isOnlyToys ? 'white' : Palette.text.secondary,
                   borderColor: isOnlyToys ? 'red' : Palette.text.secondary,
@@ -287,13 +285,12 @@ const Selection = () => {
               </Button>
               <Button
                 fullWidth
-                size={isSmallScreen ? 'small' : 'medium'}
                 variant={isOnlyFrames ? 'contained' : 'outlined'}
                 color={isOnlyFrames ? 'primary' : 'inherit'}
                 onClick={() => handleAvailability('frame')}
                 sx={{
                   fontWeight: 600,
-                  fontSize: isSmallScreen ? '.6rem' : '1rem',
+                  fontSize: isSmallScreen ? '.7rem' : '1rem',
                   bgcolor: isOnlyFrames ? 'red' : undefined,
                   color: isOnlyFrames ? 'white' : Palette.text.secondary,
                   borderColor: isOnlyFrames ? 'red' : Palette.text.secondary,
@@ -303,7 +300,7 @@ const Selection = () => {
                   },
                 }}
               >
-                Frame
+                Frames
               </Button>
             </Stack>
 
@@ -378,9 +375,9 @@ const Selection = () => {
                 size={isSmallScreen ? 'small' : 'medium'}
                 variant="contained"
                 onClick={handleOrder}
-                disabled={isOrderButtonDisabled()}
+                disabled={isButtonDisabled()}
                 startIcon={
-                  isOrderButtonDisabled() ? <ShoppingCartIcon /> : <ShoppingCartCheckoutIcon />
+                  isButtonDisabled() ? <ShoppingCartIcon /> : <ShoppingCartCheckoutIcon />
                 }
                 sx={{
                   alignSelf: 'center',
@@ -401,7 +398,7 @@ const Selection = () => {
                 size={isSmallScreen ? 'small' : 'medium'}
                 variant="contained"
                 onClick={handleClearOrder}
-                disabled={isOrderButtonDisabled()}
+                disabled={isButtonDisabled()}
                 startIcon={<RemoveShoppingCartIcon />}
                 sx={{
                   alignSelf: 'center',
@@ -429,7 +426,6 @@ const Selection = () => {
           }}
           centerTitle
           width={630}
-          title="Order Summary"
         >
           <OrderForm />
         </PopupHOC>

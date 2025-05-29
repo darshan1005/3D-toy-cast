@@ -29,8 +29,9 @@ import PopupHOC from './HOC/PopupHOC'
 import PreviewIcon from '@mui/icons-material/Preview'
 import CloseIcon from '@mui/icons-material/Close'
 import TruncatedTextWithTooltip from './TruncatedText'
-import FileUploadIcon from '@mui/icons-material/FileUpload';
+import FileUploadIcon from '@mui/icons-material/FileUpload'
 import LazyImage from './LazyImage'
+import CircularProgress from '@mui/material/CircularProgress'
 
 const OrderForm = () => {
   const theme = useTheme()
@@ -45,6 +46,7 @@ const OrderForm = () => {
   const [orderPlaced, setOrderPlaced] = useState<boolean>(false)
   const [previewOpen, setPreviewOpen] = useState(false)
   const [imageSizeWarning, setImageSizeWarning] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const [formData, setFormData] = useState({
     name: '',
@@ -105,6 +107,8 @@ const OrderForm = () => {
   useEffect(() => {
     const toyData = sessionStorage.getItem('selectedToys')
     const frameData = sessionStorage.getItem('selectedFrame')
+    const userFormData = sessionStorage.getItem('FormData')
+    const storedImage = sessionStorage.getItem('uploadedImage')
 
     let toysCost = 0
     let frameCost = 0
@@ -120,6 +124,28 @@ const OrderForm = () => {
       setSelectedFrame(parsedFrame?.type || 'No Frame Selected')
       setSelectedFrameDimension(parsedFrame?.selectedDimension || 'No Dimensions')
       frameCost = parsedFrame?.price || 0
+    }
+
+    if (userFormData) {
+      const parsedFormData = JSON.parse(userFormData)
+      setFormData(prev => ({
+        ...prev,
+        name: parsedFormData.name || '',
+        phone: parsedFormData.phone || '',
+        email: parsedFormData.email || '',
+        state: parsedFormData.state || '',
+        city: parsedFormData.city || '',
+        pincode: parsedFormData.pincode || '',
+        address: parsedFormData.address || '',
+        customBackground: parsedFormData.customBackground || '',
+        uploadedImage: parsedFormData.uploadedImage || '',
+      }))
+    }
+
+    if (storedImage) {
+      const parsedImage: Image = JSON.parse(storedImage)
+      setFileName(parsedImage.name)
+      setFormData(prev => ({ ...prev, uploadedImage: parsedImage.data }))
     }
 
     const baseCost = toysCost + frameCost // This is the Basepart that gets applied for discountPercentage
@@ -151,6 +177,10 @@ const OrderForm = () => {
     setIsOrderCancelled(true)
     sessionStorage.removeItem('selectedToys')
     sessionStorage.removeItem('selectedFrame')
+    sessionStorage.removeItem('uploadedImage')
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
     setSelectedToys([])
     setSelectedFrame('')
     setActualCostBeforeDiscount(0)
@@ -166,20 +196,20 @@ const OrderForm = () => {
         return !value.trim()
           ? 'Name is required'
           : !/^[a-zA-Z\s]+$/.test(value)
-            ? 'Only alphabets are allowed'
-            : ''
+          ? 'Only alphabets are allowed'
+          : ''
       case 'phone':
         return !value.trim()
           ? 'Phone number is required'
           : !/^\d{10}$/.test(value)
-            ? 'Phone must be a 10-digit number'
-            : ''
+          ? 'Phone must be a 10-digit number'
+          : ''
       case 'email':
         return !value.trim()
           ? 'Email is required'
           : !value.includes('@gmail.com')
-            ? 'Email must be a Gmail address'
-            : ''
+          ? 'Email must be a Gmail address'
+          : ''
       case 'state':
         return !value.trim() ? 'State is required' : ''
       case 'city':
@@ -188,8 +218,8 @@ const OrderForm = () => {
         return !value.trim()
           ? 'Pin code is required'
           : !/^\d{6}$/.test(value)
-            ? 'Pin code must be 6 digits'
-            : ''
+          ? 'Pin code must be 6 digits'
+          : ''
       case 'address':
         return !value.trim() ? 'Address is required' : ''
       default:
@@ -206,8 +236,6 @@ const OrderForm = () => {
       city: validate('city', formData.city),
       pincode: validate('pincode', formData.pincode),
       address: validate('address', formData.address),
-      customBackground: validate('customBackground', formData.customBackground),
-      uploadedImage: formData.uploadedImage ? '' : 'Image upload is required',
     }
     setErrors(newErrors)
     return !Object.values(newErrors).some(error => error !== '')
@@ -216,6 +244,9 @@ const OrderForm = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
+    const formValue = { ...formData, [name]: value }
+    const stringifiedFromData = JSON.stringify(formValue)
+    sessionStorage.setItem('FormData', stringifiedFromData)
 
     // Debounce the validation to prevent too frequent updates
     const error = validate(name, value)
@@ -242,6 +273,8 @@ const OrderForm = () => {
     if (!validateAllFields()) {
       return
     }
+
+    setLoading(true)
 
     const serviceId = 'service_12uimx6'
     const templateId = 'template_4lzj9u8'
@@ -319,17 +352,29 @@ const OrderForm = () => {
       .send(serviceId, templateId, templateParams, publicKey)
       .then(res => {
         if (res.status === 200) {
+          setLoading(false)
           setOrderPlaced(true)
           setModalOpen(true)
           sessionStorage.removeItem('selectedToys')
           sessionStorage.removeItem('selectedFrame')
+          sessionStorage.removeItem('uploadedImage')
+          if (fileInputRef.current) {
+            fileInputRef.current.value = ''
+          }
           setSelectedToys([])
           setSelectedFrame('')
           setActualCostBeforeDiscount(0)
         }
       })
       .catch(error => {
+        setLoading(false)
         console.error('error sending email:', error)
+      })
+      .finally(() => {
+        setTimeout(() => {
+          setModalOpen(false)
+          setLoading(false)
+        }, 2000)
       })
   }
 
@@ -339,7 +384,7 @@ const OrderForm = () => {
       size: 0,
       type: '',
       data: '',
-    };
+    }
     const file = e.target.files?.[0]
     if (file) {
       if (file.size > 50 * 1024) {
@@ -355,12 +400,17 @@ const OrderForm = () => {
       const reader = new FileReader()
 
       reader.onload = ev => {
-        setFormData(prev => ({ ...prev, uploadedImage: ev.target?.result as string }))
+        const uploadedImage = ev.target?.result as string
+        setFormData(prev => {
+          const updated = { ...prev, uploadedImage: uploadedImage }
+          sessionStorage.setItem('FormData', JSON.stringify(updated))
+          return updated
+        })
         ImageObj = {
           name: fileName,
           size: file.size,
           type: file.type,
-          data: ev.target?.result as string,
+          data: uploadedImage,
         }
         sessionStorage.setItem('uploadedImage', JSON.stringify(ImageObj))
       }
@@ -369,7 +419,11 @@ const OrderForm = () => {
   }
 
   const handleClearImage = () => {
-    setFormData(prev => ({ ...prev, uploadedImage: '' as string }))
+    setFormData(prev => {
+      const updated = { ...prev, uploadedImage: '' }
+      sessionStorage.setItem('FormData', JSON.stringify(updated))
+      return updated
+    })
     sessionStorage.removeItem('uploadedImage')
     setFileName('')
 
@@ -387,18 +441,11 @@ const OrderForm = () => {
     handleClearImage()
   }
 
-  // Ensure uploadedImage is loaded from sessionStorage on mount
-  useEffect(() => {
-    const storedImage = sessionStorage.getItem('uploadedImage')
-    if (storedImage) {
-      const parsedImage: Image = JSON.parse(storedImage)
-      setFileName(parsedImage.name)
-      setFormData(prev => ({ ...prev, uploadedImage: parsedImage.data }))
-    }
-  }, [])
-
   return (
     <>
+      <Typography variant='h6' fontWeight="bold" textAlign="center" sx={{ mb: 1 }}>
+        {isOrderCancelled ? `Oops ! Try again` : orderPlaced ? `Order Placed` : `Order Summary`}
+      </Typography>
       {orderPlaced ? (
         <Box
           sx={{
@@ -531,7 +578,7 @@ const OrderForm = () => {
             <TextField
               fullWidth
               name="customBackground"
-              label="Instruction to create custom background"
+              label="(optional)Instruction to create custom background"
               size="small"
               multiline
               rows={2}
@@ -540,10 +587,7 @@ const OrderForm = () => {
               sx={{ mb: { xs: 1, sm: 0 } }}
             />
           </Box>
-          <Box
-            display="flex"
-            flexDirection={'row'}
-            alignItems="center">
+          <Box display="flex" flexDirection={'row'} alignItems="center">
             <Box
               display="flex"
               flexDirection="row"
@@ -576,7 +620,7 @@ const OrderForm = () => {
                   onChange={e => handleUploadImage(e)}
                 />
               </Button>
-              {formData.uploadedImage &&
+              {formData.uploadedImage && (
                 <PreviewIcon
                   onClick={() => setPreviewOpen(true)}
                   sx={{
@@ -585,7 +629,8 @@ const OrderForm = () => {
                     flexShrink: 0,
                   }}
                   titleAccess="preview"
-                />}
+                />
+              )}
               {<TruncatedTextWithTooltip text={fileName} maxLength={10} />}
               {formData.uploadedImage && fileName && (
                 <CloseIcon
@@ -599,25 +644,25 @@ const OrderForm = () => {
                   severity="warning"
                   sx={{
                     fontSize: { xs: '0.7rem', sm: '1rem' },
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    textAlign: "left",
-                    ".MuiAlert-message": {
-                      width: "100%",
-                      display: "flex",
-                      justifyContent: "center",
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    textAlign: 'left',
+                    '.MuiAlert-message': {
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'center',
                     },
-                    ".MuiAlert-action": {
+                    '.MuiAlert-action': {
                       paddingTop: 0,
                       marginRight: 0,
-                    }
+                    },
                   }}
-                  onClose={() => setImageSizeWarning(false)}>
+                  onClose={() => setImageSizeWarning(false)}
+                >
                   Please upload image less than 50KB.
                 </Alert>
               )}
-
             </Box>
             <PopupHOC
               open={previewOpen}
@@ -632,7 +677,7 @@ const OrderForm = () => {
                   <>
                     <LazyImage
                       src={formData.uploadedImage}
-                      alt='Uploaded Preview'
+                      alt="Uploaded Preview"
                       sx={{
                         marginTop: 1,
                         width: '100%',
@@ -1010,13 +1055,14 @@ const OrderForm = () => {
 
           <Box display="flex" flexDirection={'row'} justifyContent="space-between" gap={1}>
             <Button
+              startIcon={loading && <CircularProgress size="20px" sx={{ color: 'white' }} />}
               variant="contained"
               fullWidth
               sx={{ bgcolor: 'red', color: 'white' }}
               onClick={handlePlaceOrder}
               size={isSmallScreen ? 'small' : 'large'}
             >
-              Place Order
+              {loading ? `Ordering...` : `Place Order`}
             </Button>
             <Button
               variant="outlined"

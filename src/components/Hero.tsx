@@ -153,7 +153,7 @@ const Hero = () => {
                 ? 'linear-gradient(to right, black, white)'
                 : 'linear-gradient(to bottom, black, white)',
               width: isSmallScreen ? '100%' : '20%',
-              height: isSmallScreen ? '80px' : '500px',
+              height: isSmallScreen ? '100px' : '500px',
               overflow: 'visible',
               mb: isSmallScreen ? 2 : 0,
             }}

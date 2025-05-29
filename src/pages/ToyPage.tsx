@@ -11,7 +11,7 @@ import {
   Chip,
   Typography,
 } from '@mui/material'
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import ToyCard from '@components/custom/ToyCard'
 import ConfirmComponent from '@components/custom/NavHeader'
 import { useNavigate } from 'react-router-dom'
@@ -48,6 +48,33 @@ const ToysPage = () => {
     if (savedToys) {
       setSelectedToys(JSON.parse(savedToys))
     }
+
+    // Load applied filters from sessionStorage
+    const savedFilters = sessionStorage.getItem('appliedFilters')
+    if (savedFilters) {
+      const parsedFilters = JSON.parse(savedFilters)
+      setSelectedToyType(parsedFilters.type || '')
+      setSelectedToyScale(parsedFilters.scale || '')
+      setSelectedBrands(parsedFilters.brands || [])
+      setAppliedFilters(parsedFilters)
+
+      let filtered = toysDataJSON
+      if (parsedFilters.type) filtered = filtered.filter(toy => toy.type === parsedFilters.type)
+      if (parsedFilters.scale) filtered = filtered.filter(toy => toy.scale === parsedFilters.scale)
+      if (parsedFilters.brands && parsedFilters.brands.length > 0) {
+        filtered = filtered.filter(toy =>
+          parsedFilters.brands.some((brand: string) => toy.name.includes(brand)),
+        )
+      }
+      setFilteredData(filtered)
+    } else {
+      // If no filters are saved, reset to initial state
+      setAppliedFilters({
+        type: '',
+        scale: '',
+        brands: [],
+      })
+    }
   }, [])
 
   // Listen for storage updates
@@ -69,6 +96,7 @@ const ToysPage = () => {
 
   const handleTypeChange = (type: string) => {
     setSelectedToyType(type)
+    setSelectedToyScale('')
     setSelectedBrands([])
   }
 
@@ -87,15 +115,30 @@ const ToysPage = () => {
   }
 
   const getBrandOptions = () => {
-    if (!selectedToyType) return []
+    // If neither type nor scale is selected, return all brands
+    if (!selectedToyType && !selectedToyScale) {
+      return [...new Set(toysDataJSON.map(toy => toy.name))]
+    }
+    // If only type is selected
+    if (selectedToyType && !selectedToyScale) {
+      return [
+        ...new Set(toysDataJSON.filter(toy => toy.type === selectedToyType).map(toy => toy.name)),
+      ]
+    }
+    // If only scale is selected
+    if (!selectedToyType && selectedToyScale) {
+      return [
+        ...new Set(toysDataJSON.filter(toy => toy.scale === selectedToyScale).map(toy => toy.name)),
+      ]
+    }
+    // If both type and scale are selected
     return [
-      ...new Set(toysDataJSON.filter(toy => toy.type === selectedToyType).map(toy => toy.name)),
+      ...new Set(
+        toysDataJSON
+          .filter(toy => toy.type === selectedToyType && toy.scale === selectedToyScale)
+          .map(toy => toy.name),
+      ),
     ]
-  }
-
-  const getDisplayedBrands = () => {
-    if (selectedBrands.length <= 1) return selectedBrands
-    return selectedBrands.slice(0, 1)
   }
 
   const currentFilters = useMemo(
@@ -135,8 +178,15 @@ const ToysPage = () => {
       filtered = filtered.filter(toy => selectedBrands.some(brand => toy.name.includes(brand)))
     }
 
+    const filtersToApply = {
+      type: selectedToyType,
+      scale: selectedToyScale,
+      brands: [...selectedBrands].sort(),
+    }
+
     setFilteredData(filtered)
-    setAppliedFilters(currentFilters)
+    setAppliedFilters(filtersToApply)
+    sessionStorage.setItem('appliedFilters', JSON.stringify(filtersToApply))
   }, [selectedToyType, selectedToyScale, selectedBrands, currentFilters, toysDataJSON])
 
   const handleResetFilters = () => {
@@ -144,6 +194,12 @@ const ToysPage = () => {
     setSelectedToyType('')
     setSelectedToyScale('')
     setSelectedBrands([])
+    sessionStorage.removeItem('appliedFilters')
+    setAppliedFilters({
+      type: '',
+      scale: '',
+      brands: [],
+    })
   }
 
   const handleToySelect = (toy: ToyDataProps) => {
@@ -245,7 +301,6 @@ const ToysPage = () => {
               displayEmpty
               sx={{
                 minWidth: 250,
-                height: isSmallScreen ? '40px' : 'auto',
                 width: isSmallScreen ? '100%' : 'auto',
               }}
             >
@@ -257,29 +312,43 @@ const ToysPage = () => {
               ))}
             </Select>
 
+            {/* Brand Autocomplete with 1 chip + count */}
             <Autocomplete
               multiple
+              limitTags={1}
               disableCloseOnSelect
               options={getBrandOptions()}
               value={selectedBrands}
               onChange={(event, newValue) => setSelectedBrands(newValue)}
               renderInput={params => (
-                <TextField {...params} label="Select Brands" placeholder="Brands" />
+                <TextField
+                  {...params}
+                  label="Select Brands"
+                  placeholder="Brands"
+                  inputProps={{
+                    ...params.inputProps,
+                    readOnly: true, // <-- This makes input not open dropdown on click/focus
+                  }}
+                />
               )}
-              renderTags={(value, getTagProps) => (
-                <>
-                  {getDisplayedBrands().map((option, index) => (
-                    <span {...getTagProps({ index })}>{option}</span>
-                  ))}
-                </>
-              )}
+              renderValue={(value, getTagProps) => {
+                if (value.length === 0) return null
+                const first = value[0]
+                const rest = value.length - 1
+                return [
+                  <Chip label={first} {...getTagProps({ index: 0 })} />,
+                  ...(rest > 0
+                    ? [<Chip key="more" label={`+${rest}`} sx={{ marginLeft: 0.5 }} disabled />]
+                    : []),
+                ]
+              }}
               sx={{
                 minWidth: 250,
                 width: isSmallScreen ? '100%' : 'auto',
-                height: isSmallScreen ? '55px' : 'auto',
               }}
               disabled={!selectedToyType}
             />
+
             <Box
               display={'flex'}
               flexDirection={'row'}
@@ -320,7 +389,7 @@ const ToysPage = () => {
           </Stack>
 
           {/* Selected Brands Display */}
-          {selectedBrands.length !== 0 && (
+          {selectedBrands.length > 1 && (
             <Box
               sx={{
                 display: 'flex',

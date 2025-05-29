@@ -27,7 +27,7 @@ const Testimonial = ({ username, stars, testimonial }: TestimonialType) => {
         borderRadius: 2,
         height: '100%',
         minHeight: 250,
-        border: '2px solid #000'
+        border: '1px solid #000'
       }}
     >
       <Stack spacing={1.5}>
