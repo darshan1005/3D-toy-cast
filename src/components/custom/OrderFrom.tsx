@@ -365,6 +365,7 @@ const OrderForm = () => {
           setSelectedToys([])
           setSelectedFrame('')
           setActualCostBeforeDiscount(0)
+          window.dispatchEvent(new Event('storageUpdate'))
         }
       })
       .catch(error => {

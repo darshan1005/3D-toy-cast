@@ -43,17 +43,23 @@ const FramePage = () => {
         type: parsedFrame.type,
         price: framePrice,
       })
-      // Initialize selected dimension for the frame
-      if (parsedFrame && !selectedFrameDimensions[parsedFrame.type]) {
-        const frameDetails = frameDataJSON.find(f => f.type === parsedFrame.type)
-        const defaultDimension = frameDetails?.dimensionPrice[0]?.size
-        if (defaultDimension) {
-          setSelectedFrameDimensions(prev => ({
-            ...prev,
-            [parsedFrame.type]: defaultDimension,
-          }))
-        }
+      // Restore the selected dimension for the frame!
+    if (parsedFrame.selectedDimension) {
+      setSelectedFrameDimensions(prev => ({
+        ...prev,
+        [parsedFrame.type]: parsedFrame.selectedDimension,
+      }))
+    } else {
+      // fallback to default if not present
+      const frameDetails = frameDataJSON.find(f => f.type === parsedFrame.type)
+      const defaultDimension = frameDetails?.dimensionPrice[0]?.size
+      if (defaultDimension) {
+        setSelectedFrameDimensions(prev => ({
+          ...prev,
+          [parsedFrame.type]: defaultDimension,
+        }))
       }
+    }
     }
   }, [])
 

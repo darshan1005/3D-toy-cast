@@ -11,13 +11,14 @@ import {
   Chip,
   Typography,
 } from '@mui/material'
-import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import ToyCard from '@components/custom/ToyCard'
 import ConfirmComponent from '@components/custom/NavHeader'
 import { useNavigate } from 'react-router-dom'
 import { calculateSellingPrice } from '@utils/pricing'
 import toysJsonData from '../content/ToysData.json'
 import { ToyDataProps } from 'src/types/types'
+import { canToyFitInFrame } from '@utils/fitUtils'
 
 const ToysPage = () => {
   const navigate = useNavigate()
@@ -27,8 +28,9 @@ const ToysPage = () => {
   const [selectedToyType, setSelectedToyType] = useState('')
   const [selectedToyScale, setSelectedToyScale] = useState('')
   const [selectedBrands, setSelectedBrands] = useState<string[]>([])
-  const [filteredData, setFilteredData] = useState(toysJsonData.toys)
   const [selectedToys, setSelectedToys] = useState<ToyDataProps[]>([])
+  const [selectedFrameType, setSelectedFrameType] = useState<string>('')
+  const [selectedFrameDimension, setSelectedFrameDimension] = useState<string>('')
 
   const toysDataJSON = useMemo(() => {
     return toysJsonData.toys.map((toy: ToyDataProps) => ({
@@ -58,15 +60,6 @@ const ToysPage = () => {
       setSelectedBrands(parsedFilters.brands || [])
       setAppliedFilters(parsedFilters)
 
-      let filtered = toysDataJSON
-      if (parsedFilters.type) filtered = filtered.filter(toy => toy.type === parsedFilters.type)
-      if (parsedFilters.scale) filtered = filtered.filter(toy => toy.scale === parsedFilters.scale)
-      if (parsedFilters.brands && parsedFilters.brands.length > 0) {
-        filtered = filtered.filter(toy =>
-          parsedFilters.brands.some((brand: string) => toy.name.includes(brand)),
-        )
-      }
-      setFilteredData(filtered)
     } else {
       // If no filters are saved, reset to initial state
       setAppliedFilters({
@@ -93,6 +86,46 @@ const ToysPage = () => {
       window.removeEventListener('storageUpdate', handleStorageUpdate)
     }
   }, [])
+
+  // Load selected frame from sessionStorage on component mount
+  useEffect(() => {
+  const frameData = sessionStorage.getItem('selectedFrame')
+  if (frameData) {
+    const parsed = JSON.parse(frameData)
+    setSelectedFrameType(parsed.type)
+    setSelectedFrameDimension(parsed.selectedDimension)
+  }
+}, [])
+
+ const filteredToys = useMemo(() => {
+  // 1. Apply UI filters
+  let filtered = toysDataJSON
+  if (selectedToyType) {
+    filtered = filtered.filter(toy => toy.type === selectedToyType)
+  }
+  if (selectedToyScale) {
+    filtered = filtered.filter(toy => toy.scale === selectedToyScale)
+  }
+  if (selectedBrands.length > 0) {
+    filtered = filtered.filter(toy => selectedBrands.some(brand => toy.name.includes(brand)))
+  }
+
+  // 2. Apply frame fit filter if frame is selected
+  if (selectedFrameType && selectedFrameDimension) {
+    filtered = filtered.filter(toy =>
+      canToyFitInFrame(toy.scale, selectedFrameType, selectedFrameDimension)
+    )
+  }
+
+  return filtered
+}, [
+  toysDataJSON,
+  selectedToyType,
+  selectedToyScale,
+  selectedBrands,
+  selectedFrameType,
+  selectedFrameDimension,
+])
 
   const handleTypeChange = (type: string) => {
     setSelectedToyType(type)
@@ -162,35 +195,8 @@ const ToysPage = () => {
     )
   }, [appliedFilters, currentFilters])
 
-  // Filtering logic should use toysDataJSON
-  const handleApplyFilters = useCallback(() => {
-    let filtered = toysDataJSON
-
-    if (selectedToyType) {
-      filtered = filtered.filter(toy => toy.type === selectedToyType)
-    }
-
-    if (selectedToyScale) {
-      filtered = filtered.filter(toy => toy.scale === selectedToyScale)
-    }
-
-    if (selectedBrands.length > 0) {
-      filtered = filtered.filter(toy => selectedBrands.some(brand => toy.name.includes(brand)))
-    }
-
-    const filtersToApply = {
-      type: selectedToyType,
-      scale: selectedToyScale,
-      brands: [...selectedBrands].sort(),
-    }
-
-    setFilteredData(filtered)
-    setAppliedFilters(filtersToApply)
-    sessionStorage.setItem('appliedFilters', JSON.stringify(filtersToApply))
-  }, [selectedToyType, selectedToyScale, selectedBrands, currentFilters, toysDataJSON])
 
   const handleResetFilters = () => {
-    setFilteredData(toysDataJSON)
     setSelectedToyType('')
     setSelectedToyScale('')
     setSelectedBrands([])
@@ -356,19 +362,6 @@ const ToysPage = () => {
               alignItems={'center'}
               justifyContent={'space-between'}
             >
-              <Button
-                variant={filtersChanged ? 'contained' : 'outlined'}
-                onClick={handleApplyFilters}
-                disabled={!selectedToyScale && !selectedToyType && selectedBrands.length === 0}
-                sx={{
-                  fontWeight: 600,
-                  bgcolor: filtersChanged ? 'black' : '#eee',
-                  color: filtersChanged ? 'white' : 'black',
-                  border: '2px solid #6665',
-                }}
-              >
-                Apply
-              </Button>
 
               <Button
                 variant="outlined"
@@ -422,7 +415,7 @@ const ToysPage = () => {
           )}
 
           {/* Toys Grid */}
-          {filteredData.length !== 0 ? (
+          {filteredToys.length !== 0 ? (
             <Box
               sx={{
                 display: 'flex',
@@ -433,7 +426,7 @@ const ToysPage = () => {
                 mx: 'auto',
               }}
             >
-              {filteredData.map(toy => (
+              {filteredToys.map(toy => (
                 <ToyCard
                   key={toy.id}
                   image={toy.image}
