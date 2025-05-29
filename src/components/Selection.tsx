@@ -239,7 +239,7 @@ const Selection = () => {
                   pl: 1,
                 }}
               >
-                3D ToyCast
+                3D TOYCAST
               </Typography>
             </Typography>
 

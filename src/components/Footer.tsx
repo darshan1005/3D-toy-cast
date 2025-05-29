@@ -53,7 +53,7 @@ const Footer = () => {
               products.
             </Typography>
             <Typography variant="caption" sx={{ opacity: 0.6 }}>
-              © 2025 3D ToyCast
+              © 2025 3D TOYCAST
             </Typography>
             <Typography
               variant="body2"
