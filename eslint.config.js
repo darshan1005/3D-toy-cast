@@ -1,27 +1,30 @@
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+import tseslint from 'typescript-eslint'
+import react from 'eslint-plugin-react'
 import importPlugin from 'eslint-plugin-import'
 import jsxA11y from 'eslint-plugin-jsx-a11y'
 import prettier from 'eslint-plugin-prettier'
 
 export default tseslint.config({
   plugins: {
-    'react-x': reactX,
-    'react-dom': reactDom,
+    react,
     import: importPlugin,
     'jsx-a11y': jsxA11y,
-    prettier: prettier,
+    prettier,
   },
   extends: [
     ...tseslint.configs.recommendedTypeChecked,
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
+    'plugin:react/recommended',
     'plugin:import/recommended',
     'plugin:jsx-a11y/recommended',
     'plugin:prettier/recommended',
   ],
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
   rules: {
-    'prettier/prettier': 'error', // Enforce Prettier formatting
+    'prettier/prettier': 'error',
     'import/order': [
       'error',
       {

@@ -296,7 +296,7 @@ const Bento = () => {
               fontSize: isSmallScreen ? '2rem' : '4rem',
             }}
           >
-            3D TOY CAST
+            3D TOYCAST
           </Typography>
           <LazyImage
             src={f1}

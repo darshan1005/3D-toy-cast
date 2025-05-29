@@ -42,7 +42,7 @@ const Footer = () => {
               color="red"
               sx={{ fontSize: { xs: '1.8rem', md: '2.5rem' } }}
             >
-              3D TOY CAST
+              3D TOYCAST
             </Typography>
             <Typography
               variant="h5"
@@ -53,7 +53,7 @@ const Footer = () => {
               products.
             </Typography>
             <Typography variant="caption" sx={{ opacity: 0.6 }}>
-              © 2025 3D Toy Cast
+              © 2025 3D ToyCast
             </Typography>
             <Typography
               variant="body2"

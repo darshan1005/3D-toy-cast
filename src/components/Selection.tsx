@@ -57,14 +57,14 @@ const Selection = () => {
 
   useEffect(() => {
     // Initialize availability type to '3d' on first load
-   const stored = sessionStorage.getItem('availabilityType')
-  if (!stored) {
-    sessionStorage.setItem('availabilityType', '3d')
-    updateAvailabilityState('3d')
-  } else {
-    updateAvailabilityState(stored as '3d' | 'toy' | 'frame')
-  }
-  updateSelectionStates()
+    const stored = sessionStorage.getItem('availabilityType')
+    if (!stored) {
+      sessionStorage.setItem('availabilityType', '3d')
+      updateAvailabilityState('3d')
+    } else {
+      updateAvailabilityState(stored as '3d' | 'toy' | 'frame')
+    }
+    updateSelectionStates()
   }, [])
 
   useEffect(() => {
@@ -233,13 +233,13 @@ const Selection = () => {
               <Typography
                 component="span"
                 sx={{
-                  color: 'white',
-                  fontSize: isSmallScreen ? '.8rem' : '1.2rem',
+                  color: 'red',
+                  fontSize: isSmallScreen ? '.8rem' : '1rem',
                   fontWeight: 700,
                   pl: 1,
                 }}
               >
-                3D Toy Cast
+                3D ToyCast
               </Typography>
             </Typography>
 
@@ -353,13 +353,13 @@ const Selection = () => {
                               ? Palette.secondary.light
                               : Palette.text.secondary
                             : isSelected
-                            ? Palette.secondary.light
-                            : 'transparent',
+                              ? Palette.secondary.light
+                              : 'transparent',
                           color: isSmallScreen
                             ? Palette.text.white
                             : isSelected
-                            ? Palette.text.white
-                            : Palette.text.secondary,
+                              ? Palette.text.white
+                              : Palette.text.secondary,
                           '&:hover': {
                             borderColor: isSelected ? Palette.secondary.dark : Palette.text.primary,
                             color: isSelected ? Palette.text.white : Palette.text.primary,

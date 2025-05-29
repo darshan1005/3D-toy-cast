@@ -178,6 +178,10 @@ const OrderForm = () => {
     sessionStorage.removeItem('selectedToys')
     sessionStorage.removeItem('selectedFrame')
     sessionStorage.removeItem('uploadedImage')
+    sessionStorage.setItem(
+      'FormData',
+      JSON.stringify({ ...formData, uploadedImage: '', customBackground: '' }),
+    )
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
     }
@@ -197,20 +201,20 @@ const OrderForm = () => {
         return !value.trim()
           ? 'Name is required'
           : !/^[a-zA-Z\s]+$/.test(value)
-          ? 'Only alphabets are allowed'
-          : ''
+            ? 'Only alphabets are allowed'
+            : ''
       case 'phone':
         return !value.trim()
           ? 'Phone number is required'
           : !/^\d{10}$/.test(value)
-          ? 'Phone must be a 10-digit number'
-          : ''
+            ? 'Phone must be a 10-digit number'
+            : ''
       case 'email':
         return !value.trim()
           ? 'Email is required'
           : !value.includes('@gmail.com')
-          ? 'Email must be a Gmail address'
-          : ''
+            ? 'Email must be a Gmail address'
+            : ''
       case 'state':
         return !value.trim() ? 'State is required' : ''
       case 'city':
@@ -219,8 +223,8 @@ const OrderForm = () => {
         return !value.trim()
           ? 'Pin code is required'
           : !/^\d{6}$/.test(value)
-          ? 'Pin code must be 6 digits'
-          : ''
+            ? 'Pin code must be 6 digits'
+            : ''
       case 'address':
         return !value.trim() ? 'Address is required' : ''
       default:
@@ -359,6 +363,10 @@ const OrderForm = () => {
           sessionStorage.removeItem('selectedToys')
           sessionStorage.removeItem('selectedFrame')
           sessionStorage.removeItem('uploadedImage')
+          sessionStorage.setItem(
+            'FormData',
+            JSON.stringify({ ...formData, uploadedImage: '', customBackground: '' }),
+          )
           if (fileInputRef.current) {
             fileInputRef.current.value = ''
           }
@@ -426,6 +434,10 @@ const OrderForm = () => {
       sessionStorage.setItem('FormData', JSON.stringify(updated))
       return updated
     })
+    sessionStorage.setItem(
+      'FormData',
+      JSON.stringify({ ...formData, uploadedImage: '', customBackground: '' }),
+    )
     sessionStorage.removeItem('uploadedImage')
     setFileName('')
 
@@ -445,7 +457,7 @@ const OrderForm = () => {
 
   return (
     <>
-      <Typography variant='h6' fontWeight="bold" textAlign="center" sx={{ mb: 1 }}>
+      <Typography variant="h6" fontWeight="bold" textAlign="center" sx={{ mb: 1 }}>
         {isOrderCancelled ? `Oops ! Try again` : orderPlaced ? `Order Placed` : `Order Summary`}
       </Typography>
       {orderPlaced ? (

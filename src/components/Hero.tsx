@@ -83,7 +83,7 @@ const Hero = () => {
                 fontSize: isSmallScreen ? '18px' : '20px',
               }}
             >
-              3D TOY CAST
+              3D TOYCAST
             </Typography>
           </Box>
           <Box
