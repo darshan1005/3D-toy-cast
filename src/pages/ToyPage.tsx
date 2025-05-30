@@ -11,7 +11,7 @@ import {
   Chip,
   Typography,
 } from '@mui/material'
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import ToyCard from '@components/custom/ToyCard'
 import ConfirmComponent from '@components/custom/NavHeader'
 import { useNavigate } from 'react-router-dom'
@@ -19,6 +19,10 @@ import { calculateSellingPrice } from '@utils/pricing'
 import toysJsonData from '../content/ToysData.json'
 import { ToyDataProps } from 'src/types/types'
 import { canToyFitInFrame } from '@utils/fitUtils'
+import { getFilters, getOrderType, remove } from '@utils/session'
+import { getToyItem, removeToyItem, setToyItem } from '../DB/ToyStore'
+import { getFrameItem } from '../DB/FrameStore'
+import { memCache } from '../Cache/instance'
 
 const ToysPage = () => {
   const navigate = useNavigate()
@@ -32,11 +36,19 @@ const ToysPage = () => {
   const [selectedFrameType, setSelectedFrameType] = useState<string>('')
   const [selectedFrameDimension, setSelectedFrameDimension] = useState<string>('')
 
-  const toysDataJSON = useMemo(() => {
-    return toysJsonData.toys.map((toy: ToyDataProps) => ({
-      ...toy,
-    }))
-  }, [toysJsonData.toys])
+  const TOYS_CACHE_KEY = 'toysDataCache'
+
+  const getToysData = () => {
+    let data = memCache.get<ToyDataProps[]>(TOYS_CACHE_KEY)
+    if (!data) {
+      data = toysJsonData.toys.map((toy: ToyDataProps) => ({
+        ...toy,
+      }))
+      memCache.set<ToyDataProps[]>(TOYS_CACHE_KEY, data)
+    }
+    return data
+  }
+  const toysDataJSON = getToysData()
 
   const [appliedFilters, setAppliedFilters] = useState({
     type: '',
@@ -44,38 +56,40 @@ const ToysPage = () => {
     brands: [] as string[],
   })
 
-  // Load selected toys from sessionStorage on component mount
+  // Load selected toys from indexDB on component mount
   useEffect(() => {
-    const savedToys = sessionStorage.getItem('selectedToys')
-    if (savedToys) {
-      setSelectedToys(JSON.parse(savedToys))
-    }
+    const LoadSelectedToy = async () => {
+      const savedToys = await getToyItem('selectedToys')
+      if (savedToys) {
+        setSelectedToys(JSON.parse(typeof savedToys === 'string' ? savedToys : '[]'))
+      }
 
-    // Load applied filters from sessionStorage
-    const savedFilters = sessionStorage.getItem('appliedFilters')
-    if (savedFilters) {
-      const parsedFilters = JSON.parse(savedFilters)
-      setSelectedToyType(parsedFilters.type || '')
-      setSelectedToyScale(parsedFilters.scale || '')
-      setSelectedBrands(parsedFilters.brands || [])
-      setAppliedFilters(parsedFilters)
-
-    } else {
-      // If no filters are saved, reset to initial state
-      setAppliedFilters({
-        type: '',
-        scale: '',
-        brands: [],
-      })
+      // Load applied filters from indexDB
+      const savedFilters = getFilters('appliedFilters')
+      if (savedFilters) {
+        const parsedFilters = JSON.parse(savedFilters)
+        setSelectedToyType(parsedFilters.type || '')
+        setSelectedToyScale(parsedFilters.scale || '')
+        setSelectedBrands(parsedFilters.brands || [])
+        setAppliedFilters(parsedFilters)
+      } else {
+        // If no filters are saved, reset to initial state
+        setAppliedFilters({
+          type: '',
+          scale: '',
+          brands: [],
+        })
+      }
     }
+    LoadSelectedToy()
   }, [])
 
   // Listen for storage updates
   useEffect(() => {
     const handleStorageUpdate = () => {
-      const savedToys = sessionStorage.getItem('selectedToys')
+      const savedToys = getToyItem('selectedToys')
       if (savedToys) {
-        setSelectedToys(JSON.parse(savedToys))
+        setSelectedToys(JSON.parse(typeof savedToys === 'string' ? savedToys : '[]'))
       } else {
         setSelectedToys([])
       }
@@ -87,45 +101,50 @@ const ToysPage = () => {
     }
   }, [])
 
-  // Load selected frame from sessionStorage on component mount
+  // Load selected frame from indexDB on component mount
   useEffect(() => {
-  const frameData = sessionStorage.getItem('selectedFrame')
-  if (frameData) {
-    const parsed = JSON.parse(frameData)
-    setSelectedFrameType(parsed.type)
-    setSelectedFrameDimension(parsed.selectedDimension)
-  }
-}, [])
+    const loadFrame = async () => {
+      const frameData = await getFrameItem('selectedFrame')
+      if (frameData) {
+        const parsed = JSON.parse(typeof frameData === 'string' ? frameData : 'null')
+        if (parsed && parsed.type) {
+          setSelectedFrameType(parsed.type)
+          setSelectedFrameDimension(parsed.selectedDimension)
+        }
+      }
+    }
+    loadFrame()
+  }, [])
 
- const filteredToys = useMemo(() => {
-  // 1. Apply UI filters
-  let filtered = toysDataJSON
-  if (selectedToyType) {
-    filtered = filtered.filter(toy => toy.type === selectedToyType)
-  }
-  if (selectedToyScale) {
-    filtered = filtered.filter(toy => toy.scale === selectedToyScale)
-  }
-  if (selectedBrands.length > 0) {
-    filtered = filtered.filter(toy => selectedBrands.some(brand => toy.name.includes(brand)))
-  }
+  const filteredToys = useMemo(() => {
+    // 1. Apply UI filters
+    let filtered = toysDataJSON
+    if (selectedToyType) {
+      filtered = filtered.filter(toy => toy.type === selectedToyType)
+    }
+    if (selectedToyScale) {
+      filtered = filtered.filter(toy => toy.scale === selectedToyScale)
+    }
+    if (selectedBrands.length > 0) {
+      filtered = filtered.filter(toy => selectedBrands.some(brand => toy.name.includes(brand)))
+    }
 
-  // 2. Apply frame fit filter if frame is selected
-  if (selectedFrameType && selectedFrameDimension) {
-    filtered = filtered.filter(toy =>
-      canToyFitInFrame(toy.scale, selectedFrameType, selectedFrameDimension)
-    )
-  }
+    // 2. Apply frame fit filter if frame is selected
+    if (selectedFrameType && selectedFrameDimension) {
+      filtered = filtered.filter(toy =>
+        canToyFitInFrame(toy.scale, selectedFrameType, selectedFrameDimension),
+      )
+    }
 
-  return filtered
-}, [
-  toysDataJSON,
-  selectedToyType,
-  selectedToyScale,
-  selectedBrands,
-  selectedFrameType,
-  selectedFrameDimension,
-])
+    return filtered
+  }, [
+    toysDataJSON,
+    selectedToyType,
+    selectedToyScale,
+    selectedBrands,
+    selectedFrameType,
+    selectedFrameDimension,
+  ])
 
   const handleTypeChange = (type: string) => {
     setSelectedToyType(type)
@@ -195,12 +214,11 @@ const ToysPage = () => {
     )
   }, [appliedFilters, currentFilters])
 
-
   const handleResetFilters = () => {
     setSelectedToyType('')
     setSelectedToyScale('')
     setSelectedBrands([])
-    sessionStorage.removeItem('appliedFilters')
+    remove('appliedFilters')
     setAppliedFilters({
       type: '',
       scale: '',
@@ -209,7 +227,7 @@ const ToysPage = () => {
   }
 
   const handleToySelect = (toy: ToyDataProps) => {
-    const availabilityType = sessionStorage.getItem('availabilityType')
+    const availabilityType = getOrderType()
     const toyCardPrice = calculateSellingPrice(toy.price)
     const priceOnToyCard = { ...toy, price: toyCardPrice }
 
@@ -231,11 +249,11 @@ const ToysPage = () => {
         }
       }
 
-      // Save to sessionStorage
+      // Save to indexDB
       if (newSelected.length === 0) {
-        sessionStorage.removeItem('selectedToys')
+        removeToyItem('selectedToys')
       } else {
-        sessionStorage.setItem('selectedToys', JSON.stringify(newSelected))
+        setToyItem('selectedToys', JSON.stringify(newSelected))
       }
 
       return newSelected
@@ -263,7 +281,7 @@ const ToysPage = () => {
           onConfirm={handleConfirm}
           selectedToy={selectedToys[0]}
           label={'Proceed'}
-          navigateTo={sessionStorage.getItem('availabilityType') === '3d' ? '/framespage' : '/'}
+          navigateTo={getOrderType() === '3d' ? '/framespage' : '/'}
         />
         <Box
           sx={{
@@ -362,7 +380,6 @@ const ToysPage = () => {
               alignItems={'center'}
               justifyContent={'space-between'}
             >
-
               <Button
                 variant="outlined"
                 onClick={handleResetFilters}

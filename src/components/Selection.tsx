@@ -1,14 +1,4 @@
-import {
-  Box,
-  Button,
-  Checkbox,
-  FormControlLabel,
-  FormGroup,
-  Stack,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material'
+import { Box, Button, Stack, Typography, useMediaQuery, useTheme } from '@mui/material'
 import orangeCar from '../assets/orangeCar.png'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -20,6 +10,9 @@ import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout'
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
 import LazyImage from './custom/LazyImage'
+import { getOrderType, setOrderType } from '@utils/session'
+import { getToyItem, removeToyItem } from '../DB/ToyStore'
+import { getFrameItem, removeFrameItem } from '../DB/FrameStore'
 
 const selectionButtonObj = [
   { label: 'Frame', link: '/framespage' },
@@ -42,24 +35,32 @@ const Selection = () => {
   const [frameSelected, setFrameSelected] = useState(false)
 
   // Function to check if an item is selected
-  const isItemSelected = (item: string) => {
-    const storageKey = item === 'Toy' ? 'selectedToys' : 'selectedFrame'
-    const storedData = sessionStorage.getItem(storageKey)
-    return storedData !== null && storedData !== '[]' && storedData !== 'null'
+  const isItemSelected = async (item: string) => {
+    const storedData =
+      item === 'Toy' ? await getToyItem('selectedToys') : await getFrameItem('selectedFrame')
+    if (!storedData || storedData === '[]' || storedData === 'null') return false
+    try {
+      const parsed = JSON.parse(storedData as string)
+      if (Array.isArray(parsed)) return parsed.length > 0
+      if (typeof parsed === 'object' && parsed !== null) return Object.keys(parsed).length > 0
+      return false
+    } catch {
+      return false
+    }
   }
 
-  const updateSelectionStates = () => {
-    const toySelected = isItemSelected('Toy')
-    const frameSelected = isItemSelected('Frame')
+  const updateSelectionStates = async () => {
+    const toySelected = await isItemSelected('Toy')
+    const frameSelected = await isItemSelected('Frame')
     setToySelected(toySelected)
     setFrameSelected(frameSelected)
   }
 
   useEffect(() => {
     // Initialize availability type to '3d' on first load
-    const stored = sessionStorage.getItem('availabilityType')
+    const stored = getOrderType()
     if (!stored) {
-      sessionStorage.setItem('availabilityType', '3d')
+      setOrderType('OrderType', '3d')
       updateAvailabilityState('3d')
     } else {
       updateAvailabilityState(stored as '3d' | 'toy' | 'frame')
@@ -67,12 +68,13 @@ const Selection = () => {
     updateSelectionStates()
   }, [])
 
+  // Update selection states when component mounts
   useEffect(() => {
-    const availabilityType = sessionStorage.getItem('availabilityType') as
-      | '3d'
-      | 'toy'
-      | 'frame'
-      | null
+    updateSelectionStates()
+  }, [])
+
+  useEffect(() => {
+    const availabilityType = getOrderType() as '3d' | 'toy' | 'frame' | null
     if (availabilityType) updateAvailabilityState(availabilityType)
 
     if (location.state?.scrollToSelection) {
@@ -104,27 +106,8 @@ const Selection = () => {
   }
 
   const handleAvailability = (type: '3d' | 'toy' | 'frame') => {
-    sessionStorage.setItem('availabilityType', type)
+    setOrderType('OrderType', type)
     updateAvailabilityState(type)
-
-    if (type === 'toy') {
-      sessionStorage.removeItem('selectedFrame')
-    } else if (type === 'frame') {
-      sessionStorage.removeItem('selectedToys')
-    } else if (type === '3d') {
-      const toyData = sessionStorage.getItem('selectedToys')
-      if (toyData) {
-        try {
-          const parsedToyData = JSON.parse(toyData)
-          if (Array.isArray(parsedToyData) && parsedToyData.length > 2) {
-            const trimmed = parsedToyData.slice(0, 2)
-            sessionStorage.setItem('selectedToys', JSON.stringify(trimmed))
-          }
-        } catch {
-          sessionStorage.removeItem('selectedToys')
-        }
-      }
-    }
 
     // Update selection states after availability change
     updateSelectionStates()
@@ -135,8 +118,8 @@ const Selection = () => {
   }
 
   const handleClearOrder = () => {
-    sessionStorage.removeItem('selectedToys')
-    sessionStorage.removeItem('selectedFrame')
+    removeToyItem('selectedToys')
+    removeFrameItem('selectedFrame')
 
     // Update local state immediately
     setToySelected(false)
@@ -353,13 +336,13 @@ const Selection = () => {
                               ? Palette.secondary.light
                               : Palette.text.secondary
                             : isSelected
-                              ? Palette.secondary.light
-                              : 'transparent',
+                            ? Palette.secondary.light
+                            : 'transparent',
                           color: isSmallScreen
                             ? Palette.text.white
                             : isSelected
-                              ? Palette.text.white
-                              : Palette.text.secondary,
+                            ? Palette.text.white
+                            : Palette.text.secondary,
                           '&:hover': {
                             borderColor: isSelected ? Palette.secondary.dark : Palette.text.primary,
                             color: isSelected ? Palette.text.white : Palette.text.primary,
@@ -390,9 +373,10 @@ const Selection = () => {
                   border:
                     !toySelected || !frameSelected
                       ? undefined
-                      : `2px solid ${Palette.secondary.main}`,
+                      : `1px solid ${Palette.secondary.main}90`,
                   fontWeight: 600,
-                  fontSize: isSmallScreen ? '.9rem' : '1.2rem',
+                  fontSize: isSmallScreen ? '.7rem' : '1.2rem',
+                  
                 }}
               >
                 Order
@@ -411,9 +395,9 @@ const Selection = () => {
                   border:
                     !toySelected || !frameSelected
                       ? undefined
-                      : `2px solid ${Palette.secondary.main}`,
+                      : `1px solid ${Palette.secondary.main}90`,
                   fontWeight: 600,
-                  fontSize: isSmallScreen ? '.9rem' : '1.2rem',
+                  fontSize: isSmallScreen ? '.7rem' : '1.2rem',
                 }}
               >
                 Clear Cart

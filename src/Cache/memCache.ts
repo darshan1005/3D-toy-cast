@@ -15,7 +15,7 @@ export class MemoryCache<T> {
     /**
      * Get data from cache (only if not expired)
      */
-    public get(key: string): T | undefined {
+    public get<T>(key: string): T | undefined {
         const entry = this.cache[key];
         if (!entry) return undefined;
 
@@ -29,7 +29,7 @@ export class MemoryCache<T> {
     /**
      * Set data & auto remove after the expiration time
      */
-    public set(key: string, value: T, expiryMinutes?: number): void {
+    public set<T>(key: string, value: T, expiryMinutes?: number): void {
         const minutes = expiryMinutes ?? this.defaultExpiryMinutes;
         const expiresAt = minutes ? Date.now() + minutes * 60 * 1000 : undefined;
 

@@ -5,7 +5,10 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import { useNavigate } from 'react-router-dom'
 import Cart from './Cart'
 import HomeIcon from '@mui/icons-material/Home'
-import { Frame, Toy } from 'src/types/types'
+import { Toy } from 'src/types/types'
+import { getOrderType } from '@utils/session'
+import { getToyItem } from '../../DB/ToyStore'
+import { getFrameItem } from '../../DB/FrameStore'
 
 interface NavHeaderProps {
   onConfirm: () => void
@@ -35,17 +38,37 @@ const NavHeader: React.FC<NavHeaderProps> = ({
   const [cartOpen, setCartOpen] = useState(false)
   const [isStorage, setIsStorage] = useState<boolean>(false)
   const navigate = useNavigate()
-  const availabilityType = sessionStorage.getItem('availabilityType')
+  const availabilityType = getOrderType()
 
   useEffect(() => {
-    const toyData = sessionStorage.getItem('selectedToys')
-    const frameData = sessionStorage.getItem('selectedFrame')
-    const parsedToys: Toy[] = JSON.parse(toyData || '[]')
-    const hasSelectedToy = parsedToys && parsedToys.length > 0
-    const parsedFrame = JSON.parse(frameData || 'null')
-    const hasSelectedFrame = Array.isArray(parsedFrame) ? parsedFrame.length > 0 : !!parsedFrame
-    const isSelected = hasSelectedToy || hasSelectedFrame
-    setIsStorage(isSelected)
+    const reloadStorage = async () => {
+      const toyData = await getToyItem('selectedToys')
+      const frameData = await getFrameItem('selectedFrame')
+
+      let parsedToys: Toy[] = []
+      if (typeof toyData === 'string') {
+        try {
+          parsedToys = JSON.parse(toyData)
+        } catch {
+          parsedToys = []
+        }
+      }
+      const hasSelectedToy = parsedToys.length > 0
+
+      let parsedFrame: any = null
+      if (typeof frameData === 'string') {
+        try {
+          parsedFrame = JSON.parse(frameData)
+        } catch {
+          parsedFrame = null
+        }
+      }
+      const hasSelectedFrame = Array.isArray(parsedFrame) ? parsedFrame.length > 0 : !!parsedFrame
+
+      const isSelected = hasSelectedToy || hasSelectedFrame
+      setIsStorage(isSelected)
+    }
+    reloadStorage()
   }, [selectedToy, selectedFrame])
 
   const handleConfirm = () => {

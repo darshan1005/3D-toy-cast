@@ -3,8 +3,10 @@ import { Box, Typography, IconButton, Paper, Drawer, Divider } from '@mui/materi
 import DeleteIcon from '@mui/icons-material/Delete'
 import ToyCard from './ToyCard'
 import CloseIcon from '@mui/icons-material/Close'
-import { Frame, FrameDetailsProps, ToyDataProps } from 'src/types/types'
+import { FrameDetailsProps, ToyDataProps } from 'src/types/types'
 import LazyImage from './LazyImage'
+import { getToyItem, removeToyItem, setToyItem } from '../../DB/ToyStore'
+import { getFrameItem, removeFrameItem } from '../../DB/FrameStore'
 
 interface CartProps {
   open: boolean
@@ -14,32 +16,45 @@ interface CartProps {
 const Cart: React.FC<CartProps> = ({ open, onClose }) => {
   const [selectedToys, setSelectedToys] = useState<ToyDataProps[]>([])
   const [selectedFrame, setSelectedFrame] = useState<FrameDetailsProps | null>(null)
+  const [frameTotalCost, setFrameTotalCost] = useState<number>(0)
 
   useEffect(() => {
-    const toyData = sessionStorage.getItem('selectedToys')
-    const frameData = sessionStorage.getItem('selectedFrame')
+    const fetchCartData = async () => {
+      const toyData = await getToyItem('selectedToys')
+      const frameData = await getFrameItem('selectedFrame')
 
-    if (toyData) setSelectedToys(JSON.parse(toyData))
-    if (frameData) setSelectedFrame(JSON.parse(frameData))
+      if (toyData && typeof toyData === 'string') {
+        setSelectedToys(JSON.parse(toyData))
+      } else {
+        setSelectedToys([])
+      }
+
+      if (frameData && typeof frameData === 'string') {
+        const parsedFrame = JSON.parse(frameData)
+        setSelectedFrame(parsedFrame)
+        setFrameTotalCost(parsedFrame?.price || 0)
+      } else {
+        setSelectedFrame(null)
+        setFrameTotalCost(0)
+      }
+    }
+    fetchCartData()
   }, [open]) // refresh data every time the drawer is opened
 
   const handleRemoveToy = (toyId: number) => {
     const updatedToys = selectedToys.filter(toy => toy.id !== toyId)
     setSelectedToys(updatedToys)
     updatedToys.length === 0
-      ? sessionStorage.removeItem('selectedToys')
-      : sessionStorage.setItem('selectedToys', JSON.stringify(updatedToys))
+      ? removeToyItem('selectedToys')
+      : setToyItem('selectedToys', JSON.stringify(updatedToys))
 
     window.dispatchEvent(new Event('storageUpdate'))
   }
 
-  const frameTotalCost = selectedFrame
-    ? (JSON.parse(sessionStorage.getItem('selectedFrame') || '{}') as Frame)?.price || 0
-    : 0
-
   const handleRemoveFrame = () => {
     setSelectedFrame(null)
-    sessionStorage.removeItem('selectedFrame')
+    setFrameTotalCost(0)
+    removeFrameItem('selectedFrame')
     window.dispatchEvent(new Event('storageUpdate'))
   }
 

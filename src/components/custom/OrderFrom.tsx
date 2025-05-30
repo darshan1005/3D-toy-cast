@@ -32,6 +32,10 @@ import TruncatedTextWithTooltip from './TruncatedText'
 import FileUploadIcon from '@mui/icons-material/FileUpload'
 import LazyImage from './LazyImage'
 import CircularProgress from '@mui/material/CircularProgress'
+import { getOrderType } from '@utils/session'
+import { getToyItem, removeToyItem } from '../../DB/ToyStore'
+import { getFrameItem, removeFrameItem } from '../../DB/FrameStore'
+import { getOrderForm, setOrderForm } from '../../DB/OrderFormStore'
 
 const OrderForm = () => {
   const theme = useTheme()
@@ -82,7 +86,7 @@ const OrderForm = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [fileName, setFileName] = useState('')
 
-  const availabilityType = sessionStorage.getItem('availabilityType')
+  const availabilityType = getOrderType()
   const isToy = availabilityType === 'toy'
   const is3D = availabilityType === '3d'
 
@@ -105,67 +109,71 @@ const OrderForm = () => {
   }, [])
 
   useEffect(() => {
-    const toyData = sessionStorage.getItem('selectedToys')
-    const frameData = sessionStorage.getItem('selectedFrame')
-    const userFormData = sessionStorage.getItem('FormData')
-    const storedImage = sessionStorage.getItem('uploadedImage')
+    const fetchData = async () => {
+      const toyData = await getToyItem('selectedToys')
+      const frameData = await getFrameItem('selectedFrame')
+      const userFormData = await getOrderForm('FormData')
+      const storedImage = sessionStorage.getItem('uploadedImage')
 
-    let toysCost = 0
-    let frameCost = 0
+      let toysCost = 0
+      let frameCost = 0
 
-    if (toyData) {
-      const parsedToys: Toy[] = JSON.parse(toyData)
-      setSelectedToys(parsedToys)
-      toysCost = parsedToys.reduce((total, toy) => total + toy.price, 0)
+      if (toyData) {
+        const parsedToys: Toy[] = JSON.parse(typeof toyData === 'string' ? toyData : '[]')
+        setSelectedToys(parsedToys)
+        toysCost = parsedToys.reduce((total, toy) => total + toy.price, 0)
+      }
+
+      if (frameData) {
+        const parsedFrame: Frame = JSON.parse(typeof frameData === 'string' ? frameData : '{}')
+        setSelectedFrame(parsedFrame?.type || 'No Frame Selected')
+        setSelectedFrameDimension(parsedFrame?.selectedDimension || 'No Dimensions')
+        frameCost = parsedFrame?.price || 0
+      }
+
+      if (userFormData) {
+        const parsedFormData = JSON.parse(userFormData as string)
+        setFormData(prev => ({
+          ...prev,
+          name: parsedFormData.name || '',
+          phone: parsedFormData.phone || '',
+          email: parsedFormData.email || '',
+          state: parsedFormData.state || '',
+          city: parsedFormData.city || '',
+          pincode: parsedFormData.pincode || '',
+          address: parsedFormData.address || '',
+          customBackground: parsedFormData.customBackground || '',
+          uploadedImage: parsedFormData.uploadedImage || '',
+        }))
+      }
+
+      if (storedImage) {
+        const parsedImage: Image = JSON.parse(storedImage)
+        setFileName(parsedImage.name)
+        setFormData(prev => ({ ...prev, uploadedImage: parsedImage.data }))
+      }
+
+      const baseCost = toysCost + frameCost // This is the Basepart that gets applied for discountPercentage
+      const actualPriceAfterDiscount = baseCost * (1 - discountPercentage)
+
+      const keyChainCost = isKeyChainSelected ? 49 : 0
+      const raceTrackCost = isRaceTrackSelected ? 149 : 0
+      const background = isBGSelected ? 29 : 0
+      const addOnsCost = keyChainCost + raceTrackCost + background
+
+      const isDeliveryFree = actualPriceAfterDiscount > 1299
+      const deliveryCost = isDeliveryFree ? 0 : 59
+
+      const totalFinalCost = actualPriceAfterDiscount + addOnsCost + deliveryCost
+
+      // Set costs in state
+      setActualCostBeforeDiscount(baseCost)
+      setActualPriceAfterDiscount(actualPriceAfterDiscount)
+      setDiscountAmount(baseCost - actualPriceAfterDiscount)
+      setFinalCost(totalFinalCost)
     }
 
-    if (frameData) {
-      const parsedFrame: Frame = JSON.parse(frameData)
-      setSelectedFrame(parsedFrame?.type || 'No Frame Selected')
-      setSelectedFrameDimension(parsedFrame?.selectedDimension || 'No Dimensions')
-      frameCost = parsedFrame?.price || 0
-    }
-
-    if (userFormData) {
-      const parsedFormData = JSON.parse(userFormData)
-      setFormData(prev => ({
-        ...prev,
-        name: parsedFormData.name || '',
-        phone: parsedFormData.phone || '',
-        email: parsedFormData.email || '',
-        state: parsedFormData.state || '',
-        city: parsedFormData.city || '',
-        pincode: parsedFormData.pincode || '',
-        address: parsedFormData.address || '',
-        customBackground: parsedFormData.customBackground || '',
-        uploadedImage: parsedFormData.uploadedImage || '',
-      }))
-    }
-
-    if (storedImage) {
-      const parsedImage: Image = JSON.parse(storedImage)
-      setFileName(parsedImage.name)
-      setFormData(prev => ({ ...prev, uploadedImage: parsedImage.data }))
-    }
-
-    const baseCost = toysCost + frameCost // This is the Basepart that gets applied for discountPercentage
-    const actualPriceAfterDiscount = baseCost * (1 - discountPercentage)
-
-    const keyChainCost = isKeyChainSelected ? 49 : 0
-    const raceTrackCost = isRaceTrackSelected ? 149 : 0
-    const background = isBGSelected ? 29 : 0
-    const addOnsCost = keyChainCost + raceTrackCost + background
-
-    const isDeliveryFree = actualPriceAfterDiscount > 1299
-    const deliveryCost = isDeliveryFree ? 0 : 59
-
-    const totalFinalCost = actualPriceAfterDiscount + addOnsCost + deliveryCost
-
-    // Set costs in state
-    setActualCostBeforeDiscount(baseCost)
-    setActualPriceAfterDiscount(actualPriceAfterDiscount)
-    setDiscountAmount(baseCost - actualPriceAfterDiscount)
-    setFinalCost(totalFinalCost)
+    fetchData()
   }, [isKeyChainSelected, isRaceTrackSelected, isBGSelected])
 
   const handleCancelOrder = () => {
@@ -175,12 +183,13 @@ const OrderForm = () => {
   const handleClearOrder = () => {
     setModalOpen(false)
     setIsOrderCancelled(true)
-    sessionStorage.removeItem('selectedToys')
-    sessionStorage.removeItem('selectedFrame')
+    removeToyItem('selectedToys')
+    removeFrameItem('selectedFrame')
     sessionStorage.removeItem('uploadedImage')
-    sessionStorage.setItem(
+    setOrderForm(
       'FormData',
       JSON.stringify({ ...formData, uploadedImage: '', customBackground: '' }),
+      5,
     )
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
@@ -201,20 +210,20 @@ const OrderForm = () => {
         return !value.trim()
           ? 'Name is required'
           : !/^[a-zA-Z\s]+$/.test(value)
-            ? 'Only alphabets are allowed'
-            : ''
+          ? 'Only alphabets are allowed'
+          : ''
       case 'phone':
         return !value.trim()
           ? 'Phone number is required'
           : !/^\d{10}$/.test(value)
-            ? 'Phone must be a 10-digit number'
-            : ''
+          ? 'Phone must be a 10-digit number'
+          : ''
       case 'email':
         return !value.trim()
           ? 'Email is required'
           : !value.includes('@gmail.com')
-            ? 'Email must be a Gmail address'
-            : ''
+          ? 'Email must be a Gmail address'
+          : ''
       case 'state':
         return !value.trim() ? 'State is required' : ''
       case 'city':
@@ -223,8 +232,8 @@ const OrderForm = () => {
         return !value.trim()
           ? 'Pin code is required'
           : !/^\d{6}$/.test(value)
-            ? 'Pin code must be 6 digits'
-            : ''
+          ? 'Pin code must be 6 digits'
+          : ''
       case 'address':
         return !value.trim() ? 'Address is required' : ''
       default:
@@ -251,7 +260,7 @@ const OrderForm = () => {
     setFormData(prev => ({ ...prev, [name]: value }))
     const formValue = { ...formData, [name]: value }
     const stringifiedFromData = JSON.stringify(formValue)
-    sessionStorage.setItem('FormData', stringifiedFromData)
+    setOrderForm('FormData', stringifiedFromData, 5)
 
     // Debounce the validation to prevent too frequent updates
     const error = validate(name, value)
@@ -267,10 +276,26 @@ const OrderForm = () => {
     .map(toy => `${toy.name} (${toy.scale}) - ₹${toy.price.toFixed(2)}`)
     .join('\n')
   const selectedFrameName = selectedFrame || 'No Frame Selected'
-  const frameTotalCost =
-    selectedFrame && selectedFrame !== 'No Frame Selected'
-      ? (JSON.parse(sessionStorage.getItem('selectedFrame') || '{}') as Frame)?.price || 0
-      : 0
+
+  // Remove unused async frameItem and compute frameTotalCost synchronously
+  const [frameTotalCost, setFrameTotalCost] = useState(0)
+
+  useEffect(() => {
+    const fetchFrameTotalCost = async () => {
+      if (selectedFrame && selectedFrame !== 'No Frame Selected') {
+        const frameData = await getFrameItem('selectedFrame')
+        if (frameData && typeof frameData === 'string') {
+          const parsed = JSON.parse(frameData)
+          setFrameTotalCost(parsed?.price || 0)
+        } else {
+          setFrameTotalCost(0)
+        }
+      } else {
+        setFrameTotalCost(0)
+      }
+    }
+    fetchFrameTotalCost()
+  }, [selectedFrame])
 
   const toyTotalCosts = selectedToys.reduce((total, toy) => total + toy.price, 0)
 
@@ -360,12 +385,13 @@ const OrderForm = () => {
           setLoading(false)
           setOrderPlaced(true)
           setModalOpen(true)
-          sessionStorage.removeItem('selectedToys')
-          sessionStorage.removeItem('selectedFrame')
+          removeToyItem('selectedToys')
+          removeFrameItem('selectedFrame')
           sessionStorage.removeItem('uploadedImage')
-          sessionStorage.setItem(
+          setOrderForm(
             'FormData',
             JSON.stringify({ ...formData, uploadedImage: '', customBackground: '' }),
+            5,
           )
           if (fileInputRef.current) {
             fileInputRef.current.value = ''
@@ -413,7 +439,7 @@ const OrderForm = () => {
         const uploadedImage = ev.target?.result as string
         setFormData(prev => {
           const updated = { ...prev, uploadedImage: uploadedImage }
-          sessionStorage.setItem('FormData', JSON.stringify(updated))
+          setOrderForm('FormData', JSON.stringify(updated), 5)
           return updated
         })
         ImageObj = {
@@ -430,14 +456,10 @@ const OrderForm = () => {
 
   const handleClearImage = () => {
     setFormData(prev => {
-      const updated = { ...prev, uploadedImage: '' }
-      sessionStorage.setItem('FormData', JSON.stringify(updated))
+      const updated = { ...prev, uploadedImage: '', customBackground: '' }
+      setOrderForm('FormData', JSON.stringify(updated), 5)
       return updated
     })
-    sessionStorage.setItem(
-      'FormData',
-      JSON.stringify({ ...formData, uploadedImage: '', customBackground: '' }),
-    )
     sessionStorage.removeItem('uploadedImage')
     setFileName('')
 
@@ -886,10 +908,7 @@ const OrderForm = () => {
                             {selectedFrame} ({selectedFrameDimension})
                           </TableCell>
                           <TableCell align="right" sx={{ fontSize: { xs: '0.85rem', sm: '1rem' } }}>
-                            ₹
-                            {(
-                              JSON.parse(sessionStorage.getItem('selectedFrame') || '{}') as Frame
-                            )?.price.toFixed(2) || '0.00'}
+                            ₹{frameTotalCost.toFixed(2)}
                           </TableCell>
                         </TableRow>
                       )}
