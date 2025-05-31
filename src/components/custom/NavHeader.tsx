@@ -87,7 +87,7 @@ const NavHeader: React.FC<NavHeaderProps> = ({
 
   const handleScollHome = () => {
     navigate('/', {
-      state: { scrollToSelection: true },
+      state: { scrollToSelection: false },
     })
   }
 

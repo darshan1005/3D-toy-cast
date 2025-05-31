@@ -21,12 +21,13 @@ const GridImages = () => {
         p: 2,
       }}
     >
-      <NavHeader showHome={false} showCart={false} label={'Order Now'} onConfirm={handleConfirm} />
+      <NavHeader showBack={false} showCart={false} label={'Order Now'} onConfirm={handleConfirm} />
       <Box
         sx={{
           backgroundColor: 'white',
           padding: 2,
           borderRadius: 3,
+          height: '100vh',
         }}
       >
         <Typography
