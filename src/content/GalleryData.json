@@ -1,0 +1,11 @@
+{
+  "gallery": [
+    {
+      "id": 1,
+      "alt": "orange car",
+      "src": "orangeCar",
+      "caption": "car color orange",
+      "image": "/uploads/50d4c1e8a5486ec295b098f5c11061cc-1.png"
+    }
+  ]
+}
