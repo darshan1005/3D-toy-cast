@@ -136,7 +136,7 @@ collections:
                 widget: 'string'
               - label: 'SRC'
                 name: 'src'
-                widget: 'any'
+                widget: 'string'
               - label: 'Caption'
                 name: 'caption'
                 widget: 'string'

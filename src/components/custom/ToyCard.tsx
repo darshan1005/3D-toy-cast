@@ -44,7 +44,7 @@ const ToyCard: React.FC<ToyCardProps> = ({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        height: 330,
+        height: isSmallScreen ? 'auto' : 330,
         borderRadius: 2,
         cursor: onSelect ? 'pointer' : 'default',
         transition: 'background-color 0.3s ease',

@@ -10,6 +10,9 @@ import {
   TextField,
   Chip,
   Typography,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
 } from '@mui/material'
 import { useState, useEffect, useMemo } from 'react'
 import ToyCard from '@components/custom/ToyCard'
@@ -23,6 +26,8 @@ import { getFilters, getOrderType, remove } from '@utils/session'
 import { getToyItem, removeToyItem, setToyItem } from '../DB/ToyStore'
 import { getFrameItem } from '../DB/FrameStore'
 import { memCache } from '../Cache/instance'
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 
 const ToysPage = () => {
   const navigate = useNavigate()
@@ -82,18 +87,6 @@ const ToysPage = () => {
       }
     }
     LoadSelectedToy()
-  }, [])
-
-  // Listen for storage updates
-  useEffect(() => {
-    const handleStorageUpdate = () => {
-      const savedToys = getToyItem('selectedToys')
-      if (savedToys) {
-        setSelectedToys(JSON.parse(typeof savedToys === 'string' ? savedToys : '[]'))
-      } else {
-        setSelectedToys([])
-      }
-    }
   }, [])
 
   // Load selected frame from indexDB on component mount
@@ -188,27 +181,6 @@ const ToysPage = () => {
     ]
   }
 
-  const currentFilters = useMemo(
-    () => ({
-      type: selectedToyType,
-      scale: selectedToyScale,
-      brands: [...selectedBrands].sort(), // sort to ensure consistent comparison
-    }),
-    [selectedToyType, selectedToyScale, selectedBrands],
-  )
-
-  const filtersChanged = useMemo(() => {
-    const brandsMatch =
-      appliedFilters.brands.length === currentFilters.brands.length &&
-      appliedFilters.brands.every(b => currentFilters.brands.includes(b))
-
-    return (
-      appliedFilters.type !== currentFilters.type ||
-      appliedFilters.scale !== currentFilters.scale ||
-      !brandsMatch
-    )
-  }, [appliedFilters, currentFilters])
-
   const handleResetFilters = () => {
     setSelectedToyType('')
     setSelectedToyScale('')
@@ -261,6 +233,116 @@ const ToysPage = () => {
     })
   }
 
+  const Filters = () => {
+    return (
+      <>
+        <Stack
+          direction={isSmallScreen ? 'column' : 'row'}
+          spacing={2}
+          mb={isSmallScreen ? 0 : 2}
+          justifyContent="center"
+          alignItems={isSmallScreen ? 'flex-start' : 'center'}
+        >
+          <Select
+            value={selectedToyType}
+            onChange={e => handleTypeChange(e.target.value)}
+            displayEmpty
+            sx={{
+              minWidth: 250,
+              height: isSmallScreen ? '40px' : 'auto',
+              width: isSmallScreen ? '100%' : 'auto',
+            }}
+          >
+            <MenuItem value="">Select Type</MenuItem>
+            {getTypeOptions().map((type, index) => (
+              <MenuItem key={index} value={type}>
+                {type}
+              </MenuItem>
+            ))}
+          </Select>
+
+          <Select
+            value={selectedToyScale}
+            onChange={e => handleScaleChange(e.target.value)}
+            displayEmpty
+            sx={{
+              minWidth: 250,
+              width: isSmallScreen ? '100%' : 'auto',
+            }}
+          >
+            <MenuItem value="">Select Scale</MenuItem>
+            {getScaleOptions().map((scale, index) => (
+              <MenuItem key={index} value={scale}>
+                {scale}
+              </MenuItem>
+            ))}
+          </Select>
+
+          {/* Brand Autocomplete with 1 chip + count */}
+          <Autocomplete
+            multiple
+            limitTags={1}
+            disableCloseOnSelect
+            options={getBrandOptions()}
+            value={selectedBrands}
+            onChange={(event, newValue) => setSelectedBrands(newValue)}
+            renderInput={params => (
+              <TextField
+                {...params}
+                label="Select Brands"
+                placeholder="Brands"
+                inputProps={{
+                  ...params.inputProps,
+                  readOnly: true, // <-- This makes input not open dropdown on click/focus
+                }}
+              />
+            )}
+            renderValue={(value, getTagProps) => {
+              if (value.length === 0) return null
+              const first = value[0]
+              const rest = value.length - 1
+              return [
+                <Chip label={first} {...getTagProps({ index: 0 })} />,
+                ...(rest > 0
+                  ? [<Chip key="more" label={`+${rest}`} sx={{ marginLeft: 0.5 }} disabled />]
+                  : []),
+              ]
+            }}
+            sx={{
+              minWidth: 250,
+              width: isSmallScreen ? '100%' : 'auto',
+            }}
+            disabled={!selectedToyType}
+          />
+
+          <Box
+            display={'flex'}
+            flexDirection={'row'}
+            gap={2}
+            alignItems={'center'}
+            justifyContent={'space-between'}
+          >
+            <Button
+              variant="outlined"
+              onClick={handleResetFilters}
+              sx={{
+                fontWeight: 600,
+                color: 'black',
+                '&:hover': {
+                  bgcolor: 'white',
+                  color: 'black',
+                },
+              }}
+              disabled={!appliedFilters}
+            >
+              Clear Filters
+            </Button>
+          </Box>
+        </Stack>
+      </>
+    )
+  }
+
   return (
     <>
       <Box
@@ -289,109 +371,33 @@ const ToysPage = () => {
           }}
         >
           {/* Filters Section */}
-          <Stack
-            direction={isSmallScreen ? 'column' : 'row'}
-            spacing={2}
-            mb={2}
-            justifyContent="center"
-            alignItems={isSmallScreen ? 'flex-start' : 'center'}
-          >
-            <Select
-              value={selectedToyType}
-              onChange={e => handleTypeChange(e.target.value)}
-              displayEmpty
-              sx={{
-                minWidth: 250,
-                height: isSmallScreen ? '40px' : 'auto',
-                width: isSmallScreen ? '100%' : 'auto',
-              }}
-            >
-              <MenuItem value="">Select Type</MenuItem>
-              {getTypeOptions().map((type, index) => (
-                <MenuItem key={index} value={type}>
-                  {type}
-                </MenuItem>
-              ))}
-            </Select>
-
-            <Select
-              value={selectedToyScale}
-              onChange={e => handleScaleChange(e.target.value)}
-              displayEmpty
-              sx={{
-                minWidth: 250,
-                width: isSmallScreen ? '100%' : 'auto',
-              }}
-            >
-              <MenuItem value="">Select Scale</MenuItem>
-              {getScaleOptions().map((scale, index) => (
-                <MenuItem key={index} value={scale}>
-                  {scale}
-                </MenuItem>
-              ))}
-            </Select>
-
-            {/* Brand Autocomplete with 1 chip + count */}
-            <Autocomplete
-              multiple
-              limitTags={1}
-              disableCloseOnSelect
-              options={getBrandOptions()}
-              value={selectedBrands}
-              onChange={(event, newValue) => setSelectedBrands(newValue)}
-              renderInput={params => (
-                <TextField
-                  {...params}
-                  label="Select Brands"
-                  placeholder="Brands"
-                  inputProps={{
-                    ...params.inputProps,
-                    readOnly: true, // <-- This makes input not open dropdown on click/focus
-                  }}
-                />
-              )}
-              renderValue={(value, getTagProps) => {
-                if (value.length === 0) return null
-                const first = value[0]
-                const rest = value.length - 1
-                return [
-                  <Chip label={first} {...getTagProps({ index: 0 })} />,
-                  ...(rest > 0
-                    ? [<Chip key="more" label={`+${rest}`} sx={{ marginLeft: 0.5 }} disabled />]
-                    : []),
-                ]
-              }}
-              sx={{
-                minWidth: 250,
-                width: isSmallScreen ? '100%' : 'auto',
-              }}
-              disabled={!selectedToyType}
-            />
-
+          {isSmallScreen ? (
             <Box
-              display={'flex'}
-              flexDirection={'row'}
-              gap={2}
-              alignItems={'center'}
-              justifyContent={'space-between'}
+              sx={{
+                display: 'flex',
+                margin: '0 auto',
+                mb: 2,
+                width: isSmallScreen ? '100%' : '97%',
+              }}
             >
-              <Button
-                variant="outlined"
-                onClick={handleResetFilters}
-                sx={{
-                  fontWeight: 600,
-                  color: 'black',
-                  '&:hover': {
-                    bgcolor: 'white',
-                    color: 'black',
-                  },
-                }}
-                disabled={!appliedFilters}
-              >
-                Clear Filters
-              </Button>
+              <Accordion sx={{ width: '100%' }}>
+                <AccordionSummary
+                  expandIcon={<ArrowDownwardIcon />}
+                  aria-controls="panel1-content"
+                  id="panel1-header"
+                >
+                  <Typography component="span" variant="h6" fontWeight={'bold'}>
+                    Filters
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Filters />
+                </AccordionDetails>
+              </Accordion>
             </Box>
-          </Stack>
+          ) : (
+            <Filters />
+          )}
 
           {/* Selected Brands Display */}
           {selectedBrands.length > 1 && (
