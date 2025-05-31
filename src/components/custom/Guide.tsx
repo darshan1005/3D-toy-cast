@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Typography } from '@mui/material'
+import { Alert, Button, Typography } from '@mui/material'
 import PopupHOC from './HOC/PopupHOC'
 
 const Guide = () => {
@@ -31,7 +31,8 @@ const Guide = () => {
         Quick Guide
       </Button>
       <PopupHOC open={open} onClose={handleClose} title="Quick Guide" centerTitle>
-        <Typography variant="h5">Guide</Typography>
+        <Typography variant="h5">
+          <Alert color='info' severity='info'>Comming soon</Alert></Typography>
       </PopupHOC>
     </>
   )

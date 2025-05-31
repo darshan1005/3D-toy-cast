@@ -1,4 +1,13 @@
-import { Box, Button, Stack, Typography, useMediaQuery, useTheme } from '@mui/material'
+import {
+  Box,
+  Button,
+  IconButton,
+  Snackbar,
+  Stack,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material'
 import orangeCar from '../assets/orangeCar.png'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -13,6 +22,7 @@ import LazyImage from './custom/LazyImage'
 import { getOrderType, setOrderType } from '@utils/session'
 import { getToyItem, removeToyItem } from '../DB/ToyStore'
 import { getFrameItem, removeFrameItem } from '../DB/FrameStore'
+import SnacKBar from './custom/SnackBar'
 
 const selectionButtonObj = [
   { label: 'Frame', link: '/framespage' },
@@ -25,6 +35,7 @@ const Selection = () => {
   const navigate = useNavigate()
   const location = useLocation()
 
+  const [openSnack, setOpenSnack] = useState(false)
   const [is3DToyFrame, setIs3DToyFrame] = useState<boolean>(true)
   const [isOnlyToys, setIsOnlyToys] = useState<boolean>(false)
   const [isOnlyFrames, setIsOnlyFrame] = useState<boolean>(false)
@@ -108,6 +119,7 @@ const Selection = () => {
   }
 
   const handleClearOrder = () => {
+    setOpenSnack(true)
     removeToyItem('selectedToys')
     removeFrameItem('selectedFrame')
 
@@ -324,13 +336,13 @@ const Selection = () => {
                               ? Palette.secondary.light
                               : Palette.text.secondary
                             : isSelected
-                            ? Palette.secondary.light
-                            : 'transparent',
+                              ? Palette.secondary.light
+                              : 'transparent',
                           color: isSmallScreen
                             ? Palette.text.white
                             : isSelected
-                            ? Palette.text.white
-                            : Palette.text.secondary,
+                              ? Palette.text.white
+                              : Palette.text.secondary,
                           '&:hover': {
                             borderColor: isSelected ? Palette.secondary.dark : Palette.text.primary,
                             color: isSelected ? Palette.text.white : Palette.text.primary,
@@ -364,7 +376,6 @@ const Selection = () => {
                       : `1px solid ${Palette.secondary.main}90`,
                   fontWeight: 600,
                   fontSize: isSmallScreen ? '.7rem' : '1.2rem',
-                  
                 }}
               >
                 Order
@@ -390,6 +401,17 @@ const Selection = () => {
               >
                 Clear Cart
               </Button>
+              <SnacKBar
+                open={openSnack}
+                close={() => setOpenSnack(false)}
+                message={
+                  getOrderType() === '3d'
+                    ? 'Removed 3DToys&Frame'
+                    : getOrderType() === 'frame'
+                      ? 'Removed Frame'
+                      : 'Removed Toys'
+                }
+              />
             </Stack>
           </Stack>
         </Stack>

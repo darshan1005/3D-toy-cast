@@ -3,7 +3,7 @@ import { FrameStore, openDB } from './DB'
 
 export const clearFrameStore = async (): Promise<void> => {
   const db = await openDB()
-  const transaction = db.transaction(FrameStore, 'readwrite') // FIXED typo here
+  const transaction = db.transaction(FrameStore, 'readwrite')
   const store = transaction.objectStore(FrameStore)
   store.clear()
 }

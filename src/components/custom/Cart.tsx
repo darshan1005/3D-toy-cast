@@ -132,7 +132,7 @@ const Cart: React.FC<CartProps> = ({ open, onClose }) => {
               <LazyImage
                 src={selectedFrame.image}
                 alt={selectedFrame.type}
-                sx={{ width: '100%', borderRadius: 8 }}
+                sx={{ width: '70%', borderRadius: 8 }}
               />
               <Typography variant="subtitle1" fontWeight="bold" mt={1}>
                 {selectedFrame.type}

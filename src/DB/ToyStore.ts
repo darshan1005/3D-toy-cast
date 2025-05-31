@@ -3,7 +3,7 @@ import { openDB, ToyStore } from './DB'
 
 export const clearToyStore = async (): Promise<void> => {
   const db = await openDB()
-  const transaction = db.transaction(ToyStore, 'readwrite') // FIXED typo here
+  const transaction = db.transaction(ToyStore, 'readwrite')
   const store = transaction.objectStore(ToyStore)
   store.clear()
 }
