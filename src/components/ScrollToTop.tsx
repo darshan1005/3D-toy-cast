@@ -47,7 +47,8 @@ const ScrollToTop = () => {
         transition: 'visibility 0.3s ease, opacity 0.3s ease',
         zIndex: 999,
         '&:hover': {
-          backgroundColor: 'rgba(255, 0, 0, 0.6)',
+          backgroundColor: 'rgb(255, 2, 2)',
+          color: 'white'
         },
       }}
     >

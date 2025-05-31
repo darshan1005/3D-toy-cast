@@ -15,6 +15,8 @@ interface NavHeaderProps {
   navigateTo?: string
   label?: string | JSX.Element
   showHome?: boolean
+  showBack?: boolean
+  showCart?: boolean
   selectedToy?: {
     id: number
     name: string
@@ -31,6 +33,8 @@ const NavHeader: React.FC<NavHeaderProps> = ({
   onConfirm,
   navigateTo = '/',
   showHome = true,
+  showBack = true,
+  showCart = true,
   label = 'Confrim',
   selectedToy,
   selectedFrame,
@@ -106,18 +110,20 @@ const NavHeader: React.FC<NavHeaderProps> = ({
       }}
     >
       <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-        <IconButton
-          size="small"
-          sx={{
-            minWidth: 40,
-            width: 40,
-            height: 40,
-            bgcolor: '#3331',
-          }}
-          onClick={handleBackNav}
-        >
-          <ArrowBackIcon />
-        </IconButton>
+        {showBack && (
+          <IconButton
+            size="small"
+            sx={{
+              minWidth: 40,
+              width: 40,
+              height: 40,
+              bgcolor: '#3331',
+            }}
+            onClick={handleBackNav}
+          >
+            <ArrowBackIcon />
+          </IconButton>
+        )}
 
         {showHome && orderType === '3d' && (
           <IconButton
@@ -135,41 +141,45 @@ const NavHeader: React.FC<NavHeaderProps> = ({
       </Box>
 
       {/* Confirm Button and Cart */}
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        <Button
-          size="small"
-          onClick={handleConfirm}
-          variant="contained"
-          sx={{
-            bgcolor: 'black',
-            color: 'white',
-            fontWeight: 'bold',
-            px: 3,
-            '&:hover': { bgcolor: '#333' },
-          }}
-          disabled={!selectedToy && !selectedFrame}
-        >
-          {label}
-        </Button>
+      {
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <Button
+            size="small"
+            onClick={handleConfirm}
+            variant="contained"
+            sx={{
+              bgcolor: 'black',
+              color: 'white',
+              fontWeight: 'bold',
+              px: 3,
+              '&:hover': { bgcolor: '#333' },
+            }}
+            disabled={showCart && !selectedToy && !selectedFrame}
+          >
+            {label}
+          </Button>
 
-        <IconButton
-          sx={{
-            minWidth: 40,
-            width: 40,
-            height: 40,
-            borderRadius: '50%',
-            color: 'black',
-            '&:hover': {
-              bgcolor: 'grey.300',
-            },
-          }}
-          onClick={() => setCartOpen(true)}
-        >
-          <Badge color="error" overlap="circular" variant="dot" invisible={!isStorage}>
-            <ShoppingCartIcon />
-          </Badge>
-        </IconButton>
-      </Box>
+          {showCart && (
+            <IconButton
+              sx={{
+                minWidth: 40,
+                width: 40,
+                height: 40,
+                borderRadius: '50%',
+                color: 'black',
+                '&:hover': {
+                  bgcolor: 'grey.300',
+                },
+              }}
+              onClick={() => setCartOpen(true)}
+            >
+              <Badge color="error" overlap="circular" variant="dot" invisible={!isStorage}>
+                <ShoppingCartIcon />
+              </Badge>
+            </IconButton>
+          )}
+        </Box>
+      }
 
       {/* Cart Component (Simple Drawer/Modal) */}
       {cartOpen && <Cart open={cartOpen} onClose={() => setCartOpen(false)} />}

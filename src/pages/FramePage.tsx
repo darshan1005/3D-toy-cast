@@ -1,7 +1,7 @@
 import { Box, useMediaQuery, useTheme } from '@mui/material'
 import FrameCard from '@components/custom/FrameCard'
-import ConfirmComponent from '@components/custom/NavHeader'
-import { useState, useEffect, useMemo, use } from 'react'
+import NavHeader from '@components/custom/NavHeader'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getFramePrice } from '../utils/pricing'
 import frameJsonData from '../content/FrameData.json'
@@ -173,7 +173,7 @@ const FramePage = () => {
         p: 2,
       }}
     >
-      <ConfirmComponent
+      <NavHeader
         onConfirm={handleConfirm}
         selectedFrame={selectedFrame}
         label={getOrderType() === '3d' ? 'Next' : 'Proceed'}

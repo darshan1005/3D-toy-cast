@@ -16,7 +16,7 @@ import {
 } from '@mui/material'
 import { useState, useEffect, useMemo } from 'react'
 import ToyCard from '@components/custom/ToyCard'
-import ConfirmComponent from '@components/custom/NavHeader'
+import NavHeader from '@components/custom/NavHeader'
 import { useNavigate } from 'react-router-dom'
 import { calculateSellingPrice } from '@utils/pricing'
 import toysJsonData from '../content/ToysData.json'
@@ -354,7 +354,7 @@ const ToysPage = () => {
           flexDirection: 'column',
         }}
       >
-        <ConfirmComponent
+        <NavHeader
           onConfirm={handleConfirm}
           selectedToy={selectedToys[0]}
           label={'Proceed'}

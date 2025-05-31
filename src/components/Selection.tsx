@@ -234,7 +234,7 @@ const Selection = () => {
                 color={is3DToyFrame ? 'primary' : 'inherit'}
                 onClick={() => handleOrderType('3d')}
                 sx={{
-                  fontSize: isSmallScreen ? '.8rem' : '1rem',
+                  fontSize: isSmallScreen ? '.65rem' : '1rem',
                   fontWeight: 600,
                   bgcolor: is3DToyFrame ? 'red' : undefined,
                   color: is3DToyFrame ? 'white' : Palette.text.secondary,
@@ -254,7 +254,7 @@ const Selection = () => {
                 onClick={() => handleOrderType('toy')}
                 sx={{
                   fontWeight: 600,
-                  fontSize: isSmallScreen ? '.8rem' : '1rem',
+                  fontSize: isSmallScreen ? '.7rem' : '1rem',
                   bgcolor: isOnlyToys ? 'red' : undefined,
                   color: isOnlyToys ? 'white' : Palette.text.secondary,
                   borderColor: isOnlyToys ? 'red' : Palette.text.secondary,
@@ -273,7 +273,7 @@ const Selection = () => {
                 onClick={() => handleOrderType('frame')}
                 sx={{
                   fontWeight: 600,
-                  fontSize: isSmallScreen ? '.8rem' : '1rem',
+                  fontSize: isSmallScreen ? '.7rem' : '1rem',
                   bgcolor: isOnlyFrames ? 'red' : undefined,
                   color: isOnlyFrames ? 'white' : Palette.text.secondary,
                   borderColor: isOnlyFrames ? 'red' : Palette.text.secondary,
