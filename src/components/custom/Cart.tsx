@@ -3,7 +3,7 @@ import { Box, Typography, IconButton, Paper, Drawer, Divider } from '@mui/materi
 import DeleteIcon from '@mui/icons-material/Delete'
 import ToyCard from './ToyCard'
 import CloseIcon from '@mui/icons-material/Close'
-import { FrameDetailsProps, ToyDataProps } from 'src/types/types'
+import { FrameDetailsProps, ToyDataProps } from '../../types/types'
 import LazyImage from './LazyImage'
 import { getToyItem, removeToyItem, setToyItem } from '../../DB/ToyStore'
 import { getFrameItem, removeFrameItem } from '../../DB/FrameStore'
@@ -48,14 +48,12 @@ const Cart: React.FC<CartProps> = ({ open, onClose }) => {
       ? removeToyItem('selectedToys')
       : setToyItem('selectedToys', JSON.stringify(updatedToys))
 
-    window.dispatchEvent(new Event('storageUpdate'))
   }
 
   const handleRemoveFrame = () => {
     setSelectedFrame(null)
     setFrameTotalCost(0)
     removeFrameItem('selectedFrame')
-    window.dispatchEvent(new Event('storageUpdate'))
   }
 
   return (

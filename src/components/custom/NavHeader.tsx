@@ -5,7 +5,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import { useNavigate } from 'react-router-dom'
 import Cart from './Cart'
 import HomeIcon from '@mui/icons-material/Home'
-import { Toy } from 'src/types/types'
+import { Toy } from '../../types/types'
 import { getOrderType } from '@utils/session'
 import { getToyItem } from '../../DB/ToyStore'
 import { getFrameItem } from '../../DB/FrameStore'
@@ -38,7 +38,7 @@ const NavHeader: React.FC<NavHeaderProps> = ({
   const [cartOpen, setCartOpen] = useState(false)
   const [isStorage, setIsStorage] = useState<boolean>(false)
   const navigate = useNavigate()
-  const availabilityType = getOrderType()
+  const orderType = getOrderType()
 
   useEffect(() => {
     const reloadStorage = async () => {
@@ -119,7 +119,7 @@ const NavHeader: React.FC<NavHeaderProps> = ({
           <ArrowBackIcon />
         </IconButton>
 
-        {showHome && availabilityType === '3d' && (
+        {showHome && orderType === '3d' && (
           <IconButton
             size="small"
             sx={{

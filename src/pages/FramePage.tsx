@@ -5,7 +5,7 @@ import { useState, useEffect, useMemo, use } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getFramePrice } from '../utils/pricing'
 import frameJsonData from '../content/FrameData.json'
-import { FrameDetailsProps, DimensionPrice } from 'src/types/types'
+import { FrameDetailsProps, DimensionPrice } from '../types/types'
 import { getOrderType } from '@utils/session'
 import { getFrameItem, removeFrameItem, setFrameItem } from '../DB/FrameStore'
 import { memCache } from '../Cache/instance'
@@ -105,11 +105,6 @@ const FramePage = () => {
         setSelectedFrame(null)
       }
     }
-
-    window.addEventListener('storageUpdate', handleStorageUpdate)
-    return () => {
-      window.removeEventListener('storageUpdate', handleStorageUpdate)
-    }
   }, [])
 
   const handleFrameDimensionChange = (frameType: string, dimension: string) => {
@@ -164,8 +159,8 @@ const FramePage = () => {
   }
 
   const handleConfirm = () => {
-    const availabilityType = getOrderType()
-    const nav = availabilityType === '3d' ? '/toyspage' : '/'
+    const orderType = getOrderType()
+    const nav = orderType === '3d' ? '/toyspage' : '/'
     navigate(nav, {
       state: { scrollToSelection: true },
     })

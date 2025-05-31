@@ -14,7 +14,7 @@ import {
 import { Palette } from '../../theme'
 import PreviewIcon from '@mui/icons-material/Preview'
 import { getFramePrice } from '../../utils/pricing'
-import { DimensionPrice } from 'src/types/types'
+import { DimensionPrice } from '../../types/types'
 import PopupHOC from './HOC/PopupHOC'
 import CarouselHOC from './HOC/CarouselHOC'
 import LazyImage from './LazyImage'

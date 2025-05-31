@@ -24,7 +24,7 @@ import emailjs from '@emailjs/browser'
 import { generateUniqueId } from '../../utils/uniqueId'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import CountUp from 'react-countup'
-import { Frame, Image, Toy } from 'src/types/types'
+import { Frame, Image, Toy } from '../../types/types'
 import PopupHOC from './HOC/PopupHOC'
 import PreviewIcon from '@mui/icons-material/Preview'
 import CloseIcon from '@mui/icons-material/Close'
@@ -86,9 +86,9 @@ const OrderForm = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [fileName, setFileName] = useState('')
 
-  const availabilityType = getOrderType()
-  const isToy = availabilityType === 'toy'
-  const is3D = availabilityType === '3d'
+  const orderType = getOrderType()
+  const isToy = orderType === 'toy'
+  const is3D = orderType === '3d'
 
   const discountPercentage = is3D ? 0.32 : isToy ? 0.12 : 0.22
   const isdeliveryFee = actualPriceAfterDiscount > 1299
@@ -376,6 +376,7 @@ const OrderForm = () => {
       // Custom background instructions and Upload Image
       customBackground: formData.customBackground,
       uploadedImage: formData.uploadedImage || 'No image uploaded',
+      fileName: fileName || 'No file uploaded',
     }
 
     emailjs

@@ -187,7 +187,7 @@ const Hero = () => {
               <Typography
                 variant={isSmallScreen ? 'h4' : 'h1'}
                 sx={{
-                  fontSize: isSmallScreen ? '30px' : '90px',
+                  fontSize: isSmallScreen ? '30px' : '12vh',
                   fontWeight: 600,
                 }}
               >
@@ -251,7 +251,7 @@ const Hero = () => {
                 bottom: isSmallScreen ? '5px' : '0px',
                 top: isSmallScreen ? 'auto' : '40%',
                 left: isSmallScreen ? '35px' : '-100px',
-                width: isSmallScreen ? '80%' : 'auto',
+                width: isSmallScreen ? '70%' : 'auto',
               }} />
           </Box>
         </Box>

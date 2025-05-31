@@ -57,13 +57,13 @@ const Selection = () => {
   }
 
   useEffect(() => {
-    // Initialize availability type to '3d' on first load
+    // Initialize order type to '3d' on first load
     const stored = getOrderType()
     if (!stored) {
       setOrderType('OrderType', '3d')
-      updateAvailabilityState('3d')
+      updateOrderState('3d')
     } else {
-      updateAvailabilityState(stored as '3d' | 'toy' | 'frame')
+      updateOrderState(stored as '3d' | 'toy' | 'frame')
     }
     updateSelectionStates()
   }, [])
@@ -74,8 +74,8 @@ const Selection = () => {
   }, [])
 
   useEffect(() => {
-    const availabilityType = getOrderType() as '3d' | 'toy' | 'frame' | null
-    if (availabilityType) updateAvailabilityState(availabilityType)
+    const orderType = getOrderType() as '3d' | 'toy' | 'frame' | null
+    if (orderType) updateOrderState(orderType)
 
     if (location.state?.scrollToSelection) {
       document.getElementById('selection')?.scrollIntoView({ behavior: 'smooth' })
@@ -87,29 +87,19 @@ const Selection = () => {
     const handleStorageUpdate = () => {
       updateSelectionStates()
     }
-
-    window.addEventListener('storageUpdate', handleStorageUpdate)
-
-    // Also listen for focus events to catch changes from other tabs
-    window.addEventListener('focus', handleStorageUpdate)
-
-    return () => {
-      window.removeEventListener('storageUpdate', handleStorageUpdate)
-      window.removeEventListener('focus', handleStorageUpdate)
-    }
   }, [])
 
-  const updateAvailabilityState = (type: '3d' | 'toy' | 'frame') => {
+  const updateOrderState = (type: '3d' | 'toy' | 'frame') => {
     setIs3DToyFrame(type === '3d')
     setIsOnlyToys(type === 'toy')
     setIsOnlyFrame(type === 'frame')
   }
 
-  const handleAvailability = (type: '3d' | 'toy' | 'frame') => {
+  const handleOrderType = (type: '3d' | 'toy' | 'frame') => {
     setOrderType('OrderType', type)
-    updateAvailabilityState(type)
+    updateOrderState(type)
 
-    // Update selection states after availability change
+    // Update selection states after order change
     updateSelectionStates()
   }
 
@@ -124,8 +114,6 @@ const Selection = () => {
     // Update local state immediately
     setToySelected(false)
     setFrameSelected(false)
-
-    window.dispatchEvent(new Event('storageUpdate'))
   }
 
   const isButtonDisabled = () => {
@@ -232,7 +220,7 @@ const Selection = () => {
                 fullWidth
                 variant={is3DToyFrame ? 'contained' : 'outlined'}
                 color={is3DToyFrame ? 'primary' : 'inherit'}
-                onClick={() => handleAvailability('3d')}
+                onClick={() => handleOrderType('3d')}
                 sx={{
                   fontSize: isSmallScreen ? '.6rem' : '1rem',
                   fontWeight: 600,
@@ -251,7 +239,7 @@ const Selection = () => {
                 fullWidth
                 variant={isOnlyToys ? 'contained' : 'outlined'}
                 color={isOnlyToys ? 'primary' : 'inherit'}
-                onClick={() => handleAvailability('toy')}
+                onClick={() => handleOrderType('toy')}
                 sx={{
                   fontWeight: 600,
                   fontSize: isSmallScreen ? '.7rem' : '1rem',
@@ -270,7 +258,7 @@ const Selection = () => {
                 fullWidth
                 variant={isOnlyFrames ? 'contained' : 'outlined'}
                 color={isOnlyFrames ? 'primary' : 'inherit'}
-                onClick={() => handleAvailability('frame')}
+                onClick={() => handleOrderType('frame')}
                 sx={{
                   fontWeight: 600,
                   fontSize: isSmallScreen ? '.7rem' : '1rem',

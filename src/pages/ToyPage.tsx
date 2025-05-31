@@ -17,7 +17,7 @@ import ConfirmComponent from '@components/custom/NavHeader'
 import { useNavigate } from 'react-router-dom'
 import { calculateSellingPrice } from '@utils/pricing'
 import toysJsonData from '../content/ToysData.json'
-import { ToyDataProps } from 'src/types/types'
+import { ToyDataProps } from '../types/types'
 import { canToyFitInFrame } from '@utils/fitUtils'
 import { getFilters, getOrderType, remove } from '@utils/session'
 import { getToyItem, removeToyItem, setToyItem } from '../DB/ToyStore'
@@ -93,11 +93,6 @@ const ToysPage = () => {
       } else {
         setSelectedToys([])
       }
-    }
-
-    window.addEventListener('storageUpdate', handleStorageUpdate)
-    return () => {
-      window.removeEventListener('storageUpdate', handleStorageUpdate)
     }
   }, [])
 
@@ -227,7 +222,7 @@ const ToysPage = () => {
   }
 
   const handleToySelect = (toy: ToyDataProps) => {
-    const availabilityType = getOrderType()
+    const orderType = getOrderType()
     const toyCardPrice = calculateSellingPrice(toy.price)
     const priceOnToyCard = { ...toy, price: toyCardPrice }
 
@@ -238,7 +233,7 @@ const ToysPage = () => {
       if (isAlreadySelected) {
         newSelected = prevSelected.filter(t => t.id !== toy.id)
       } else {
-        if (availabilityType === 'toy') {
+        if (orderType === 'toy') {
           newSelected = [...prevSelected, priceOnToyCard]
         } else {
           if (prevSelected.length < 2) {

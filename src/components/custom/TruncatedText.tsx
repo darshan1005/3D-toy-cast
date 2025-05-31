@@ -1,6 +1,6 @@
 import { Tooltip } from "@mui/material";
 import { useState, useRef, useEffect } from "react";
-import { TruncatedTextWithTooltipProps } from "src/types/types";
+import { TruncatedTextWithTooltipProps } from "../../types/types";
 
 const TruncatedTextWithTooltip = ({ text, maxLength }: TruncatedTextWithTooltipProps) => {
   const [isTruncated, setIsTruncated] = useState(false);
