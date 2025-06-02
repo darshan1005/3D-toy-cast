@@ -23,6 +23,7 @@ import { getOrderType, setOrderType } from '@utils/session'
 import { getToyItem, removeToyItem } from '../DB/ToyStore'
 import { getFrameItem, removeFrameItem } from '../DB/FrameStore'
 import SnacKBar from './custom/SnackBar'
+import FlippingText from './custom/Animated/FlipText'
 
 const selectionButtonObj = [
   { label: 'Frame', link: '/framespage' },
@@ -189,15 +190,14 @@ const Selection = () => {
             gap={isSmallScreen ? 2 : 3}
             mr={isSmallScreen ? 0 : 2}
           >
-            <Typography
-              variant={isSmallScreen ? 'h5' : 'h3'}
-              fontWeight="bold"
-              textAlign={isSmallScreen ? 'center' : 'left'}
-              zIndex={4}
-              mt={2}
-            >
-              Customise Your Order
-            </Typography>
+            <FlippingText 
+            text='Customise Your Order' 
+            speed={50}
+            sx={{
+              fontSize: isSmallScreen ? '2rem' : '3rem',
+              fontWeight: 'bold', 
+              fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'
+            }}/>
 
             <Typography
               sx={{

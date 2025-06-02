@@ -16,6 +16,7 @@ import { Link } from 'react-router-dom'
 import CollectionsIcon from '@mui/icons-material/Collections'
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import LazyImage from './custom/LazyImage'
+import SlideFadeWords from './custom/Animated/SlidingText'
 
 const Hero = () => {
   const theme = useTheme()
@@ -184,15 +185,14 @@ const Hero = () => {
             }}
           >
             <Box display="flex" flexDirection={'column'} gap={1}>
-              <Typography
-                variant={isSmallScreen ? 'h4' : 'h1'}
-                sx={{
-                  fontSize: isSmallScreen ? '30px' : '12vh',
-                  fontWeight: 600,
-                }}
-              >
-                3D Printed Models & <mark>Collectables</mark>
-              </Typography>
+              <SlideFadeWords 
+              text={'3D Printed Models Collectables'} 
+              sx={{
+                fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+                fontSize: isSmallScreen ? '30px' : '12vh',
+                fontWeight: 600
+              }}              
+              />
               <Typography
                 variant="subtitle1"
                 sx={{

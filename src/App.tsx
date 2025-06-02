@@ -8,6 +8,7 @@ const GridImages = React.lazy(() => import('./pages/GalleryPage'))
 import ScrollTop from './helpers/scrollTop'
 import ScrollToTop from '@components/ScrollToTop'
 import Loading from '@components/custom/Loading'
+import CustomCursor from '@components/custom/Animated/Cursor'
 
 const App = () => {
   const [isDomReady, setIsDomReady] = useState(false);
@@ -33,6 +34,7 @@ const App = () => {
   return (
     <Router>
       <Guide />
+      <CustomCursor />
       <ScrollToTop />
       <ScrollTop /> {/* trigger scroll to top on route change */}
       <Routes>
