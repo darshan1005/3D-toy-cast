@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 const MainPage = React.lazy(() => import('./pages/MainPage'))
 const ToysPage = React.lazy(() => import('./pages/ToyPage'))
@@ -10,6 +10,26 @@ import ScrollToTop from '@components/ScrollToTop'
 import Loading from '@components/custom/Loading'
 
 const App = () => {
+  const [isDomReady, setIsDomReady] = useState(false);
+
+  useEffect(() => {
+    const handleReady = () => setIsDomReady(true);
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      handleReady();
+    } else {
+      document.addEventListener('DOMContentLoaded', handleReady);
+    }
+
+    return () => {
+      document.removeEventListener('DOMContentLoaded', handleReady);
+    }
+  }, []);
+
+  if (!isDomReady) {
+    return (
+      <Loading />
+    )
+  }
   return (
     <Router>
       <Guide />
