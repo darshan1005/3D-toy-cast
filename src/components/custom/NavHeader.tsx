@@ -85,7 +85,7 @@ const NavHeader: React.FC<NavHeaderProps> = ({
     })
   }
 
-  const handleScollHome = () => {
+  const handleScrollHome = () => {
     navigate('/', {
       state: { scrollToSelection: false },
     })
@@ -133,7 +133,7 @@ const NavHeader: React.FC<NavHeaderProps> = ({
               width: 40,
               height: 40,
             }}
-            onClick={handleScollHome}
+            onClick={handleScrollHome}
           >
             <HomeIcon />
           </IconButton>

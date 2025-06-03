@@ -21,7 +21,7 @@ const GridImages = () => {
         p: 2,
       }}
     >
-      <NavHeader showBack={false} showCart={false} label={'Order Now'} onConfirm={handleConfirm} />
+      <NavHeader showCart={false} label={'Order Now'} onConfirm={handleConfirm} />
       <Box
         sx={{
           backgroundColor: 'white',

@@ -27,7 +27,6 @@ import { getToyItem, removeToyItem, setToyItem } from '../DB/ToyStore'
 import { getFrameItem } from '../DB/FrameStore'
 import { memCache } from '../Cache/instance'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 
 const ToysPage = () => {
   const navigate = useNavigate()
